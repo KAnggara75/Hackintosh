@@ -138,7 +138,7 @@
 				<key>TableLength</key>
 				<integer>0</integer>
 				<key>TableSignature</key>
-				<data>AAA=</data>
+				<data></data>
 			</dict>
 			<dict>
 				<key>Base</key>
@@ -168,7 +168,7 @@
 				<key>TableLength</key>
 				<integer>0</integer>
 				<key>TableSignature</key>
-				<data>AAA=</data>
+				<data></data>
 			</dict>
 			<dict>
 				<key>Base</key>
@@ -198,7 +198,7 @@
 				<key>TableLength</key>
 				<integer>0</integer>
 				<key>TableSignature</key>
-				<data>AAA=</data>
+				<data></data>
 			</dict>
 		</array>
 		<key>Quirks</key>
@@ -340,7 +340,7 @@
 				<key>BundlePath</key>
 				<string>Lilu.kext</string>
 				<key>Comment</key>
-				<string>Lilu.kext</string>
+				<string>0</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -358,7 +358,7 @@
 				<key>BundlePath</key>
 				<string>VirtualSMC.kext</string>
 				<key>Comment</key>
-				<string>VirtualSMC.kext</string>
+				<string>1</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -376,7 +376,7 @@
 				<key>BundlePath</key>
 				<string>AirportItlwm.kext</string>
 				<key>Comment</key>
-				<string>AirportItlwm.kext</string>
+				<string>2</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -394,7 +394,7 @@
 				<key>BundlePath</key>
 				<string>IntelBluetoothFirmware.kext</string>
 				<key>Comment</key>
-				<string>IntelBluetoothFirmware.kext</string>
+				<string>3</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -410,9 +410,45 @@
 				<key>Arch</key>
 				<string>Any</string>
 				<key>BundlePath</key>
+				<string>CPUFriend.kext</string>
+				<key>Comment</key>
+				<string>3a</string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/CPUFriend</string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>MinKernel</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>Any</string>
+				<key>BundlePath</key>
+				<string>CPUFriendDataProvider.kext</string>
+				<key>Comment</key>
+				<string>3b</string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string></string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>MinKernel</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>Any</string>
+				<key>BundlePath</key>
 				<string>IntelBluetoothInjector.kext</string>
 				<key>Comment</key>
-				<string>IntelBluetoothInjector.kext</string>
+				<string>4</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -430,7 +466,7 @@
 				<key>BundlePath</key>
 				<string>IntelMausi.kext</string>
 				<key>Comment</key>
-				<string>IntelMausi.kext</string>
+				<string>5</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -448,7 +484,7 @@
 				<key>BundlePath</key>
 				<string>NVMeFix.kext</string>
 				<key>Comment</key>
-				<string>NVMeFix.kext</string>
+				<string>6</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -466,7 +502,7 @@
 				<key>BundlePath</key>
 				<string>USBInjectAll.kext</string>
 				<key>Comment</key>
-				<string>USBInjectAll.kext</string>
+				<string>7</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -484,7 +520,7 @@
 				<key>BundlePath</key>
 				<string>VoodooPS2Controller.kext</string>
 				<key>Comment</key>
-				<string>VoodooPS2Controller.kext</string>
+				<string>8</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -502,7 +538,7 @@
 				<key>BundlePath</key>
 				<string>VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Keyboard.kext</string>
 				<key>Comment</key>
-				<string>VoodooPS2Keyboard.kext</string>
+				<string>9</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -520,7 +556,7 @@
 				<key>BundlePath</key>
 				<string>VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Trackpad.kext</string>
 				<key>Comment</key>
-				<string>VoodooPS2Trackpad.kext</string>
+				<string>10</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -538,7 +574,7 @@
 				<key>BundlePath</key>
 				<string>VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Mouse.kext</string>
 				<key>Comment</key>
-				<string>VoodooPS2Mouse.kext</string>
+				<string>11</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -556,7 +592,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext</string>
 				<key>Comment</key>
-				<string>VoodooRMI.kext</string>
+				<string>12</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -574,7 +610,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/VoodooInput.kext</string>
 				<key>Comment</key>
-				<string>VoodooInput.kext</string>
+				<string>13</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -592,7 +628,7 @@
 				<key>BundlePath</key>
 				<string>VoodooSMBus.kext</string>
 				<key>Comment</key>
-				<string>VoodooSMBus.kext</string>
+				<string>14</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -610,7 +646,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/RMISMBus.kext</string>
 				<key>Comment</key>
-				<string>RMISMBus.kext</string>
+				<string>15</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -628,7 +664,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/RMII2C.kext</string>
 				<key>Comment</key>
-				<string>RMII2C.kext</string>
+				<string>16</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -646,7 +682,7 @@
 				<key>BundlePath</key>
 				<string>WhateverGreen.kext</string>
 				<key>Comment</key>
-				<string>WhateverGreen.kext</string>
+				<string>17</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -664,7 +700,7 @@
 				<key>BundlePath</key>
 				<string>XHCI-unsupported.kext</string>
 				<key>Comment</key>
-				<string>XHCI-unsupported.kext</string>
+				<string>18</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -682,7 +718,7 @@
 				<key>BundlePath</key>
 				<string>AppleALC.kext</string>
 				<key>Comment</key>
-				<string>AppleALC.kext</string>
+				<string>19</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -700,7 +736,7 @@
 				<key>BundlePath</key>
 				<string>BrightnessKeys.kext</string>
 				<key>Comment</key>
-				<string>BrightnessKeys.kext</string>
+				<string>20</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -718,7 +754,7 @@
 				<key>BundlePath</key>
 				<string>ECEnabler.kext</string>
 				<key>Comment</key>
-				<string>ECEnabler.kext</string>
+				<string>21</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -736,7 +772,7 @@
 				<key>BundlePath</key>
 				<string>SMCBatteryManager.kext</string>
 				<key>Comment</key>
-				<string>SMCBatteryManager.kext</string>
+				<string>22</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -754,7 +790,7 @@
 				<key>BundlePath</key>
 				<string>SMCProcessor.kext</string>
 				<key>Comment</key>
-				<string>SMCProcessor.kext</string>
+				<string>23</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
