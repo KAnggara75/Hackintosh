@@ -1440,9 +1440,83 @@
 			<key>SystemProductName</key>
 			<string>MacBookPro12,1</string>
 			<key>SystemSerialNumber</key>
-			<string>C02TRZZJH1DP</string>
+			<string>C02PJWZMH1DP</string>
 			<key>SystemUUID</key>
-			<string>86F472B4-571F-43F7-83F3-1DC9606410E2</string>
+			<string>4B9ED0CB-6EF5-4EE6-8D18-28AC362B7FA2</string>
+		</dict>
+		<key>PlatformNVRAM</key>
+		<dict>
+			<key>BID</key>
+			<string>Mac-E43C1C25D4880AD6</string>
+			<key>FirmwareFeatures</key>
+			<data>dvUP/QgAAAA=</data>
+			<key>FirmwareFeaturesMask</key>
+			<data>f/8f/wgAAAA=</data>
+			<key>MLB</key>
+			<string>C02514500QXGDVVCB</string>
+			<key>ROM</key>
+			<data>ESIzRFVm</data>
+			<key>SystemSerialNumber</key>
+			<string>C02PJWZMH1DP</string>
+			<key>SystemUUID</key>
+			<string>4B9ED0CB-6EF5-4EE6-8D18-28AC362B7FA2</string>
+		</dict>
+		<key>SMBIOS</key>
+		<dict>
+			<key>BIOSReleaseDate</key>
+			<string>10/27/2021</string>
+			<key>BIOSVendor</key>
+			<string></string>
+			<key>BIOSVersion</key>
+			<string>428.60.3.0.0</string>
+			<key>BoardAssetTag</key>
+			<string>Base Board Asset Tag</string>
+			<key>BoardLocationInChassis</key>
+			<string>Part Component</string>
+			<key>BoardManufacturer</key>
+			<string></string>
+			<key>BoardProduct</key>
+			<string>Mac-E43C1C25D4880AD6</string>
+			<key>BoardSerialNumber</key>
+			<string>C02514500QXGDVVCB</string>
+			<key>BoardType</key>
+			<integer>10</integer>
+			<key>BoardVersion</key>
+			<string>MacBookPro12,1</string>
+			<key>ChassisAssetTag</key>
+			<string>Asset Tag#</string>
+			<key>ChassisManufacturer</key>
+			<string></string>
+			<key>ChassisSerialNumber</key>
+			<string>C02PJWZMH1DP</string>
+			<key>ChassisType</key>
+			<integer>9</integer>
+			<key>ChassisVersion</key>
+			<string>Mac-E43C1C25D4880AD6</string>
+			<key>FirmwareFeatures</key>
+			<data>dvUP/QgAAAA=</data>
+			<key>FirmwareFeaturesMask</key>
+			<data>f/8f/wgAAAA=</data>
+			<key>PlatformFeature</key>
+			<integer>2</integer>
+			<key>ProcessorType</key>
+			<integer>1542</integer>
+			<key>SmcVersion</key>
+			<data></data>
+			<key>SystemFamily</key>
+			<string>MacBook Pro</string>
+			<key>SystemManufacturer</key>
+			<string></string>
+			<key>SystemProductName</key>
+			<string>MacBookPro12,1</string>
+			<key>SystemSKUNumber</key>
+			<string>System SKU#</string>
+			<key>SystemSerialNumber</key>
+			<string>C02PJWZMH1DP</string>
+			<key>SystemUUID</key>
+			<string>4B9ED0CB-6EF5-4EE6-8D18-28AC362B7FA2</string>
+			<key>SystemVersion</key>
+			<string>1.0</string>
 		</dict>
 		<key>UpdateDataHub</key>
 		<true/>
