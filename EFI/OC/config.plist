@@ -1421,6 +1421,37 @@
 		<true/>
 		<key>CustomMemory</key>
 		<false/>
+		<key>DataHub</key>
+		<dict>
+			<key>ARTFrequency</key>
+			<integer>0</integer>
+			<key>BoardProduct</key>
+			<string>Mac-E43C1C25D4880AD6</string>
+			<key>BoardRevision</key>
+			<data></data>
+			<key>DevicePathsSupported</key>
+			<integer>0</integer>
+			<key>FSBFrequency</key>
+			<integer>0</integer>
+			<key>InitialTSC</key>
+			<integer>0</integer>
+			<key>PlatformName</key>
+			<string></string>
+			<key>SmcBranch</key>
+			<data>ajUyAAAAAAA=</data>
+			<key>SmcPlatform</key>
+			<data>ajUyAAAAAAA=</data>
+			<key>SmcRevision</key>
+			<data>AigPAAAH</data>
+			<key>StartupPowerEvents</key>
+			<integer>0</integer>
+			<key>SystemProductName</key>
+			<string>MacBookPro12,1</string>
+			<key>SystemSerialNumber</key>
+			<string>C02PJWZMH1DP</string>
+			<key>SystemUUID</key>
+			<string>4B9ED0CB-6EF5-4EE6-8D18-28AC362B7FA2</string>
+		</dict>
 		<key>Generic</key>
 		<dict>
 			<key>AdviseFeatures</key>
@@ -1428,9 +1459,9 @@
 			<key>MaxBIOSVersion</key>
 			<false/>
 			<key>MLB</key>
-			<string>C02721301J9GDVVFB</string>
+			<string>C02514500QXGDVVCB</string>
 			<key>ProcessorType</key>
-			<integer>0</integer>
+			<integer>1542</integer>
 			<key>ROM</key>
 			<data>ESIzRFVm</data>
 			<key>SpoofVendor</key>
