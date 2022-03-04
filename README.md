@@ -4,9 +4,9 @@
 
 [![HP_840-G2](https://img.shields.io/badge/HP-840_G2-blue.svg)](https://www.hp.com/id-id/shop/)
 [![MacOS Big Sur](https://img.shields.io/badge/Big_Sur-11.6-red.svg)](https://www.apple.com/macos/big-sur/)
-[![Release](https://img.shields.io/badge/Download-latest-brightgreen.svg)](https://github.com/kanggara75/Hackintosh_HP_840-G2/releases/latest)
+[![Release](https://img.shields.io/badge/Download-latest-brightgreen.svg)](https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/releases/latest)
 [![OpenCore](https://img.shields.io/github/v/release/acidanthera/OpenCorePkg?label=OpenCore)](https://github.com/acidanthera/OpenCorePkg/releases/latest)
-[![Release](https://img.shields.io/github/v/release/kanggara75/Hackintosh_HP_840-G2?label=Release)](https://github.com/kanggara75/Hackintosh_HP_840-G2/releases/latest)
+[![Release](https://img.shields.io/github/v/release/kanggara75/Hackintosh-HP-840-G2-OpenCore?label=Release)](https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/releases/latest)
 [![Donate](https://img.shields.io/badge/-Buy%20me%20a%20coffee-blue.svg)](https://saweria.co/KAnggara75)
 
 ## READ THE ENTIRE README.md BEFORE YOU START
