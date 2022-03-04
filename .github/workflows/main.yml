@@ -1,0 +1,51 @@
+name: CI Release
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  version:
+    name: Create version number
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          repository: KAnggara/fireapp
+          token: ${{ secrets.GH_TOKEN }}
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --depth=10000
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          versionSpec: "5.8.x"
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.11
+      - name: Create version.txt with NuGetVersionV2
+        run: echo ${{ steps.gitversion.outputs.NuGetVersionV2  }} > version.txt
+      - name: Upload version.txt
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitversion
+          path: version.txt
+  build:
+    name: Build and Create release
+    needs: [version]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        type: 'zip'
+        filename: 'EFI-${{ steps.version.outputs.content }}.zip'
+        exclusions: '*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: 'EFI-${{ steps.version.outputs.content }}.zip'
+        token: ${{ secrets.GH_TOKEN }}
+        tag: ${{ steps.version.outputs.content }}
+        commit: ${{ github.sha }}
