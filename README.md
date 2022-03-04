@@ -82,6 +82,7 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 | :----------------- | ------ | --------------------------------- |
 | Fingerprint Reader | ❌     | `DISABLED` in BIOS to save power. |
 | Wireless WAN       | ❌     | `DISABLED` in BIOS to save power. |
+| Top Button         | ❌     | `Not Work` because i using Touchpad Gesture |
 
 > ### Video and Audio
 
@@ -127,7 +128,7 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 | Feature                    | Status | Dependency                         |
 | :------------------------- | ------ | ---------------------------------- |
 | iCloud, iMessage, FaceTime | ✅     | Whitelisted Apple ID, Valid SMBIOS |
-| AirDrop                    | ✅     | Not tested | i don't have apple product |
+| AirDrop                    | ❗    | Not tested | i don't have apple product |
 | Time Machine               | ✅     | Native                             |
 
 </details>
