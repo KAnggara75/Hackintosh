@@ -35,6 +35,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - uses: actions/setup-java@v1
+      with:
+          java-version: "12.x"
+    - name: Get version.txt
+      uses: actions/download-artifact@v2
+      with:
+          name: gitversion
+    - name: Read version
+      id: version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: version.txt
     - name: Archive Release
       uses: thedoctor0/zip-release@master
       with:
