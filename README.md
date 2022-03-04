@@ -100,8 +100,8 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 
 | Feature                       | Status | Dependency                                                                        |
 | :---------------------------- | ------ | --------------------------------------------------------------------------------- |
-| Battery Percentage Indication | ✅     | `ECEnabler.kext`                                                                  |
-| iGPU Power Management         | ✅     | `XCPM`, enabled by [`SSDT-PM.aml`](https://github.com/Piker-Alpha/ssdtPRGen.sh)   |
+| Battery Percentage Indication | ✅     | `SMCBatteryManager.kext`                                                          |
+| Power Management              | ✅     | `CPUFriend.kext` and config with [CPUFriendFriend](https://github.com/corpnewt/CPUFriendFriend) |
 | S3 Sleep/ Hibernation Mode 3  | ✅     | `SSDT-PWTK.aml`                                                                   |
 
 > ### Input/ Output
