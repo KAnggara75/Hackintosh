@@ -40,7 +40,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'EFI-${{ steps.version.outputs.content }}.zip'
-        exclusions: '*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft'
+        exclusions: '*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft/*'
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
