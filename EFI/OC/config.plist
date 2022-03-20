@@ -272,7 +272,7 @@
 			<key>ResetHwSig</key>
 			<false/>
 			<key>ResetLogoStatus</key>
-			<true/>
+			<false/>
 			<key>SyncTableIds</key>
 			<false/>
 		</dict>
@@ -1194,16 +1194,16 @@
 			<key>ThirdPartyDrives</key>
 			<false/>
 			<key>XhciPortLimit</key>
-			<true/>
+			<false/>
 		</dict>
 		<key>Scheme</key>
 		<dict>
 			<key>CustomKernel</key>
 			<false/>
 			<key>FuzzyMatch</key>
-			<true/>
+			<false/>
 			<key>KernelArch</key>
-			<string>Auto</string>
+			<string>x86_64</string>
 			<key>KernelCache</key>
 			<string>Auto</string>
 		</dict>
@@ -1248,7 +1248,7 @@
 			<key>ApplePanic</key>
 			<true/>
 			<key>DisableWatchDog</key>
-			<false/>
+			<true/>
 			<key>DisplayDelay</key>
 			<integer>0</integer>
 			<key>DisplayLevel</key>
@@ -1328,7 +1328,7 @@
 				<key>Flavour</key>
 				<string>Auto</string>
 				<key>Name</key>
-				<string>OpenShell.efi</string>
+				<string>UEFI Shell</string>
 				<key>Path</key>
 				<string>OpenShell.efi</string>
 				<key>RealPath</key>
@@ -1348,7 +1348,7 @@
 				<key>Flavour</key>
 				<string>Auto</string>
 				<key>Name</key>
-				<string>ResetSystem.efi</string>
+				<string>ResetSystem</string>
 				<key>Path</key>
 				<string>ResetSystem.efi</string>
 				<key>RealPath</key>
@@ -1374,8 +1374,6 @@
 			</dict>
 			<key>7C436110-AB2A-4BBB-A880-FE41995C9F82</key>
 			<dict>
-				<key>ForceDisplayRotationInEFI</key>
-				<integer>0</integer>
 				<key>SystemAudioVolume</key>
 				<data>Rg==</data>
 				<key>boot-args</key>
@@ -1472,9 +1470,9 @@
 			<key>SystemProductName</key>
 			<string>MacBookPro12,1</string>
 			<key>SystemSerialNumber</key>
-			<string>C02QL8ZEH1DP</string>
+			<string>C02Q73Y7H1DP</string>
 			<key>SystemUUID</key>
-			<string>E1073995-0223-4D59-8170-0B13BA87227D</string>
+			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
 		</dict>
 		<key>Generic</key>
 		<dict>
@@ -1483,11 +1481,11 @@
 			<key>MaxBIOSVersion</key>
 			<false/>
 			<key>MLB</key>
-			<string>C02543500QXGDVVCB</string>
+			<string>C02533404GUGDVVA8</string>
 			<key>ProcessorType</key>
 			<integer>1542</integer>
 			<key>ROM</key>
-			<data>ESIzRFVm</data>
+			<data>YHDAJjTm</data>
 			<key>SpoofVendor</key>
 			<true/>
 			<key>SystemMemoryStatus</key>
@@ -1495,9 +1493,9 @@
 			<key>SystemProductName</key>
 			<string>MacBookPro12,1</string>
 			<key>SystemSerialNumber</key>
-			<string>C02QL8ZEH1DP</string>
+			<string>C02Q73Y7H1DP</string>
 			<key>SystemUUID</key>
-			<string>E1073995-0223-4D59-8170-0B13BA87227D</string>
+			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
 		</dict>
 		<key>PlatformNVRAM</key>
 		<dict>
@@ -1508,20 +1506,20 @@
 			<key>FirmwareFeaturesMask</key>
 			<data>f/8f/wgAAAA=</data>
 			<key>MLB</key>
-			<string>C02543500QXGDVVCB</string>
+			<string>C02533404GUGDVVA8</string>
 			<key>ROM</key>
-			<data>ESIzRFVm</data>
+			<data>YHDAJjTm</data>
 			<key>SystemSerialNumber</key>
-			<string>C02QL8ZEH1DP</string>
+			<string>C02Q73Y7H1DP</string>
 			<key>SystemUUID</key>
-			<string>E1073995-0223-4D59-8170-0B13BA87227D</string>
+			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
 		</dict>
 		<key>SMBIOS</key>
 		<dict>
 			<key>BIOSReleaseDate</key>
 			<string>10/27/2021</string>
 			<key>BIOSVendor</key>
-			<string></string>
+			<string>Apple Inc.</string>
 			<key>BIOSVersion</key>
 			<string>428.60.3.0.0</string>
 			<key>BoardAssetTag</key>
@@ -1529,11 +1527,11 @@
 			<key>BoardLocationInChassis</key>
 			<string>Part Component</string>
 			<key>BoardManufacturer</key>
-			<string></string>
+			<string>Apple Inc.</string>
 			<key>BoardProduct</key>
 			<string>Mac-E43C1C25D4880AD6</string>
 			<key>BoardSerialNumber</key>
-			<string>C02543500QXGDVVCB</string>
+			<string>C02533404GUGDVVA8</string>
 			<key>BoardType</key>
 			<integer>10</integer>
 			<key>BoardVersion</key>
@@ -1541,9 +1539,9 @@
 			<key>ChassisAssetTag</key>
 			<string>Asset Tag#</string>
 			<key>ChassisManufacturer</key>
-			<string></string>
+			<string>Apple Inc.</string>
 			<key>ChassisSerialNumber</key>
-			<string>C02QL8ZEH1DP</string>
+			<string>C02Q73Y7H1DP</string>
 			<key>ChassisType</key>
 			<integer>9</integer>
 			<key>ChassisVersion</key>
@@ -1561,15 +1559,15 @@
 			<key>SystemFamily</key>
 			<string>MacBook Pro</string>
 			<key>SystemManufacturer</key>
-			<string></string>
+			<string>Apple Inc.</string>
 			<key>SystemProductName</key>
 			<string>MacBookPro12,1</string>
 			<key>SystemSKUNumber</key>
 			<string>System SKU#</string>
 			<key>SystemSerialNumber</key>
-			<string>C02QL8ZEH1DP</string>
+			<string>C02Q73Y7H1DP</string>
 			<key>SystemUUID</key>
-			<string>E1073995-0223-4D59-8170-0B13BA87227D</string>
+			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
 			<key>SystemVersion</key>
 			<string>1.0</string>
 		</dict>
@@ -1718,7 +1716,7 @@
 			<key>ClearScreenOnModeSwitch</key>
 			<false/>
 			<key>ConsoleMode</key>
-			<string>Max</string>
+			<string></string>
 			<key>DirectGopRendering</key>
 			<false/>
 			<key>ForceResolution</key>
@@ -1792,7 +1790,7 @@
 			<key>DisableSecurityPolicy</key>
 			<false/>
 			<key>EnableVectorAcceleration</key>
-			<true/>
+			<false/>
 			<key>EnableVmx</key>
 			<false/>
 			<key>ExitBootServicesDelay</key>
