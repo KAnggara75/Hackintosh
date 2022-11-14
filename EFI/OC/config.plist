@@ -1153,7 +1153,7 @@
 			<key>PollAppleHotKeys</key>
 			<false/>
 			<key>ShowPicker</key>
-			<true/>
+			<false/>
 			<key>TakeoffDelay</key>
 			<integer>0</integer>
 			<key>Timeout</key>
@@ -1170,13 +1170,13 @@
 			<key>DisplayDelay</key>
 			<integer>0</integer>
 			<key>DisplayLevel</key>
-			<integer>2147483650</integer>
+			<integer>2147483714</integer>
 			<key>LogModules</key>
 			<string>*</string>
 			<key>SysReport</key>
 			<false/>
 			<key>Target</key>
-			<integer>67</integer>
+			<integer>0</integer>
 		</dict>
 		<key>Entries</key>
 		<array>
@@ -1295,7 +1295,7 @@
 			<key>4D1EDE05-38C7-4A6A-9CC6-4BCCA8B38C14</key>
 			<dict>
 				<key>DefaultBackgroundColor</key>
-				<data>v7+/AA==</data>
+				<data>AAAAAA==</data>
 			</dict>
 			<key>4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102</key>
 			<dict>
@@ -1309,7 +1309,7 @@
 				<key>SystemAudioVolume</key>
 				<data>Rg==</data>
 				<key>boot-args</key>
-				<string>-v keepsyms=1 debug=0x100 alcid=4</string>
+				<string>keepsyms=1 debug=0x100 alcid=4 swd_panic=1</string>
 				<key>csr-active-config</key>
 				<data>AAAAAA==</data>
 				<key>prev-lang:kbd</key>
@@ -1373,37 +1373,6 @@
 		<true/>
 		<key>CustomMemory</key>
 		<false/>
-		<key>DataHub</key>
-		<dict>
-			<key>ARTFrequency</key>
-			<integer>0</integer>
-			<key>BoardProduct</key>
-			<string>Mac-E43C1C25D4880AD6</string>
-			<key>BoardRevision</key>
-			<data></data>
-			<key>DevicePathsSupported</key>
-			<integer>0</integer>
-			<key>FSBFrequency</key>
-			<integer>0</integer>
-			<key>InitialTSC</key>
-			<integer>0</integer>
-			<key>PlatformName</key>
-			<string></string>
-			<key>SmcBranch</key>
-			<data>ajUyAAAAAAA=</data>
-			<key>SmcPlatform</key>
-			<data>ajUyAAAAAAA=</data>
-			<key>SmcRevision</key>
-			<data>AigPAAAH</data>
-			<key>StartupPowerEvents</key>
-			<integer>0</integer>
-			<key>SystemProductName</key>
-			<string>MacBookPro12,1</string>
-			<key>SystemSerialNumber</key>
-			<string>C02Q73Y7H1DP</string>
-			<key>SystemUUID</key>
-			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
-		</dict>
 		<key>Generic</key>
 		<dict>
 			<key>AdviseFeatures</key>
@@ -1426,80 +1395,6 @@
 			<string>C02Q73Y7H1DP</string>
 			<key>SystemUUID</key>
 			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
-		</dict>
-		<key>PlatformNVRAM</key>
-		<dict>
-			<key>BID</key>
-			<string>Mac-E43C1C25D4880AD6</string>
-			<key>FirmwareFeatures</key>
-			<data>dvUP/QgAAAA=</data>
-			<key>FirmwareFeaturesMask</key>
-			<data>f/8f/wgAAAA=</data>
-			<key>MLB</key>
-			<string>C02533404GUGDVVA8</string>
-			<key>ROM</key>
-			<data>YHDAJjTm</data>
-			<key>SystemSerialNumber</key>
-			<string>C02Q73Y7H1DP</string>
-			<key>SystemUUID</key>
-			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
-		</dict>
-		<key>SMBIOS</key>
-		<dict>
-			<key>BIOSReleaseDate</key>
-			<string>10/27/2021</string>
-			<key>BIOSVendor</key>
-			<string>Apple Inc.</string>
-			<key>BIOSVersion</key>
-			<string>428.60.3.0.0</string>
-			<key>BoardAssetTag</key>
-			<string>Base Board Asset Tag</string>
-			<key>BoardLocationInChassis</key>
-			<string>Part Component</string>
-			<key>BoardManufacturer</key>
-			<string>Apple Inc.</string>
-			<key>BoardProduct</key>
-			<string>Mac-E43C1C25D4880AD6</string>
-			<key>BoardSerialNumber</key>
-			<string>C02533404GUGDVVA8</string>
-			<key>BoardType</key>
-			<integer>10</integer>
-			<key>BoardVersion</key>
-			<string>MacBookPro12,1</string>
-			<key>ChassisAssetTag</key>
-			<string>Asset Tag#</string>
-			<key>ChassisManufacturer</key>
-			<string>Apple Inc.</string>
-			<key>ChassisSerialNumber</key>
-			<string>C02Q73Y7H1DP</string>
-			<key>ChassisType</key>
-			<integer>9</integer>
-			<key>ChassisVersion</key>
-			<string>Mac-E43C1C25D4880AD6</string>
-			<key>FirmwareFeatures</key>
-			<data>dvUP/QgAAAA=</data>
-			<key>FirmwareFeaturesMask</key>
-			<data>f/8f/wgAAAA=</data>
-			<key>PlatformFeature</key>
-			<integer>2</integer>
-			<key>ProcessorType</key>
-			<integer>1542</integer>
-			<key>SmcVersion</key>
-			<data></data>
-			<key>SystemFamily</key>
-			<string>MacBook Pro</string>
-			<key>SystemManufacturer</key>
-			<string>Apple Inc.</string>
-			<key>SystemProductName</key>
-			<string>MacBookPro12,1</string>
-			<key>SystemSKUNumber</key>
-			<string>System SKU#</string>
-			<key>SystemSerialNumber</key>
-			<string>C02Q73Y7H1DP</string>
-			<key>SystemUUID</key>
-			<string>EF03FC63-0C51-473A-A28E-DA8FFE673DEF</string>
-			<key>SystemVersion</key>
-			<string>1.0</string>
 		</dict>
 		<key>UpdateDataHub</key>
 		<true/>
