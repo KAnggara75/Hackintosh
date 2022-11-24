@@ -346,7 +346,21 @@
 			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
 			<dict>
 				<key>AAPL,ig-platform-id</key>
-				<data>BgAmFg==</data>
+				<data>AgAWFg==</data>
+				<key>AAPL,slot-name</key>
+				<string>Internal@0,2,0</string>
+				<key>device-id</key>
+				<data>FhYAAA==</data>
+				<key>device_type</key>
+				<string>VGA compatible controller</string>
+				<key>framebuffer-fbmem</key>
+				<data>AACQAA==</data>
+				<key>framebuffer-patch-enable</key>
+				<data>AQAAAA==</data>
+				<key>framebuffer-stolenmem</key>
+				<data>AAAwAQ==</data>
+				<key>model</key>
+				<string>Intel HD Graphics 5500</string>
 			</dict>
 		</dict>
 		<key>Delete</key>
