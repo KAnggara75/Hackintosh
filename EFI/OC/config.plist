@@ -40,7 +40,7 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
-				<string>SSDT-PNLF.aml</string>
+				<string>Display</string>
 				<key>Enabled</key>
 				<true/>
 				<key>Path</key>
