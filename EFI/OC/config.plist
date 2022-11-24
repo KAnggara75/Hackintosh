@@ -16,6 +16,14 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
+				<string>Fix Shutdown</string>
+				<key>Enabled</key>
+				<true/>
+				<key>Path</key>
+				<string>FixShutdown.aml</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
 				<string>HPET _CRS (Needs _CRS to XCRS Rename)</string>
 				<key>Enabled</key>
 				<true/>
