@@ -2,8 +2,8 @@ name: CI Release
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: [main]
+
 jobs:
   version:
     name: Create version number
@@ -34,29 +34,30 @@ jobs:
     needs: [version]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-java@v1
-      with:
+      - uses: actions/checkout@master
+      - uses: actions/setup-java@v1
+        with:
           java-version: "12.x"
-    - name: Get version.txt
-      uses: actions/download-artifact@v2
-      with:
+      - name: Get version.txt
+        uses: actions/download-artifact@v2
+        with:
           name: gitversion
-    - name: Read version
-      id: version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: version.txt
-    - name: Archive Release
-      uses: thedoctor0/zip-release@master
-      with:
-        type: 'zip'
-        filename: 'EFI-${{ steps.version.outputs.content }}.zip'
-        exclusions: '*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft/* docs docs/* LICENSE README.md version.txt'
-    - name: Upload Release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: 'EFI-${{ steps.version.outputs.content }}.zip'
-        token: ${{ secrets.GH_TOKEN }}
-        tag: ${{ steps.version.outputs.content }}
-        commit: ${{ github.sha }}
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: "zip"
+          filename: "EFI-${{ steps.version.outputs.content }}.zip"
+          exclusions: "*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft/* docs docs/* LICENSE"
+          recursive_exclusions: "*.txt *.md *.jpg"
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "EFI-${{ steps.version.outputs.content }}.zip"
+          token: ${{ secrets.GH_TOKEN }}
+          tag: ${{ steps.version.outputs.content }}
+          commit: ${{ github.sha }}
