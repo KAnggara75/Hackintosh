@@ -52,7 +52,7 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 <br>
 
 - A macOS machine(optional): to create the macOS installer.
-- Flash drive, 12GB or more, for the above purpose.
+- Flash drive, 16GB or more, for the above purpose.
 - Xcode works fine for editing plist files on macOS, but I prefer [PlistEdit Pro](https://www.fatcatsoftware.com/plisteditpro/).
 - [ProperTree](https://github.com/corpnewt/ProperTree) if you need to edit plist files on Windows.
 - [MaciASL](https://github.com/acidanthera/MaciASL), for patching ACPI tables and editing ACPI patches.
@@ -92,7 +92,7 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 | Audio Playback                       | ✅     | `AppleALC.kext` with Layout ID = 4 and `SSDT-HPET.aml`             |
 | Automatic Headphone Output Switching | ✅     | `AppleALC.kext` with Layout ID = 4 and `SSDT-HPET.aml`             |
 | Dock Audio Port                      | ❗     | Not Tested, `AppleALC.kext` with Layout ID = 4 and `SSDT-HPET.aml` |
-| VGA Port                             | ✅     | Testes on Projector                                                |
+| VGA Port                             | ❗     | Not Testes on Projector                                            |
 | HDMI Port                            | ❗     | Not Tested                                                         |
 
 > ### Power, Charge, Sleep and Hibernation
@@ -105,13 +105,13 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 
 > ### Input/ Output
 
-| Feature                       | Status | Dependency & Note             |
-| :---------------------------- | ------ | ----------------------------- |
-| WiFi                          | ✅     | `AirportItlwm.kext`           |
-| Bluetooth                     | ✅     | `IntelBluetoothFirmware.kext` |
-| Ethernet                      | ✅     | `IntelMausi.kext`             |
-| USB 2.0, USB 3.0              | ✅     | `USBPorts.kext`               |
-| USB Power Properties in macOS | ✅     | `SSDT-EC-USBX.aml`            |
+| Feature                       | Status | Dependency & Note                                                                                                                                         |
+| :---------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WiFi                          | ✅     | `AirportItlwm.kext`                                                                                                                                       |
+| Bluetooth                     | ✅     | `IntelBTPatcher.kext` `IntelBluetoothFirmware.kext` and `BlueToolFixup.kext` from [acidanthera/BrcmPatchRAM](https://github.com/acidanthera/BrcmPatchRAM) |
+| Ethernet                      | ✅     | `IntelMausi.kext`                                                                                                                                         |
+| USB 2.0, USB 3.0              | ✅     | `USBPorts.kext`                                                                                                                                           |
+| USB Power Properties in macOS | ✅     | `SSDT-EC-USBX.aml`                                                                                                                                        |
 
 > ### Display, TrackPad, TrackPoint, and Keyboard
 
@@ -124,11 +124,11 @@ Before you do anything, please familiarize yourself with basic Hackintosh termin
 
 > ### macOS Continuity
 
-| Feature                    | Status | Dependency & Note                     |
-| :------------------------- | ------ | ------------------------------------- |
-| iCloud, iMessage, FaceTime | ✅     | Whitelisted Apple ID, Valid SMBIOS    |
-| AirDrop                    | ❗     | Not tested i don't have apple product |
-| Time Machine               | ✅     | Native                                |
+| Feature                    | Status | Dependency & Note                                     |
+| :------------------------- | ------ | ----------------------------------------------------- |
+| iCloud, iMessage, FaceTime | ✅     | Whitelisted Apple ID, Valid SMBIOS                    |
+| AirDrop                    | ❗     | Not tested i don't have iPhone or other apple product |
+| Time Machine               | ✅     | Native                                                |
 
 </details>
 
