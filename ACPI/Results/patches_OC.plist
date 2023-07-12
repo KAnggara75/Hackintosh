@@ -32,6 +32,14 @@
 				</dict>
 				<dict>
 					<key>Comment</key>
+					<string>SSDT to disable USB RHUB/HUBN/URTH and rename devices</string>
+					<key>Enabled</key>
+					<true />
+					<key>Path</key>
+					<string>SSDT-USB-Reset.aml</string>
+				</dict>
+				<dict>
+					<key>Comment</key>
 					<string>Defines PNLF device with a _UID of 15 for backlight control - requires PNLF to
 						XNLF rename</string>
 					<key>Enabled</key>
@@ -101,6 +109,96 @@
 					<data> AAAAAA== </data>
 					<key>Replace</key>
 					<data> RwVYQ1JT </data>
+					<key>ReplaceMask</key>
+					<data> </data>
+					<key>Skip</key>
+					<integer>0</integer>
+					<key>TableLength</key>
+					<integer>0</integer>
+					<key>TableSignature</key>
+					<data> AAAAAA== </data>
+				</dict>
+				<dict>
+					<key>Base</key>
+					<string></string>
+					<key>BaseSkip</key>
+					<integer>0</integer>
+					<key>Comment</key>
+					<string>IPIC IRQ 2 Patch</string>
+					<key>Count</key>
+					<integer>0</integer>
+					<key>Enabled</key>
+					<true />
+					<key>Find</key>
+					<data> IgQAeQA= </data>
+					<key>Limit</key>
+					<integer>0</integer>
+					<key>Mask</key>
+					<data> </data>
+					<key>OemTableId</key>
+					<data> AAAAAA== </data>
+					<key>Replace</key>
+					<data> IgAAeQA= </data>
+					<key>ReplaceMask</key>
+					<data> </data>
+					<key>Skip</key>
+					<integer>0</integer>
+					<key>TableLength</key>
+					<integer>0</integer>
+					<key>TableSignature</key>
+					<data> AAAAAA== </data>
+				</dict>
+				<dict>
+					<key>Base</key>
+					<string></string>
+					<key>BaseSkip</key>
+					<integer>0</integer>
+					<key>Comment</key>
+					<string>RTC IRQ 8 Patch</string>
+					<key>Count</key>
+					<integer>0</integer>
+					<key>Enabled</key>
+					<true />
+					<key>Find</key>
+					<data> IgABeQA= </data>
+					<key>Limit</key>
+					<integer>0</integer>
+					<key>Mask</key>
+					<data> </data>
+					<key>OemTableId</key>
+					<data> AAAAAA== </data>
+					<key>Replace</key>
+					<data> IgAAeQA= </data>
+					<key>ReplaceMask</key>
+					<data> </data>
+					<key>Skip</key>
+					<integer>0</integer>
+					<key>TableLength</key>
+					<integer>0</integer>
+					<key>TableSignature</key>
+					<data> AAAAAA== </data>
+				</dict>
+				<dict>
+					<key>Base</key>
+					<string></string>
+					<key>BaseSkip</key>
+					<integer>0</integer>
+					<key>Comment</key>
+					<string>TIMR IRQ 0 Patch</string>
+					<key>Count</key>
+					<integer>0</integer>
+					<key>Enabled</key>
+					<true />
+					<key>Find</key>
+					<data> IgEAeQA= </data>
+					<key>Limit</key>
+					<integer>0</integer>
+					<key>Mask</key>
+					<data> </data>
+					<key>OemTableId</key>
+					<data> AAAAAA== </data>
+					<key>Replace</key>
+					<data> IgAAeQA= </data>
 					<key>ReplaceMask</key>
 					<data> </data>
 					<key>Skip</key>
