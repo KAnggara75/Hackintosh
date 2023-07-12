@@ -40,6 +40,14 @@
 				</dict>
 				<dict>
 					<key>Comment</key>
+					<string>Defines missing PCI bridges for property injection</string>
+					<key>Enabled</key>
+					<true />
+					<key>Path</key>
+					<string>SSDT-Bridge.aml</string>
+				</dict>
+				<dict>
+					<key>Comment</key>
 					<string>Defines PNLF device with a _UID of 15 for backlight control - requires PNLF to
 						XNLF rename</string>
 					<key>Enabled</key>
