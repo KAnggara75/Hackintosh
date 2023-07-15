@@ -115,7 +115,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Shutdown
 - remove Unused kernel
 
-[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.14...HEAD
+[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.14...0.2.0
 [0.1.14]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.13...0.1.14
 [0.1.13]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.12...0.1.13
 [0.1.12]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.11...0.1.12
