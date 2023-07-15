@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-07-15
+
+- Upgrade VoodooRMI 1.3.5
+- Upgrade VoodooPS2Controller 2.3.5
+- Upgrade WhateverGreen 1.6.5
+- Upgrade ECEnabler 1.0.4
+- Upgrade SMC 1.3.2
+- Upgrade Lilu 1.6.6
+- Upgrade AppleALC 1.8.3
+- Upgrade OpenCore 0.9.3
+- Upgrade AirportItlwm 2.2.0 for Monterey
+- Update .gitignore
+- fix: git action
+- Roll Back to 0.1.13
+
 ## [0.1.14] - 2023-07-09
 
 - fix: Bluetooth on Monterey
