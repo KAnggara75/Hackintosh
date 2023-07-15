@@ -5,3 +5,4 @@ EFI/Microsoft/Recovery/BCD
 EFI/Microsoft/Recovery/BCD.LOG
 ._*
 EFI-*/
+.DS_Store
