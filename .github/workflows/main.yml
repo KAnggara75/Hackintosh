@@ -54,7 +54,7 @@ jobs:
         with:
           type: "zip"
           filename: "EFI-${{ steps.version.outputs.content }}.zip"
-          directory: "EFI"
+          path: "EFI"
       - name: check Files
         run: |
           ls -la
