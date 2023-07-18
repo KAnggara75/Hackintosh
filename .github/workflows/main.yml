@@ -2,7 +2,8 @@ name: CI Release 📦
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   version:
@@ -49,11 +50,11 @@ jobs:
         with:
           path: version.txt
       - name: Archive Release
-        uses: thedoctor0/zip-release@master
+        uses: thedoctor0/zip-release@0.7.1
         with:
           type: "zip"
           filename: "EFI-${{ steps.version.outputs.content }}.zip"
-          exclusions: "*.git* EFI/BOOT/BOOTx64ms.efi /EFI/Microsoft/* docs docs/* docs/img/* docs/img/840g2.png LICENSE README.md version.txt docs/img/840g2.jpg"
+          path: "EFI"
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
