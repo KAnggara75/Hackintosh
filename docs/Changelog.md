@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0] - 2023-07-15
+## [0.3.1] - 2023-07-18
+
+- remove unused kext
+- disable bluetooth kext
+- add TimeSync.reg
+- add: Time Sync Windows
+- Remove unused plugin
+- fix: Bluetooth, Need fix cpu halt on restart and shutdown
+- fix: Disable USB Tool Box
+- add: kext version on Comment
+- add: USBMap.kext
+- add: kext version on Comment
+
+## [0.2.1] - 2023-07-15
 
 - Upgrade VoodooRMI 1.3.5
 - Upgrade VoodooPS2Controller 2.3.5
@@ -115,8 +128,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Shutdown
 - remove Unused kernel
 
-[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.2.0...HEAD
-[0.2.0]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.14...0.2.0
+[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.2.1...0.3.1
+[0.2.1]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.14...0.2.1
 [0.1.14]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.13...0.1.14
 [0.1.13]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.12...0.1.13
 [0.1.12]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.11...0.1.12
@@ -128,7 +142,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.6]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.5...0.1.6
 [0.1.5]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.3...0.1.4
-[0.1.3]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.2...0.1.3
-[0.1.2]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.1...0.1.2
-[0.1.1]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/releases/tag/0.1.0
