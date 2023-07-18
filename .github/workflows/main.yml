@@ -2,8 +2,7 @@ name: CI Release 📦
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   version:
