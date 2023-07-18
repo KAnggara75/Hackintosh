@@ -16,12 +16,12 @@ jobs:
         run: |
           git fetch --prune --depth=10000
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.15
+        uses: gittools/actions/gitversion/setup@v0.10.2
         with:
           versionSpec: "5.11.1"
       - name: Use GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.15
+        uses: gittools/actions/gitversion/execute@v0.10.2
       - name: Create version.txt with NuGetVersionV2
         run: echo -n ${{ steps.gitversion.outputs.NuGetVersionV2  }} > version.txt
       - name: Upload version.txt
@@ -39,13 +39,13 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
-      - name: Get version.txt
-        uses: actions/download-artifact@v2
+      - name: Download a Version Artifact
+        uses: actions/download-artifact@v2.1.1
         with:
           name: gitversion
       - name: Read version
         id: version
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@v1.1.6
         with:
           path: version.txt
       - name: Archive Release
@@ -54,8 +54,8 @@ jobs:
           type: "zip"
           filename: "EFI-${{ steps.version.outputs.content }}.zip"
           path: "EFI"
-      - name: Upload Release
-        uses: ncipollo/release-action@v1
+      - name: Create Release
+        uses: ncipollo/release-action@v1.12.0
         with:
           artifacts: "EFI-${{ steps.version.outputs.content }}.zip"
           token: ${{ secrets.GH_TOKEN }}
