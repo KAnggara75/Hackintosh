@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.1] - 2023-07-18
+## [0.4.0] - 2023-07-18
 
 - remove unused kext
 - disable bluetooth kext
@@ -128,8 +128,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Shutdown
 - remove Unused kernel
 
-[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.3.1...HEAD
-[0.3.1]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.2.1...0.3.1
+[unreleased]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.2.1...0.4.0
 [0.2.1]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.14...0.2.1
 [0.1.14]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.13...0.1.14
 [0.1.13]: https://github.com/kanggara75/Hackintosh-HP-840-G2-OpenCore/compare/0.1.12...0.1.13
