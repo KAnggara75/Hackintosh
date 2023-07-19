@@ -607,7 +607,7 @@
 				<key>Comment</key>
 				<string>V1.0.7 | IntelMausi.kext</string>
 				<key>Enabled</key>
-				<true/>
+				<false/>
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/IntelMausi</string>
 				<key>MaxKernel</key>
@@ -1051,7 +1051,7 @@
 				<key>SystemAudioVolume</key>
 				<data>Rg==</data>
 				<key>boot-args</key>
-				<string>keepsyms=1 debug=0x100 alcid=4 swd_panic=1</string>
+				<string>keepsyms=1 debug=0x100 alcid=4</string>
 				<key>csr-active-config</key>
 				<data>AAAAAA==</data>
 				<key>prev-lang:kbd</key>
