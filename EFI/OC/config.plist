@@ -424,7 +424,7 @@
 				<key>BundlePath</key>
 				<string>IntelBTPatcher.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.2.0 | IntelBTPatcher</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -442,7 +442,7 @@
 				<key>BundlePath</key>
 				<string>IntelBluetoothFirmware.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.2.0 | IntelBluetoothFirmware</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -460,7 +460,7 @@
 				<key>BundlePath</key>
 				<string>BlueToolFixup.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.6.7 | BlueToolFixup</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
