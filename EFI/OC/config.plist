@@ -424,7 +424,7 @@
 				<key>BundlePath</key>
 				<string>IntelBTPatcher.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.2.0 | IntelBTPatcher</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -442,7 +442,7 @@
 				<key>BundlePath</key>
 				<string>IntelBluetoothFirmware.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.2.0 | IntelBluetoothFirmware</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -460,7 +460,7 @@
 				<key>BundlePath</key>
 				<string>BlueToolFixup.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V2.6.7 | BlueToolFixup</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -568,7 +568,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext</string>
 				<key>Comment</key>
-				<string>V1.3.5 | 0. VoodooRMI</string>
+				<string>V1.3.5 | VoodooRMI</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -586,7 +586,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/VoodooInput.kext</string>
 				<key>Comment</key>
-				<string>V1.1.4 | 1. VoodooInput</string>
+				<string>V1.1.4 | VoodooInput</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -604,7 +604,7 @@
 				<key>BundlePath</key>
 				<string>VoodooSMBus.kext</string>
 				<key>Comment</key>
-				<string>V3.0 | 2. VoodooSMBus</string>
+				<string>V3.0 | VoodooSMBus</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -622,7 +622,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/RMISMBus.kext</string>
 				<key>Comment</key>
-				<string>V1.0 | 3. RMISMBus</string>
+				<string>V1.0 | RMISMBus</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -746,13 +746,13 @@
 				<key>Arch</key>
 				<string>Any</string>
 				<key>BundlePath</key>
-				<string>USBMap.kext</string>
+				<string>SMCProcessor.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>V1.3.2 | SMCProcessor.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
-				<string></string>
+				<string>Contents/MacOS/SMCProcessor</string>
 				<key>MaxKernel</key>
 				<string></string>
 				<key>MinKernel</key>
@@ -764,13 +764,31 @@
 				<key>Arch</key>
 				<string>Any</string>
 				<key>BundlePath</key>
-				<string>SMCProcessor.kext</string>
+				<string>USBToolBox.kext</string>
 				<key>Comment</key>
-				<string>V1.3.2 | SMCProcessor.kext</string>
+				<string>V1.1.1 | USBToolBox.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
-				<string>Contents/MacOS/SMCProcessor</string>
+				<string>Contents/MacOS/USBToolBox</string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>MinKernel</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>Any</string>
+				<key>BundlePath</key>
+				<string>UTBMap.kext</string>
+				<key>Comment</key>
+				<string>V0.2 | UTBMap.kext</string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string></string>
 				<key>MaxKernel</key>
 				<string></string>
 				<key>MinKernel</key>
@@ -1254,7 +1272,7 @@
 		<key>Debug</key>
 		<dict>
 			<key>AppleDebug</key>
-			<true/>
+			<false/>
 			<key>ApplePanic</key>
 			<true/>
 			<key>DisableWatchDog</key>
@@ -1534,9 +1552,9 @@
 			<key>JumpstartHotPlug</key>
 			<false/>
 			<key>MinDate</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>MinVersion</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>AppleInput</key>
 		<dict>
