@@ -355,7 +355,7 @@
 				<key>BundlePath</key>
 				<string>IntelBluetoothFirmware.kext</string>
 				<key>Comment</key>
-				<string>V2.2.0 | IntelBluetoothFirmware</string>
+				<string>IntelBluetoothFirmware.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -373,7 +373,7 @@
 				<key>BundlePath</key>
 				<string>IntelMausi.kext</string>
 				<key>Comment</key>
-				<string>V1.0.7 | IntelMausi.kext</string>
+				<string>IntelMausi.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -661,7 +661,7 @@
 				<key>BundlePath</key>
 				<string>BlueToolFixup.kext</string>
 				<key>Comment</key>
-				<string>V2.6.7 | BlueToolFixup</string>
+				<string>BlueToolFixup.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -697,7 +697,7 @@
 				<key>BundlePath</key>
 				<string>IntelBTPatcher.kext</string>
 				<key>Comment</key>
-				<string>V2.2.0 | IntelBTPatcher</string>
+				<string>IntelBTPatcher.kext</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
