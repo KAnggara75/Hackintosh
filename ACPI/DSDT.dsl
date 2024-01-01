@@ -3,9 +3,9 @@
  * AML/ASL+ Disassembler version 20200925 (64-bit version)
  * Copyright (c) 2000 - 2020 Intel Corporation
  * 
- * Disassembling to symbolic ASL+ operators
+ * Disassembling to non-symbolic legacy ASL operators
  *
- * Disassembly of DSDT.aml, Mon Jan  1 16:33:53 2024
+ * Disassembly of DSDT.aml, Mon Jan  1 16:49:16 2024
  *
  * Original Table Header:
  *     Signature        "DSDT"
@@ -96,47 +96,47 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     Name (IDPM, 0x00)
     Method (\HPTS, 1, NotSerialized)
     {
-        SLPT = Arg0
-        \_SB.ODGW ((0x5400 | Arg0))
+        Store (Arg0, SLPT) /* \SLPT */
+        \_SB.ODGW (Or (0x5400, Arg0))
         If (CondRefOf (\_SB.IFFS.FFRU))
         {
-            \_SB.IFFS.FFRU = 0x00
+            Store (0x00, \_SB.IFFS.FFRU) /* External reference */
         }
 
-        If ((Arg0 == 0x05))
+        If (LEqual (Arg0, 0x05))
         {
             \_SB.SSMI (0xEA82, Arg0, 0x00, 0x00, 0x00)
         }
 
-        If ((Arg0 > 0x00))
+        If (LGreater (Arg0, 0x00))
         {
             \_SB.SSMI (0xEA83, 0x00, 0x00, 0x00, 0x00)
             Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
             If (\_SB.PCI0.LPCB.EC0.ECRG)
             {
-                \_SB.PCI0.LPCB.EC0.HSST = 0x00
-                \_SB.PCI0.LPCB.EC0.PB10 = 0x00
+                Store (0x00, \_SB.PCI0.LPCB.EC0.HSST)
+                Store (0x00, \_SB.PCI0.LPCB.EC0.PB10)
             }
 
             Release (\_SB.PCI0.LPCB.EC0.ECMX)
             PPTS (Arg0)
-            If ((Arg0 != 0x05))
+            If (LNotEqual (Arg0, 0x05))
             {
                 \_SB.PCI0.LPCB.EC0.BTDR (0x00)
-                \_SB.PCI0.LPCB.EC0.NGBF = 0xFF
-                \_SB.PCI0.LPCB.EC0.NGBT = 0xFF
-                \_SB.PCI0.LPCB.EC0.GACP = 0x07
-                \_SB.NFBS = 0x01
-                If ((Arg0 == 0x03))
+                Store (0xFF, \_SB.PCI0.LPCB.EC0.NGBF)
+                Store (0xFF, \_SB.PCI0.LPCB.EC0.NGBT)
+                Store (0x07, \_SB.PCI0.LPCB.EC0.GACP)
+                Store (0x01, \_SB.NFBS)
+                If (LEqual (Arg0, 0x03))
                 {
-                    LSTA = \_SB.LID._LID ()
-                    If (((PNHM & 0x000F0FF0) != 0x000106E0))
+                    Store (\_SB.LID._LID (), LSTA) /* \LSTA */
+                    If (LNotEqual (And (PNHM, 0x000F0FF0), 0x000106E0))
                     {
-                        IDPM = \APMC
+                        Store (\APMC, IDPM) /* \IDPM */
                     }
                 }
 
-                If ((Arg0 == 0x04))
+                If (LEqual (Arg0, 0x04))
                 {
                     \_SB.WLBU.INIT ()
                 }
@@ -146,88 +146,88 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\HWAK, 1, NotSerialized)
     {
-        SLPT = 0x00
-        \_SB.ODGW ((0x5600 | Arg0))
+        Store (0x00, SLPT) /* \SLPT */
+        \_SB.ODGW (Or (0x5600, Arg0))
         \_SB.PCI0.LPCB.EC0.ITLB ()
         \_SB.PCI0.LPCB.EC0.RPPC (0x01)
         If (\_SB.PCI0.LPCB.EC0.ECRG)
         {
             Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-            \_SB.PCI0.LPCB.EC0.ACPI = 0x01
-            \_SB.PCI0.LPCB.EC0.OST = \WCOS ()
-            If ((PB1E & 0x01))
+            Store (0x01, \_SB.PCI0.LPCB.EC0.ACPI)
+            Store (\WCOS (), \_SB.PCI0.LPCB.EC0.OST)
+            If (And (PB1E, 0x01))
             {
-                \_SB.PCI0.LPCB.EC0.PB10 = 0x01
+                Store (0x01, \_SB.PCI0.LPCB.EC0.PB10)
             }
             Else
             {
-                \_SB.PCI0.LPCB.EC0.PB10 = 0x00
+                Store (0x00, \_SB.PCI0.LPCB.EC0.PB10)
             }
 
             Release (\_SB.PCI0.LPCB.EC0.ECMX)
         }
 
-        If ((Arg0 > 0x02))
+        If (LGreater (Arg0, 0x02))
         {
             \_TZ.RETD ()
             \_TZ.INTM (0x01)
-            \_SB.NFBS = 0x01
-            If ((Arg0 == 0x03))
+            Store (0x01, \_SB.NFBS)
+            If (LEqual (Arg0, 0x03))
             {
                 If (CondRefOf (\_SB.IFFS.FFRU))
                 {
                     Notify (\_SB.SLPB, 0x02) // Device Wake
                 }
 
-                Local0 = \_SB.LID._LID ()
-                If ((Local0 ^ LSTA))
+                Store (\_SB.LID._LID (), Local0)
+                If (XOr (Local0, LSTA))
                 {
                     \_SB.PCI0.GFX0.GLID (Local0)
                 }
 
-                If (((PNHM & 0x000F0FF0) != 0x000106E0))
+                If (LNotEqual (And (PNHM, 0x000F0FF0), 0x000106E0))
                 {
-                    \APMC = IDPM /* \IDPM */
+                    Store (IDPM, \APMC)
                 }
             }
 
-            If ((Arg0 == 0x04))
+            If (LEqual (Arg0, 0x04))
             {
                 \_SB.WMID.WGWE (0x05, 0x00)
             }
         }
 
-        If (((Arg0 == 0x04) || (\WCOS () == 0x01)))
+        If (LOr (LEqual (Arg0, 0x04), LEqual (\WCOS (), 0x01)))
         {
             Notify (\_SB.SLPB, 0x02) // Device Wake
         }
 
-        Local2 = \_SB.PCI0.LPCB.EC0.GACS ()
+        Store (\_SB.PCI0.LPCB.EC0.GACS (), Local2)
         \_SB.PCI0.LPCB.EC0.PWUP (0x03, 0xFF)
-        Local1 = \_SB.PCI0.LPCB.EC0.GBAP ()
-        Local3 = \_SB.PCI0.LPCB.EC0.GACS ()
-        PWRS = Local3
-        Local3 ^= Local2
-        If ((Arg0 > 0x02))
+        Store (\_SB.PCI0.LPCB.EC0.GBAP (), Local1)
+        Store (\_SB.PCI0.LPCB.EC0.GACS (), Local3)
+        Store (Local3, PWRS) /* \PWRS */
+        XOr (Local2, Local3, Local3)
+        If (LGreater (Arg0, 0x02))
         {
             Notify (\_SB.AC, 0x80) // Status Change
             PCNT ()
         }
 
-        If ((Local3 == 0x00))
+        If (LEqual (Local3, 0x00))
         {
-            If ((Arg0 == 0x04))
+            If (LEqual (Arg0, 0x04))
             {
-                \_SB.ACST = (Local2 ^ 0x01)
+                XOr (Local2, 0x01, \_SB.ACST)
             }
         }
 
         PWAK (Arg0)
         \_SB.VWAK (Arg0)
-        Local0 = \_SB.HST1.GHID ()
-        If ((Arg0 == 0x03))
+        Store (\_SB.HST1.GHID (), Local0)
+        If (LEqual (Arg0, 0x03))
         {
-            \_SB.PCI0.ACEL.CTST = 0xFF
+            Store (0xFF, \_SB.PCI0.ACEL.CTST)
             \_SB.PCI0.ACEL.AJAL ()
         }
         Else
@@ -235,7 +235,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             \_SB.PCI0.ACEL.ITAL ()
         }
 
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        If (LOr (LEqual (Arg0, 0x03), LEqual (Arg0, 0x04)))
         {
             \_SB.PCI0.XHC.XWAK ()
         }
@@ -243,44 +243,44 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (PCNT, 0, Serialized)
     {
-        If ((TCNT > 0x01))
+        If (LGreater (TCNT, 0x01))
         {
-            If ((PDC0 & 0x18))
+            If (And (PDC0, 0x18))
             {
                 Notify (\_PR.CPU0, 0x81) // C-State Change
             }
 
-            If ((PDC1 & 0x18))
+            If (And (PDC1, 0x18))
             {
                 Notify (\_PR.CPU1, 0x81) // C-State Change
             }
 
-            If ((PDC2 & 0x18))
+            If (And (PDC2, 0x18))
             {
                 Notify (\_PR.CPU2, 0x81) // C-State Change
             }
 
-            If ((PDC3 & 0x18))
+            If (And (PDC3, 0x18))
             {
                 Notify (\_PR.CPU3, 0x81) // C-State Change
             }
 
-            If ((PDC4 & 0x18))
+            If (And (PDC4, 0x18))
             {
                 Notify (\_PR.CPU4, 0x81) // C-State Change
             }
 
-            If ((PDC5 & 0x18))
+            If (And (PDC5, 0x18))
             {
                 Notify (\_PR.CPU5, 0x81) // C-State Change
             }
 
-            If ((PDC6 & 0x18))
+            If (And (PDC6, 0x18))
             {
                 Notify (\_PR.CPU6, 0x81) // C-State Change
             }
 
-            If ((PDC7 & 0x18))
+            If (And (PDC7, 0x18))
             {
                 Notify (\_PR.CPU7, 0x81) // C-State Change
             }
@@ -294,26 +294,26 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     Mutex (MUTX, 0x00)
     Method (P8XH, 2, Serialized)
     {
-        If ((Arg0 == 0x00))
+        If (LEqual (Arg0, 0x00))
         {
             \_SB.ODBG (Arg1)
-            P80D = ((P80D & 0xFFFFFF00) | Arg1)
+            Store (Or (And (P80D, 0xFFFFFF00), Arg1), P80D) /* \P80D */
         }
 
-        If ((Arg0 == 0x01))
+        If (LEqual (Arg0, 0x01))
         {
             \_SB.ODG1 (Arg1)
-            P80D = ((P80D & 0xFFFF00FF) | (Arg1 << 0x08))
+            Store (Or (And (P80D, 0xFFFF00FF), ShiftLeft (Arg1, 0x08)), P80D) /* \P80D */
         }
 
-        If ((Arg0 == 0x02))
+        If (LEqual (Arg0, 0x02))
         {
-            P80D = ((P80D & 0xFF00FFFF) | (Arg1 << 0x10))
+            Store (Or (And (P80D, 0xFF00FFFF), ShiftLeft (Arg1, 0x10)), P80D) /* \P80D */
         }
 
-        If ((Arg0 == 0x03))
+        If (LEqual (Arg0, 0x03))
         {
-            P80D = ((P80D & 0x00FFFFFF) | (Arg1 << 0x18))
+            Store (Or (And (P80D, 0x00FFFFFF), ShiftLeft (Arg1, 0x18)), P80D) /* \P80D */
         }
     }
 
@@ -325,81 +325,81 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_PIC, 1, NotSerialized)  // _PIC: Interrupt Model
     {
-        GPIC = Arg0
+        Store (Arg0, GPIC) /* \GPIC */
     }
 
     Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep
     {
-        If ((ALSC == 0x01))
+        If (LEqual (ALSC, 0x01))
         {
-            ALSC = 0x00
+            Store (0x00, ALSC) /* \ALSC */
         }
 
-        If ((ECLP == 0x01))
+        If (LEqual (ECLP, 0x01))
         {
             \_SB.GLVW (0x58, 0x01)
-            \_SB.PCI0.LPCB.EC0.SLPT = 0x00
-            ECLP = 0x00
+            Store (0x00, \_SB.PCI0.LPCB.EC0.SLPT)
+            Store (0x00, ECLP) /* \ECLP */
         }
 
         HPTS (Arg0)
-        If ((Arg0 == 0x03)){}
-        If ((Arg0 == 0x05)){}
-        If (((Arg0 != 0x03) && (\_SB.PCI0.LPCB.EC0.ERWB != One)))
+        If (LEqual (Arg0, 0x03)){}
+        If (LEqual (Arg0, 0x05)){}
+        If (LAnd (LNotEqual (Arg0, 0x03), LNotEqual (\_SB.PCI0.LPCB.EC0.ERWB, One)))
         {
-            RDWD = One
+            Store (One, RDWD) /* \RDWD */
         }
     }
 
     Method (_WAK, 1, NotSerialized)  // _WAK: Wake
     {
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        If (LOr (LEqual (Arg0, 0x03), LEqual (Arg0, 0x04)))
         {
-            If ((OSYS >= 0x07DD)){}
+            If (LGreaterEqual (OSYS, 0x07DD)){}
         }
 
-        UAMS = 0x00
+        Store (0x00, UAMS) /* \UAMS */
         HWAK (Arg0)
         \_SB.PCI0.POSC (OSCC, 0x00)
-        If ((Arg0 == 0x03))
+        If (LEqual (Arg0, 0x03))
         {
             If (CondRefOf (\_SB.ISCT))
             {
-                If ((\_SB.ISCT.ASCT & 0x01))
+                If (And (\_SB.ISCT.ASCT, 0x01))
                 {
-                    If ((\_SB.PCI0.GFX0.TCHE & 0x0100))
+                    If (And (\_SB.PCI0.GFX0.TCHE, 0x0100))
                     {
-                        If (((\_SB.PCI0.LPCB.EC0.SCCB & 0x01) && (\_SB.ISCT.WKRS & 0x40)))
+                        If (LAnd (And (\_SB.PCI0.LPCB.EC0.SCCB, 0x01), And (\_SB.ISCT.WKRS, 0x40)))
                         {
-                            \_SB.PCI0.GFX0.STAT = ((\_SB.PCI0.GFX0.STAT & ~0x03) | 0x01)
+                            Store (Or (And (\_SB.PCI0.GFX0.STAT, Not (0x03)), 0x01), \_SB.PCI0.GFX0.STAT)
                         }
                         Else
                         {
-                            \_SB.PCI0.GFX0.STAT = (\_SB.PCI0.GFX0.STAT & ~0x03)
+                            Store (And (\_SB.PCI0.GFX0.STAT, Not (0x03)), \_SB.PCI0.GFX0.STAT)
                         }
                     }
                 }
             }
         }
 
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        If (LOr (LEqual (Arg0, 0x03), LEqual (Arg0, 0x04)))
         {
-            If ((OSYS == 0x07D2))
+            If (LEqual (OSYS, 0x07D2))
             {
-                If ((\_PR.CFGD & 0x01))
+                If (And (\_PR.CFGD, 0x01))
                 {
-                    If ((\_PR.CPU0._PPC > 0x00))
+                    If (LGreater (\_PR.CPU0._PPC, 0x00))
                     {
-                        \_PR.CPU0._PPC -= 0x01
+                        Subtract (\_PR.CPU0._PPC, 0x01, \_PR.CPU0._PPC) /* External reference */
                         PNOT ()
-                        \_PR.CPU0._PPC += 0x01
+                        Add (\_PR.CPU0._PPC, 0x01, \_PR.CPU0._PPC) /* External reference */
                         PNOT ()
                     }
                     Else
                     {
-                        \_PR.CPU0._PPC += 0x01
+                        Add (\_PR.CPU0._PPC, 0x01, \_PR.CPU0._PPC) /* External reference */
                         PNOT ()
-                        \_PR.CPU0._PPC -= 0x01
+                        Subtract (\_PR.CPU0._PPC, 0x01, \_PR.CPU0._PPC) /* External reference */
                         PNOT ()
                     }
                 }
@@ -415,90 +415,90 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (GETB, 3, Serialized)
     {
-        Local0 = (Arg0 * 0x08)
-        Local1 = (Arg1 * 0x08)
+        Multiply (Arg0, 0x08, Local0)
+        Multiply (Arg1, 0x08, Local1)
         CreateField (Arg2, Local0, Local1, TBF3)
         Return (TBF3) /* \GETB.TBF3 */
     }
 
     Method (PNOT, 0, Serialized)
     {
-        If ((TCNT > 0x01))
+        If (LGreater (TCNT, 0x01))
         {
-            If ((PDC0 & 0x08))
+            If (And (PDC0, 0x08))
             {
                 Notify (\_PR.CPU0, 0x80) // Performance Capability Change
-                If ((PDC0 & 0x10))
+                If (And (PDC0, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU0, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC1 & 0x08))
+            If (And (PDC1, 0x08))
             {
                 Notify (\_PR.CPU1, 0x80) // Performance Capability Change
-                If ((PDC1 & 0x10))
+                If (And (PDC1, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU1, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC2 & 0x08))
+            If (And (PDC2, 0x08))
             {
                 Notify (\_PR.CPU2, 0x80) // Performance Capability Change
-                If ((PDC2 & 0x10))
+                If (And (PDC2, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU2, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC3 & 0x08))
+            If (And (PDC3, 0x08))
             {
                 Notify (\_PR.CPU3, 0x80) // Performance Capability Change
-                If ((PDC3 & 0x10))
+                If (And (PDC3, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU3, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC4 & 0x08))
+            If (And (PDC4, 0x08))
             {
                 Notify (\_PR.CPU4, 0x80) // Performance Capability Change
-                If ((PDC4 & 0x10))
+                If (And (PDC4, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU4, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC5 & 0x08))
+            If (And (PDC5, 0x08))
             {
                 Notify (\_PR.CPU5, 0x80) // Performance Capability Change
-                If ((PDC5 & 0x10))
+                If (And (PDC5, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU5, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC6 & 0x08))
+            If (And (PDC6, 0x08))
             {
                 Notify (\_PR.CPU6, 0x80) // Performance Capability Change
-                If ((PDC6 & 0x10))
+                If (And (PDC6, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU6, 0x81) // C-State Change
                 }
             }
 
-            If ((PDC7 & 0x08))
+            If (And (PDC7, 0x08))
             {
                 Notify (\_PR.CPU7, 0x80) // Performance Capability Change
-                If ((PDC7 & 0x10))
+                If (And (PDC7, 0x10))
                 {
                     Sleep (0x64)
                     Notify (\_PR.CPU7, 0x81) // C-State Change
@@ -518,41 +518,41 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     Name (VBOK, 0x00)
     Method (GUAM, 1, Serialized)
     {
-        If ((Arg0 != DDPS))
+        If (LNotEqual (Arg0, DDPS))
         {
-            DDPS = Arg0
-            UAMS = (Arg0 && ~PWRS)
+            Store (Arg0, DDPS) /* \DDPS */
+            Store (LAnd (Arg0, Not (PWRS)), UAMS) /* \UAMS */
             If (Arg0)
             {
-                \_SB.PCI0.LPCB.EC0.SLPT = 0x06
+                Store (0x06, \_SB.PCI0.LPCB.EC0.SLPT)
                 \_SB.GLVW (0x58, 0x00)
-                ECLP = 0x01
-                If ((\_SB.PCI0.LPCB.EC0.ALST & 0x01))
+                Store (0x01, ECLP) /* \ECLP */
+                If (And (\_SB.PCI0.LPCB.EC0.ALST, 0x01))
                 {
-                    \_SB.PCI0.LPCB.EC0.ALST = 0x00
-                    ALSC = 0x01
+                    Store (0x00, \_SB.PCI0.LPCB.EC0.ALST)
+                    Store (0x01, ALSC) /* \ALSC */
                 }
 
-                If ((CondRefOf (\_PR.CPU0._PSS) && CondRefOf (\_PR.CPU0._PPC)))
+                If (LAnd (CondRefOf (\_PR.CPU0._PSS), CondRefOf (\_PR.CPU0._PPC)))
                 {
-                    \_PR.CPU0._PPC = (SizeOf (\_PR.CPU0._PSS) - One)
+                    Subtract (SizeOf (\_PR.CPU0._PSS), One, \_PR.CPU0._PPC) /* External reference */
                     PNOT ()
                 }
             }
             Else
             {
                 \_SB.GLVW (0x58, 0x01)
-                \_SB.PCI0.LPCB.EC0.SLPT = 0x00
-                ECLP = 0x00
-                If ((ALSC == 0x01))
+                Store (0x00, \_SB.PCI0.LPCB.EC0.SLPT)
+                Store (0x00, ECLP) /* \ECLP */
+                If (LEqual (ALSC, 0x01))
                 {
-                    \_SB.PCI0.LPCB.EC0.ALST = 0x01
-                    ALSC = 0x00
+                    Store (0x01, \_SB.PCI0.LPCB.EC0.ALST)
+                    Store (0x00, ALSC) /* \ALSC */
                 }
 
                 If (CondRefOf (\_PR.CPU0._PPC))
                 {
-                    \_PR.CPU0._PPC = Zero
+                    Store (Zero, \_PR.CPU0._PPC) /* External reference */
                     PNOT ()
                 }
             }
@@ -568,7 +568,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             \_SB.PCI0.PAUD.PUAM ()
         }
 
-        If ((OSYS == 0x07DC))
+        If (LEqual (OSYS, 0x07DC))
         {
             If (CondRefOf (\_SB.PCI0.XHC.DUAM))
             {
@@ -579,16 +579,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (TRAP, 2, Serialized)
     {
-        SMIF = Arg1
-        If ((Arg0 == 0x01))
+        Store (Arg1, SMIF) /* \SMIF */
+        If (LEqual (Arg0, 0x01))
         {
-            TRP0 = 0x00
+            Store (0x00, TRP0) /* \TRP0 */
         }
 
-        If ((Arg0 == 0x02))
+        If (LEqual (Arg0, 0x02))
         {
-            DTSF = Arg1
-            TRPD = 0x00
+            Store (Arg1, DTSF) /* \DTSF */
+            Store (0x00, TRPD) /* \TRPD */
             Return (DTSF) /* \DTSF */
         }
 
@@ -599,63 +599,63 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_INI, 0, NotSerialized)  // _INI: Initialize
         {
-            OSYS = 0x07D0
+            Store (0x07D0, OSYS) /* \OSYS */
             If (CondRefOf (\_OSI, Local0))
             {
                 If (\_OSI ("Linux"))
                 {
-                    OSYS = 0x03E8
+                    Store (0x03E8, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2001"))
                 {
-                    OSYS = 0x07D1
+                    Store (0x07D1, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2001 SP1"))
                 {
-                    OSYS = 0x07D1
+                    Store (0x07D1, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2001 SP2"))
                 {
-                    OSYS = 0x07D2
+                    Store (0x07D2, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2001.1"))
                 {
-                    OSYS = 0x07D3
+                    Store (0x07D3, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2006"))
                 {
-                    OSYS = 0x07D6
+                    Store (0x07D6, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2009"))
                 {
-                    OSYS = 0x07D9
+                    Store (0x07D9, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2012"))
                 {
-                    OSYS = 0x07DC
+                    Store (0x07DC, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2013"))
                 {
-                    OSYS = 0x07DD
+                    Store (0x07DD, OSYS) /* \OSYS */
                 }
 
                 If (\_OSI ("Windows 2015"))
                 {
-                    OSYS = 0x07DF
+                    Store (0x07DF, OSYS) /* \OSYS */
                 }
             }
 
             \_TZ.BOTT ()
             \_TZ.RETD ()
-            PFLV = 0x01
+            Store (0x01, PFLV) /* \PFLV */
         }
 
         Name (OSCI, 0x00)
@@ -664,49 +664,49 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         {
             CreateDWordField (Arg3, 0x00, STS0)
             CreateDWordField (Arg3, 0x04, CAP0)
-            If ((Arg0 == ToUUID ("0811b06e-4a27-44f9-8d60-3cbbc22e7b48") /* Platform-wide Capabilities */))
+            If (LEqual (Arg0, ToUUID ("0811b06e-4a27-44f9-8d60-3cbbc22e7b48") /* Platform-wide Capabilities */))
             {
-                If ((Arg1 == One))
+                If (LEqual (Arg1, One))
                 {
-                    If ((CAP0 & 0x04))
+                    If (And (CAP0, 0x04))
                     {
-                        OSCO = 0x04
+                        Store (0x04, OSCO) /* \_SB_.OSCO */
                     }
 
-                    If ((CAP0 & 0x20))
+                    If (And (CAP0, 0x20))
                     {
                         If (CondRefOf (\_SB.PCCD.PENB))
                         {
-                            If ((CondRefOf (\_SB.PCCD.PENB) == 0x00))
+                            If (LEqual (CondRefOf (\_SB.PCCD.PENB), 0x00))
                             {
-                                CAP0 &= 0x1F
-                                STS0 |= 0x10
+                                And (CAP0, 0x1F, CAP0) /* \_SB_._OSC.CAP0 */
+                                Or (STS0, 0x10, STS0) /* \_SB_._OSC.STS0 */
                             }
                         }
                         Else
                         {
-                            CAP0 &= 0x1F
-                            STS0 |= 0x10
+                            And (CAP0, 0x1F, CAP0) /* \_SB_._OSC.CAP0 */
+                            Or (STS0, 0x10, STS0) /* \_SB_._OSC.STS0 */
                         }
                     }
 
                     If (\_OSI ("Windows 2013"))
                     {
-                        CAP0 |= 0x04
-                        OSCI = STS0 /* \_SB_._OSC.STS0 */
-                        OSCO = CAP0 /* \_SB_._OSC.CAP0 */
+                        Or (CAP0, 0x04, CAP0) /* \_SB_._OSC.CAP0 */
+                        Store (STS0, OSCI) /* \_SB_.OSCI */
+                        Store (CAP0, OSCO) /* \_SB_.OSCO */
                     }
                 }
                 Else
                 {
-                    STS0 &= 0xFFFFFF00
-                    STS0 |= 0x0A
+                    And (STS0, 0xFFFFFF00, STS0) /* \_SB_._OSC.STS0 */
+                    Or (STS0, 0x0A, STS0) /* \_SB_._OSC.STS0 */
                 }
             }
             Else
             {
-                STS0 &= 0xFFFFFF00
-                STS0 |= 0x06
+                And (STS0, 0xFFFFFF00, STS0) /* \_SB_._OSC.STS0 */
+                Or (STS0, 0x06, STS0) /* \_SB_._OSC.STS0 */
             }
 
             Return (Arg3)
@@ -1184,7 +1184,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_L61, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=0x00-0xFF
         {
-            L01C += 0x01
+            Add (L01C, 0x01, L01C) /* \L01C */
             \_SB.PCI0.RP01.HPLG ()
             \_SB.PCI0.RP02.HPLG ()
             \_SB.PCI0.RP03.HPLG ()
@@ -1197,22 +1197,22 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (_L62, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=0x00-0xFF
         {
-            GPEC = 0x00
-            Local0 = SSCI /* \SSCI */
+            Store (0x00, GPEC) /* \GPEC */
+            Store (SSCI, Local0)
             If (Local0)
             {
-                SSCI = 0x00
-                If ((Local0 == 0x01))
+                Store (0x00, SSCI) /* \SSCI */
+                If (LEqual (Local0, 0x01))
                 {
                     VFN4 ()
                 }
 
-                If ((Local0 == 0x04))
+                If (LEqual (Local0, 0x04))
                 {
                     \_SB.WMID.WGWE (Local0, 0x00)
                 }
 
-                If ((Local0 == 0x05))
+                If (LEqual (Local0, 0x05))
                 {
                     If (\_SB.WLBU._STA ())
                     {
@@ -1224,12 +1224,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                 }
 
-                If ((Local0 == 0x03))
+                If (LEqual (Local0, 0x03))
                 {
                     VBRE (0x87)
                 }
 
-                If ((Local0 == 0x02))
+                If (LEqual (Local0, 0x02))
                 {
                     VBRE (0x86)
                 }
@@ -1252,19 +1252,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         {
             If (\_SB.PCI0.EHC1.PMES)
             {
-                \_SB.PCI0.EHC1.PMES = 0x01
+                Store (0x01, \_SB.PCI0.EHC1.PMES)
                 Notify (\_SB.PCI0.EHC1, 0x02) // Device Wake
             }
 
             If (\_SB.PCI0.XHC.PMES)
             {
-                \_SB.PCI0.XHC.PMES = 0x01
+                Store (0x01, \_SB.PCI0.XHC.PMES)
                 Notify (\_SB.PCI0.XHC, 0x02) // Device Wake
             }
 
             If (\_SB.PCI0.HDEF.PMES)
             {
-                \_SB.PCI0.HDEF.PMES = 0x01
+                Store (0x01, \_SB.PCI0.HDEF.PMES)
                 Notify (\_SB.PCI0.HDEF, 0x02) // Device Wake
             }
 
@@ -1273,16 +1273,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (_L29, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=0x00-0xFF
         {
-            Local0 = \_SB.GINR (0x29)
-            Local0 ^= 0x01
+            Store (\_SB.GINR (0x29), Local0)
+            XOr (0x01, Local0, Local0)
             \_SB.GINW (0x29, Local0)
             VDET ()
-            If ((\WCOS () >= 0x09)){}
-            If ((\WCOS () == 0x07))
+            If (LGreaterEqual (\WCOS (), 0x09)){}
+            If (LEqual (\WCOS (), 0x07))
             {
-                If ((\_SB.DCKD () ^ \_SB.PCI0.LPCB.EC0.DOKS))
+                If (XOr (\_SB.DCKD (), \_SB.PCI0.LPCB.EC0.DOKS))
                 {
-                    \_SB.PCI0.LPCB.EC0.DOKS ^= 0x01
+                    XOr (\_SB.PCI0.LPCB.EC0.DOKS, 0x01, \_SB.PCI0.LPCB.EC0.DOKS)
                     \_SB.WMID.WGWE (0x01, 0x00)
                 }
             }
@@ -1294,12 +1294,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (HWWP, 1, Serialized)
         {
-            If ((Arg0 == 0x01))
+            If (LEqual (Arg0, 0x01))
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
                 If (WXML)
                 {
-                    Local0 = 0x01
+                    Store (0x01, Local0)
                 }
 
                 \_SB.PCI0.LPCB.EC0.HWWP (Local0)
@@ -1384,34 +1384,34 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 Case (0x50)
                 {
-                    MRPM = 0x19C8
-                    TRPC [0x01] = CLSH /* \_TZ_.CLSH */
+                    Store (0x19C8, MRPM) /* \_TZ_.MRPM */
+                    Store (CLSH, Index (TRPC, 0x01))
                 }
                 Case (0x52)
                 {
-                    MRPM = 0x10CC
-                    TRPC [0x01] = CLSH /* \_TZ_.CLSH */
+                    Store (0x10CC, MRPM) /* \_TZ_.MRPM */
+                    Store (CLSH, Index (TRPC, 0x01))
                 }
                 Case (0x53)
                 {
-                    MRPM = 0x10CC
-                    TRPC [0x01] = CLSH /* \_TZ_.CLSH */
+                    Store (0x10CC, MRPM) /* \_TZ_.MRPM */
+                    Store (CLSH, Index (TRPC, 0x01))
                 }
 
             }
 
-            If ((TJMX > 0x00))
+            If (LGreater (TJMX, 0x00))
             {
-                Local0 = (TJMX - 0x01)
-                DerefOf (TRPC [0x00]) [0x02] = Local0
-                DerefOf (TRPC [0x00]) [0x01] = Local0
-                DerefOf (TRPC [0x00]) [0x00] = (TJMX - 0x04)
+                Subtract (TJMX, 0x01, Local0)
+                Store (Local0, Index (DerefOf (Index (TRPC, 0x00)), 0x02))
+                Store (Local0, Index (DerefOf (Index (TRPC, 0x00)), 0x01))
+                Subtract (TJMX, 0x04, Index (DerefOf (Index (TRPC, 0x00)), 0x00))
             }
         }
 
         Method (INTM, 1, Serialized)
         {
-            Local0 = 0x00
+            Store (0x00, Local0)
             OTHI (Arg0)
         }
 
@@ -1427,38 +1427,38 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Method (BOTT, 0, Serialized)
         {
             TRUP ()
-            Local3 = SizeOf (TRPC)
-            Local5 = DerefOf (TRPC [0x00])
-            Local4 = SizeOf (Local5)
-            Local0 = 0x00
-            While ((Local0 < Local3))
+            Store (SizeOf (TRPC), Local3)
+            Store (DerefOf (Index (TRPC, 0x00)), Local5)
+            Store (SizeOf (Local5), Local4)
+            Store (0x00, Local0)
+            While (LLess (Local0, Local3))
             {
-                Local1 = 0x00
-                While ((Local1 < Local4))
+                Store (0x00, Local1)
+                While (LLess (Local1, Local4))
                 {
-                    Local6 = DerefOf (DerefOf (TRPC [Local0]) [Local1])
-                    Local7 = GETK (Local6)
-                    DerefOf (TRIP [Local0]) [Local1] = Local7
-                    Local1++
+                    Store (DerefOf (Index (DerefOf (Index (TRPC, Local0)), Local1)), Local6)
+                    Store (GETK (Local6), Local7)
+                    Store (Local7, Index (DerefOf (Index (TRIP, Local0)), Local1))
+                    Increment (Local1)
                 }
 
-                Local0++
+                Increment (Local0)
             }
         }
 
         Method (RETD, 0, Serialized)
         {
             Acquire (THER, 0xFFFF)
-            THSC = 0x1F
-            WHTR = 0x1F
-            Local0 = 0x00
-            While ((Local0 < 0x06))
+            Store (0x1F, THSC) /* \_TZ_.THSC */
+            Store (0x1F, WHTR) /* \_TZ_.WHTR */
+            Store (0x00, Local0)
+            While (LLess (Local0, 0x06))
             {
-                LARE [Local0] = 0x00
-                LARP [Local0] = 0x00
-                CUZO [Local0] = 0xFF
-                LATR [Local0] = 0x00
-                Local0++
+                Store (0x00, Index (LARE, Local0))
+                Store (0x00, Index (LARP, Local0))
+                Store (0xFF, Index (CUZO, Local0))
+                Store (0x00, Index (LATR, Local0))
+                Increment (Local0)
             }
 
             Release (THER)
@@ -1476,155 +1476,155 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Name (OTID, 0x00)
         Method (ECTI, 1, Serialized)
         {
-            Local0 = 0x00
-            If ((Arg0 == 0x01))
+            Store (0x00, Local0)
+            If (LEqual (Arg0, 0x01))
             {
-                OTID = 0x01
+                Store (0x01, OTID) /* \_TZ_.OTID */
             }
 
-            If ((\_SB.PCI0.LPCB.EC0.ECRG && OTID))
+            If (LAnd (\_SB.PCI0.LPCB.EC0.ECRG, OTID))
             {
                 NTHS (0x1F)
-                OTID = 0x00
+                Store (0x00, OTID) /* \_TZ_.OTID */
             }
         }
 
         Method (OSIT, 0, Serialized)
         {
-            If ((OSTH == 0x00))
+            If (LEqual (OSTH, 0x00))
             {
                 \_TZ.INTM (0x00)
-                OSTH = 0x01
+                Store (0x01, OSTH) /* \_TZ_.OSTH */
             }
         }
 
         Method (GETP, 2, Serialized)
         {
-            Local0 = Arg1
-            If ((Arg1 == 0x01))
+            Store (Arg1, Local0)
+            If (LEqual (Arg1, 0x01))
             {
-                Local3 = DerefOf (CUZO [Arg0])
-                If (((Local3 > 0x01) && (Local3 != 0xFF)))
+                Store (DerefOf (Index (CUZO, Arg0)), Local3)
+                If (LAnd (LGreater (Local3, 0x01), LNotEqual (Local3, 0xFF)))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
             }
 
-            Local2 = DerefOf (DerefOf (TRIP [Arg0]) [Local0])
+            Store (DerefOf (Index (DerefOf (Index (TRIP, Arg0)), Local0)), Local2)
             Return (Local2)
         }
 
         Method (GETK, 1, Serialized)
         {
-            Local0 = (Arg0 * 0x0A)
-            Local1 = (Local0 + 0x0AAC)
+            Multiply (Arg0, 0x0A, Local0)
+            Add (Local0, 0x0AAC, Local1)
             Return (Local1)
         }
 
         Method (GTTP, 5, Serialized)
         {
-            Local1 = Arg2
-            If (((Arg0 <= 0x04) && \_SB.PCI0.LPCB.EC0.ECRG))
+            Store (Arg2, Local1)
+            If (LAnd (LLessEqual (Arg0, 0x04), \_SB.PCI0.LPCB.EC0.ECRG))
             {
                 Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                \_SB.PCI0.LPCB.EC0.CRZN = Arg1
-                Local1 = \_SB.PCI0.LPCB.EC0.TEMP
+                Store (Arg1, \_SB.PCI0.LPCB.EC0.CRZN)
+                Store (\_SB.PCI0.LPCB.EC0.TEMP, Local1)
                 Release (\_SB.PCI0.LPCB.EC0.ECMX)
             }
 
-            Local2 = Local1
-            If ((Local1 < Arg3))
+            Store (Local1, Local2)
+            If (LLess (Local1, Arg3))
             {
-                If ((DerefOf (LARE [Arg0]) < Arg3))
+                If (LLess (DerefOf (Index (LARE, Arg0)), Arg3))
                 {
-                    LARP [Arg0] = Arg3
+                    Store (Arg3, Index (LARP, Arg0))
                 }
 
-                Local1 = DerefOf (LARP [Arg0])
+                Store (DerefOf (Index (LARP, Arg0)), Local1)
             }
-            ElseIf ((Local1 > Arg4))
+            ElseIf (LGreater (Local1, Arg4))
             {
-                If ((DerefOf (LARE [Arg0]) > Arg4))
+                If (LGreater (DerefOf (Index (LARE, Arg0)), Arg4))
                 {
-                    LARP [Arg0] = Arg4
+                    Store (Arg4, Index (LARP, Arg0))
                 }
 
-                Local1 = DerefOf (LARP [Arg0])
+                Store (DerefOf (Index (LARP, Arg0)), Local1)
             }
 
-            LARE [Arg0] = Local2
-            LARP [Arg0] = Local1
+            Store (Local2, Index (LARE, Arg0))
+            Store (Local1, Index (LARP, Arg0))
             Return (Local1)
         }
 
         Method (SETM, 3, Serialized)
         {
-            Local5 = 0x00
-            If ((Arg0 <= 0x04))
+            Store (0x00, Local5)
+            If (LLessEqual (Arg0, 0x04))
             {
                 Acquire (THER, 0xFFFF)
-                Local7 = (0x01 << Arg0)
-                If (((THSC & Local7) && \_SB.PCI0.LPCB.EC0.ECRG))
+                Store (ShiftLeft (0x01, Arg0), Local7)
+                If (LAnd (And (THSC, Local7), \_SB.PCI0.LPCB.EC0.ECRG))
                 {
-                    If ((DerefOf (LATR [Arg0]) && (Arg0 != 0x04)))
+                    If (LAnd (DerefOf (Index (LATR, Arg0)), LNotEqual (Arg0, 0x04)))
                     {
-                        Local4 = (Arg2 + 0x02)
+                        Add (Arg2, 0x02, Local4)
                     }
                     Else
                     {
-                        Local4 = Arg2
+                        Store (Arg2, Local4)
                     }
 
-                    Local2 = DerefOf (DerefOf (TRPC [Arg0]) [0x00])
-                    Local0 = 0x01
-                    While ((Local0 <= 0x03))
+                    Store (DerefOf (Index (DerefOf (Index (TRPC, Arg0)), 0x00)), Local2)
+                    Store (0x01, Local0)
+                    While (LLessEqual (Local0, 0x03))
                     {
-                        Local6 = DerefOf (DerefOf (TRPC [Arg0]) [Local0])
-                        If ((Local4 < Local6))
+                        Store (DerefOf (Index (DerefOf (Index (TRPC, Arg0)), Local0)), Local6)
+                        If (LLess (Local4, Local6))
                         {
                             Break
                         }
                         Else
                         {
-                            Local0++
+                            Increment (Local0)
                         }
                     }
 
-                    If ((Local0 == 0x01))
+                    If (LEqual (Local0, 0x01))
                     {
-                        If ((Arg2 > Local2))
+                        If (LGreater (Arg2, Local2))
                         {
-                            If ((DerefOf (LATR [Arg0]) > Local6))
+                            If (LGreater (DerefOf (Index (LATR, Arg0)), Local6))
                             {
-                                Local0++
+                                Increment (Local0)
                             }
                         }
                     }
 
-                    Local3 = DerefOf (TRPC [Arg0])
-                    Local4 = SizeOf (Local3)
-                    If (((Local0 != DerefOf (CUZO [Arg0])) && (Local0 < 
+                    Store (DerefOf (Index (TRPC, Arg0)), Local3)
+                    Store (SizeOf (Local3), Local4)
+                    If (LAnd (LNotEqual (Local0, DerefOf (Index (CUZO, Arg0))), LLess (Local0, 
                         Local4)))
                     {
-                        Local5 = 0x01
-                        CUZO [Arg0] = Local0
-                        If ((Arg0 < 0x04))
+                        Store (0x01, Local5)
+                        Store (Local0, Index (CUZO, Arg0))
+                        If (LLess (Arg0, 0x04))
                         {
                             Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                            \_SB.PCI0.LPCB.EC0.CRZN = Arg1
-                            If ((DerefOf (LATR [Arg0]) == 0x00))
+                            Store (Arg1, \_SB.PCI0.LPCB.EC0.CRZN)
+                            If (LEqual (DerefOf (Index (LATR, Arg0)), 0x00))
                             {
-                                \_SB.PCI0.LPCB.EC0.PLTP = Local2
+                                Store (Local2, \_SB.PCI0.LPCB.EC0.PLTP)
                             }
 
-                            \_SB.PCI0.LPCB.EC0.PHTP = Local6
+                            Store (Local6, \_SB.PCI0.LPCB.EC0.PHTP)
                             Release (\_SB.PCI0.LPCB.EC0.ECMX)
                         }
 
-                        LATR [Arg0] = Local6
+                        Store (Local6, Index (LATR, Arg0))
                     }
 
-                    THSC &= ~Local7
+                    And (THSC, Not (Local7), THSC) /* \_TZ_.THSC */
                 }
 
                 Release (THER)
@@ -1635,13 +1635,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (CHOT, 1, Serialized)
         {
-            If ((DTCD & 0x00020000))
+            If (And (DTCD, 0x00020000))
             {
-                Local0 = 0x0FAC
+                Store (0x0FAC, Local0)
             }
             Else
             {
-                Local0 = GETP (Arg0, 0x02)
+                Store (GETP (Arg0, 0x02), Local0)
             }
 
             Return (Local0)
@@ -1662,8 +1662,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
                 \_TZ.OSIT ()
-                Local0 = 0x00
-                Local0 = GTTP (0x00, 0x01, 0x10, 0x00, 0x7F)
+                Store (0x00, Local0)
+                Store (GTTP (0x00, 0x01, 0x10, 0x00, 0x7F), Local0)
                 If (SETM (0x00, 0x01, Local0))
                 {
                     Notify (\_TZ.CPUZ, 0x81) // Thermal Trip Point Change
@@ -1695,8 +1695,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
-                Local0 = 0x00
-                Local0 = GTTP (0x01, 0x02, 0x10, 0x00, 0x7F)
+                Store (0x00, Local0)
+                Store (GTTP (0x01, 0x02, 0x10, 0x00, 0x7F), Local0)
                 If (SETM (0x01, 0x02, Local0))
                 {
                     Notify (\_TZ.GFXZ, 0x81) // Thermal Trip Point Change
@@ -1715,8 +1715,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
-                Local0 = 0x00
-                Local0 = GTTP (0x02, 0x03, 0x10, 0x00, 0x7F)
+                Store (0x00, Local0)
+                Store (GTTP (0x02, 0x03, 0x10, 0x00, 0x7F), Local0)
                 Return (GETK (Local0))
             }
         }
@@ -1730,8 +1730,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
-                Local0 = 0x00
-                Local0 = GTTP (0x03, 0x04, 0x10, 0x00, 0x7F)
+                Store (0x00, Local0)
+                Store (GTTP (0x03, 0x04, 0x10, 0x00, 0x7F), Local0)
                 Return (GETK (Local0))
             }
         }
@@ -1758,8 +1758,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
-                Local0 = 0x00
-                Local0 = GTTP (0x04, 0x05, 0x00, 0x00, 0x7F)
+                Store (0x00, Local0)
+                Store (GTTP (0x04, 0x05, 0x00, 0x00, 0x7F), Local0)
                 If (SETM (0x04, 0x05, Local0))
                 {
                     Notify (\_TZ.BATZ, 0x81) // Thermal Trip Point Change
@@ -1771,27 +1771,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (NTHS, 1, Serialized)
         {
-            If ((Arg0 & 0x01))
+            If (And (Arg0, 0x01))
             {
                 Notify (CPUZ, 0x80) // Thermal Status Change
             }
 
-            If ((Arg0 & 0x02))
+            If (And (Arg0, 0x02))
             {
                 Notify (GFXZ, 0x80) // Thermal Status Change
             }
 
-            If ((Arg0 & 0x04))
+            If (And (Arg0, 0x04))
             {
                 Notify (EXTZ, 0x80) // Thermal Status Change
             }
 
-            If ((Arg0 & 0x08))
+            If (And (Arg0, 0x08))
             {
                 Notify (LOCZ, 0x80) // Thermal Status Change
             }
 
-            If ((Arg0 & 0x10))
+            If (And (Arg0, 0x10))
             {
                 Notify (BATZ, 0x80) // Thermal Status Change
             }
@@ -1799,57 +1799,57 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (ECTE, 1, Serialized)
         {
-            Local1 = 0x00
+            Store (0x00, Local1)
             If (Arg0)
             {
-                If ((Arg0 & 0x01))
+                If (And (Arg0, 0x01))
                 {
-                    Local1 |= 0x01
+                    Or (Local1, 0x01, Local1)
                 }
 
-                If ((Arg0 & 0x02))
+                If (And (Arg0, 0x02))
                 {
-                    Local1 |= 0x02
+                    Or (Local1, 0x02, Local1)
                 }
 
-                If ((Arg0 & 0x04))
+                If (And (Arg0, 0x04))
                 {
-                    Local1 |= 0x04
+                    Or (Local1, 0x04, Local1)
                 }
 
-                If ((Arg0 & 0x08))
+                If (And (Arg0, 0x08))
                 {
-                    Local1 |= 0x08
+                    Or (Local1, 0x08, Local1)
                 }
 
-                If ((Arg0 & 0x10))
+                If (And (Arg0, 0x10))
                 {
-                    Local1 |= 0x10
+                    Or (Local1, 0x10, Local1)
                 }
             }
             Else
             {
-                Local1 |= 0x10
+                Or (Local1, 0x10, Local1)
             }
 
             Acquire (THER, 0xFFFF)
-            THSC |= Local1
+            Or (THSC, Local1, THSC) /* \_TZ_.THSC */
             Release (THER)
             NTHS (Local1)
         }
 
         Method (GFRM, 0, Serialized)
         {
-            Local0 = 0x00
+            Store (0x00, Local0)
             If (\_SB.PCI0.LPCB.EC0.ECRG)
             {
                 Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                Local0 = \_SB.PCI0.LPCB.EC0.FRDC
+                Store (\_SB.PCI0.LPCB.EC0.FRDC, Local0)
                 Release (\_SB.PCI0.LPCB.EC0.ECMX)
                 If (Local0)
                 {
-                    Local1 = (Local0 >> 0x01)
-                    Local2 = (0x0003C000 + Local1)
+                    ShiftRight (Local0, 0x01, Local1)
+                    Add (0x0003C000, Local1, Local2)
                     Divide (Local2, Local0, Local1, Local0)
                 }
             }
@@ -1859,16 +1859,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (GTRM, 0, Serialized)
         {
-            Local0 = 0x00
+            Store (0x00, Local0)
             If (\_SB.PCI0.LPCB.EC0.ECRG)
             {
                 Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                Local0 = \_SB.PCI0.LPCB.EC0.FTGC
+                Store (\_SB.PCI0.LPCB.EC0.FTGC, Local0)
                 Release (\_SB.PCI0.LPCB.EC0.ECMX)
                 If (Local0)
                 {
-                    Local1 = (Local0 >> 0x01)
-                    Local2 = (0x0003C000 + Local1)
+                    ShiftRight (Local0, 0x01, Local1)
+                    Add (0x0003C000, Local1, Local2)
                     Divide (Local2, Local0, Local1, Local0)
                 }
             }
@@ -1878,26 +1878,26 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (GFSD, 0, Serialized)
         {
-            Local0 = GFRM ()
-            Local1 = (Local0 * 0x64)
+            Store (GFRM (), Local0)
+            Multiply (Local0, 0x64, Local1)
             Divide (Local1, MRPM, Local1, Local2)
             Return (Local2)
         }
 
         Method (CTCT, 1, Serialized)
         {
-            Local1 = (Arg0 * MRPM) /* \_TZ_.MRPM */
+            Multiply (Arg0, MRPM, Local1)
             Divide (Local1, 0x64, Local2, Local0)
             If (Local0)
             {
-                Local1 = (Local0 >> 0x01)
-                Local2 = (0x0003C000 + Local1)
+                ShiftRight (Local0, 0x01, Local1)
+                Add (0x0003C000, Local1, Local2)
                 Divide (Local2, Local0, Local1, Local0)
             }
 
-            If ((Local0 > 0xF4))
+            If (LGreater (Local0, 0xF4))
             {
-                Local0 = 0xF4
+                Store (0xF4, Local0)
             }
 
             Return (Local0)
@@ -1905,9 +1905,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (PSL, 0, Serialized)
         {
-            If ((\_PR.CFGD & 0x01000000))
+            If (And (\_PR.CFGD, 0x01000000))
             {
-                If ((TCNT == 0x08))
+                If (LEqual (TCNT, 0x08))
                 {
                     Return (Package (0x08)
                     {
@@ -1922,7 +1922,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                If ((TCNT == 0x04))
+                If (LEqual (TCNT, 0x04))
                 {
                     Return (Package (0x04)
                     {
@@ -1957,12 +1957,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_TMP, 0, Serialized)  // _TMP: Temperature
             {
-                Local0 = 0x00
-                Local0 = GTTP (0x05, 0x00, PCHT, 0x00, 0x7F)
-                Local1 = DerefOf (DerefOf (\_SB.WMID.TSTV [0x02]) [0x02])
-                If ((Local1 != 0xFF))
+                Store (0x00, Local0)
+                Store (GTTP (0x05, 0x00, PCHT, 0x00, 0x7F), Local0)
+                Store (DerefOf (Index (DerefOf (Index (\_SB.WMID.TSTV, 0x02)), 0x02)), Local1)
+                If (LNotEqual (Local1, 0xFF))
                 {
-                    Local0 = Local1
+                    Store (Local1, Local0)
                 }
 
                 Return (GETK (Local0))
@@ -1971,21 +1971,21 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (GDTP, 2, Serialized)
         {
-            If ((Arg1 || DTZS ()))
+            If (LOr (Arg1, DTZS ()))
             {
-                Local0 = \_SB.PCI0.SBUS.SRDW (Arg0, 0x05)
-                If ((Local0 == 0xFFFFFFFF))
+                Store (\_SB.PCI0.SBUS.SRDW (Arg0, 0x05), Local0)
+                If (LEqual (Local0, 0xFFFFFFFF))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
-                ElseIf ((Local0 & 0x1000))
+                ElseIf (And (Local0, 0x1000))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
                 Else
                 {
-                    Local0 >>= 0x04
-                    Local0 &= 0xFF
+                    ShiftRight (Local0, 0x04, Local0)
+                    And (Local0, 0xFF, Local0)
                 }
 
                 Return (\_TZ.GETK (Local0))
@@ -1998,7 +1998,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (DTZS, 0, NotSerialized)
         {
-            If ((DTCD & 0x00010000))
+            If (And (DTCD, 0x00010000))
             {
                 Return (0x0F)
             }
@@ -2064,17 +2064,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     })
     Method (\ISTR, 2, NotSerialized)
     {
-        Local0 = Arg0
-        Local7 = ""
-        Local4 = Arg1
-        While ((Local4 > 0x00))
+        Store (Arg0, Local0)
+        Store ("", Local7)
+        Store (Arg1, Local4)
+        While (LGreater (Local4, 0x00))
         {
-            Local1 = (Local0 & 0x0F)
-            Local2 = DerefOf (\NIST [Local1])
+            And (Local0, 0x0F, Local1)
+            Store (DerefOf (Index (\NIST, Local1)), Local2)
             Concatenate (Local2, Local7, Local3)
-            Local7 = Local3
-            Local0 >>= 0x04
-            Local4--
+            Store (Local3, Local7)
+            ShiftRight (Local0, 0x04, Local0)
+            Decrement (Local4)
         }
 
         Return (Local7)
@@ -2082,26 +2082,26 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\SRCP, 2, NotSerialized)
     {
-        Local7 = SizeOf (Arg0)
-        If ((Local7 != SizeOf (Arg1)))
+        Store (SizeOf (Arg0), Local7)
+        If (LNotEqual (Local7, SizeOf (Arg1)))
         {
             Return (0x00)
         }
 
         Name (ST00, Buffer (Local7){})
         Name (ST01, Buffer (Local7){})
-        ST00 = Arg0
-        ST01 = Arg1
-        Local6 = 0x00
-        Local0 = 0x01
-        While (((Local6 != Local7) && Local0))
+        Store (Arg0, ST00) /* \SRCP.ST00 */
+        Store (Arg1, ST01) /* \SRCP.ST01 */
+        Store (0x00, Local6)
+        Store (0x01, Local0)
+        While (LAnd (LNotEqual (Local6, Local7), Local0))
         {
-            Local2 = DerefOf (ST00 [Local6])
-            Local3 = DerefOf (ST01 [Local6])
-            Local6++
-            If ((Local2 != Local3))
+            Store (DerefOf (Index (ST00, Local6)), Local2)
+            Store (DerefOf (Index (ST01, Local6)), Local3)
+            Increment (Local6)
+            If (LNotEqual (Local2, Local3))
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
             }
         }
 
@@ -2119,18 +2119,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Name (ST00, Buffer (0x8C){})
         Name (ST01, Buffer (0x8C){})
-        ST00 = Arg0
-        ST01 = Arg1
-        Local6 = 0x00
-        Local0 = 0x01
-        While (((Local6 != Arg2) && Local0))
+        Store (Arg0, ST00) /* \SRCM.ST00 */
+        Store (Arg1, ST01) /* \SRCM.ST01 */
+        Store (0x00, Local6)
+        Store (0x01, Local0)
+        While (LAnd (LNotEqual (Local6, Arg2), Local0))
         {
-            Local2 = DerefOf (ST00 [Local6])
-            Local3 = DerefOf (ST01 [Local6])
-            Local6++
-            If ((Local2 != Local3))
+            Store (DerefOf (Index (ST00, Local6)), Local2)
+            Store (DerefOf (Index (ST01, Local6)), Local3)
+            Increment (Local6)
+            If (LNotEqual (Local2, Local3))
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
             }
         }
 
@@ -2139,76 +2139,76 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (WCOS, 0, Serialized)
     {
-        If ((WOSI == 0xFF))
+        If (LEqual (WOSI, 0xFF))
         {
-            Local0 = \_OS
-            Local7 = SizeOf (OSID)
-            Local1 = 0x00
-            While (((Local1 < Local7) && (WOSI == 0xFF)))
+            Store (\_OS, Local0)
+            Store (SizeOf (OSID), Local7)
+            Store (0x00, Local1)
+            While (LAnd (LLess (Local1, Local7), LEqual (WOSI, 0xFF)))
             {
-                Local2 = \SRCP (Local0, DerefOf (OSID [Local1]))
+                Store (\SRCP (Local0, DerefOf (Index (OSID, Local1))), Local2)
                 If (Local2)
                 {
-                    WOSI = (Local1 + 0x01)
+                    Add (Local1, 0x01, WOSI) /* \WOSI */
                 }
                 Else
                 {
-                    Local1++
+                    Increment (Local1)
                 }
             }
 
-            If ((WOSI == 0xFF))
+            If (LEqual (WOSI, 0xFF))
             {
-                WOSI = 0x00
+                Store (0x00, WOSI) /* \WOSI */
             }
 
-            If (((WOSI == 0x00) || (WOSI == 0x03)))
+            If (LOr (LEqual (WOSI, 0x00), LEqual (WOSI, 0x03)))
             {
                 If (CondRefOf (\_OSI, Local0))
                 {
                     If (\_OSI ("Windows 2001"))
                     {
-                        WOSI = 0x04
+                        Store (0x04, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2001 SP1"))
                     {
-                        WOSI = 0x04
+                        Store (0x04, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2001 SP2"))
                     {
-                        WOSI = 0x05
+                        Store (0x05, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2006"))
                     {
-                        WOSI = 0x06
+                        Store (0x06, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2009"))
                     {
-                        WOSI = 0x07
+                        Store (0x07, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2012"))
                     {
-                        WOSI = 0x08
+                        Store (0x08, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2013"))
                     {
-                        WOSI = 0x09
+                        Store (0x09, WOSI) /* \WOSI */
                     }
 
                     If (\_OSI ("Windows 2015"))
                     {
-                        WOSI = 0x0A
+                        Store (0x0A, WOSI) /* \WOSI */
                     }
                 }
             }
 
-            WHOS = WOSI /* \WOSI */
+            Store (WOSI, WHOS) /* \WHOS */
         }
 
         Return (WOSI) /* \WOSI */
@@ -2216,15 +2216,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (UPRW, 2, Serialized)
     {
-        Local0 = Package (0x02)
+        Store (Package (0x02)
             {
                 0x00, 
                 0x00
-            }
-        Local0 [0x00] = Arg0
-        If ((UWKD == 0x00))
+            }, Local0)
+        Store (Arg0, Index (Local0, 0x00))
+        If (LEqual (UWKD, 0x00))
         {
-            Local0 [0x01] = Arg1
+            Store (Arg1, Index (Local0, 0x01))
         }
 
         Return (Local0)
@@ -2248,37 +2248,37 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     })
     Method (CBRT, 2, Serialized)
     {
-        Local6 = SizeOf (Arg0)
-        Local7 = SizeOf (Arg1)
-        If ((Local6 == 0x00))
+        Store (SizeOf (Arg0), Local6)
+        Store (SizeOf (Arg1), Local7)
+        If (LEqual (Local6, 0x00))
         {
-            Local0 = Arg1
+            Store (Arg1, Local0)
             Return (Local0)
         }
 
-        If ((Local7 == 0x00))
+        If (LEqual (Local7, 0x00))
         {
-            Local0 = Arg0
+            Store (Arg0, Local0)
             Return (Local0)
         }
 
-        Local1 = (Local7 + Local6)
-        Local1 -= 0x02
-        Local0 = Buffer (Local1){}
-        Local1 = 0x00
-        While ((Local1 < SizeOf (Arg0)))
+        Add (Local7, Local6, Local1)
+        Subtract (Local1, 0x02, Local1)
+        Store (Buffer (Local1){}, Local0)
+        Store (0x00, Local1)
+        While (LLess (Local1, SizeOf (Arg0)))
         {
-            Local0 [Local1] = DerefOf (Arg0 [Local1])
-            Local1++
+            Store (DerefOf (Index (Arg0, Local1)), Index (Local0, Local1))
+            Increment (Local1)
         }
 
-        Local1 -= 0x02
-        Local2 = 0x00
-        While ((Local2 < SizeOf (Arg1)))
+        Subtract (Local1, 0x02, Local1)
+        Store (0x00, Local2)
+        While (LLess (Local2, SizeOf (Arg1)))
         {
-            Local0 [Local1] = DerefOf (Arg1 [Local2])
-            Local1++
-            Local2++
+            Store (DerefOf (Index (Arg1, Local2)), Index (Local0, Local1))
+            Increment (Local1)
+            Increment (Local2)
         }
 
         Return (Local0)
@@ -2295,13 +2295,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Acquire (\_GL, 0xFFFF)
             }
 
-            EAX = (Arg0 << 0x10)
-            EBX = Arg1
-            ECX = Arg2
-            EDX = Arg3
-            REFS = 0x00
+            ShiftLeft (Arg0, 0x10, EAX) /* \EAX_ */
+            Store (Arg1, EBX) /* \EBX_ */
+            Store (Arg2, ECX) /* \ECX_ */
+            Store (Arg3, EDX) /* \EDX_ */
+            Store (0x00, REFS) /* \REFS */
             \_SB.PCI0.GSWS (Arg0)
-            Local0 = REFS /* \REFS */
+            Store (REFS, Local0)
             If (Arg4)
             {
                 Release (\_GL)
@@ -2327,142 +2327,142 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Name (BCLC, 0x00)
         Method (BCL, 0, Serialized)
         {
-            If ((BCLC == 0x00))
+            If (LEqual (BCLC, 0x00))
             {
-                If ((ILUX == 0x01))
+                If (LEqual (ILUX, 0x01))
                 {
-                    BRCT = BCCT /* \BCCT */
+                    Store (BCCT, BRCT) /* \BRCT */
                 }
-                ElseIf ((\WCOS () > 0x06))
+                ElseIf (LGreater (\WCOS (), 0x06))
                 {
-                    BRCT = BCCT /* \BCCT */
+                    Store (BCCT, BRCT) /* \BRCT */
                 }
 
-                Local7 = 0x00
-                If ((BRCT >= 0x15))
+                Store (0x00, Local7)
+                If (LGreaterEqual (BRCT, 0x15))
                 {
-                    BCLI = 0x01
-                    Local7 = 0x01
-                    If ((BRCT == 0x19))
+                    Store (0x01, BCLI) /* \_SB_.BCLI */
+                    Store (0x01, Local7)
+                    If (LEqual (BRCT, 0x19))
                     {
-                        BCLI = 0x02
+                        Store (0x02, BCLI) /* \_SB_.BCLI */
                     }
                 }
 
-                Local1 = 0x00
-                If ((DCAP & 0x10))
+                Store (0x00, Local1)
+                If (And (DCAP, 0x10))
                 {
-                    Local0 = BRLV /* \BRLV */
-                    Local5 = 0x00
-                    Local4 = BMAP /* \BMAP */
-                    While ((Local1 < BRCT))
+                    Store (BRLV, Local0)
+                    Store (0x00, Local5)
+                    Store (BMAP, Local4)
+                    While (LLess (Local1, BRCT))
                     {
                         If (Local7)
                         {
-                            Local3 = Local1
+                            Store (Local1, Local3)
                         }
                         Else
                         {
-                            Local3 = DerefOf (Local4 [Local1])
+                            Store (DerefOf (Index (Local4, Local1)), Local3)
                         }
 
-                        Local2 = DerefOf (Local0 [Local3])
-                        Local3 = (Local2 * 0x64)
-                        Divide ((Local3 + 0x7F), 0xFF, Local6, Local2)
-                        DerefOf (BCLS [BCLI]) [(Local1 + 0x02)] = 
-                            Local2
-                        If ((Local2 > Local5))
+                        Store (DerefOf (Index (Local0, Local3)), Local2)
+                        Multiply (Local2, 0x64, Local3)
+                        Divide (Add (Local3, 0x7F), 0xFF, Local6, Local2)
+                        Store (Local2, Index (DerefOf (Index (BCLS, BCLI)), Add (Local1, 0x02)
+                            ))
+                        If (LGreater (Local2, Local5))
                         {
-                            Local5 = Local2
+                            Store (Local2, Local5)
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
 
-                    Local3 = (BRCT >> 0x01)
-                    DerefOf (BCLS [BCLI]) [0x01] = DerefOf (DerefOf (
-                        BCLS [BCLI]) [Local3])
-                    DerefOf (BCLS [BCLI]) [0x00] = Local5
+                    ShiftRight (BRCT, 0x01, Local3)
+                    Store (DerefOf (Index (DerefOf (Index (BCLS, BCLI)), Local3)), Index (DerefOf (
+                        Index (BCLS, BCLI)), 0x01))
+                    Store (Local5, Index (DerefOf (Index (BCLS, BCLI)), 0x00))
                 }
                 Else
                 {
-                    Local4 = BCLV /* \BCLV */
-                    Local0 = BMAP /* \BMAP */
-                    While ((Local1 < (BRCT + 0x02)))
+                    Store (BCLV, Local4)
+                    Store (BMAP, Local0)
+                    While (LLess (Local1, Add (BRCT, 0x02)))
                     {
-                        If ((Local7 || (Local1 < 0x02)))
+                        If (LOr (Local7, LLess (Local1, 0x02)))
                         {
-                            Local3 = Local1
+                            Store (Local1, Local3)
                         }
                         Else
                         {
-                            Local3 = DerefOf (Local0 [(Local1 - 0x02)])
-                            Local3 += 0x02
+                            Store (DerefOf (Index (Local0, Subtract (Local1, 0x02))), Local3)
+                            Add (Local3, 0x02, Local3)
                         }
 
-                        Local2 = DerefOf (Local4 [Local3])
-                        DerefOf (BCLS [BCLI]) [Local1] = Local2
-                        Local1++
+                        Store (DerefOf (Index (Local4, Local3)), Local2)
+                        Store (Local2, Index (DerefOf (Index (BCLS, BCLI)), Local1))
+                        Increment (Local1)
                     }
                 }
 
-                Local0 = BRNT /* \BRNT */
-                Local1 = BMAP /* \BMAP */
-                Local2 = 0x00
-                While ((Local2 < BRCT))
+                Store (BRNT, Local0)
+                Store (BMAP, Local1)
+                Store (0x00, Local2)
+                While (LLess (Local2, BRCT))
                 {
                     If (Local7)
                     {
-                        Local3 = Local2
+                        Store (Local2, Local3)
                     }
                     Else
                     {
-                        Local3 = DerefOf (Local1 [Local2])
+                        Store (DerefOf (Index (Local1, Local2)), Local3)
                     }
 
-                    Local3 <<= 0x01
-                    Local5 = (Local2 << 0x01)
-                    Local4 = DerefOf (Local0 [Local3])
-                    DerefOf (NITS [BCLI]) [Local5] = Local4
-                    Local4 = DerefOf (Local0 [(Local3 + 0x01)])
-                    DerefOf (NITS [BCLI]) [(Local5 + 0x01)] = 
-                        Local4
-                    Local2++
+                    ShiftLeft (Local3, 0x01, Local3)
+                    ShiftLeft (Local2, 0x01, Local5)
+                    Store (DerefOf (Index (Local0, Local3)), Local4)
+                    Store (Local4, Index (DerefOf (Index (NITS, BCLI)), Local5))
+                    Store (DerefOf (Index (Local0, Add (Local3, 0x01))), Local4)
+                    Store (Local4, Index (DerefOf (Index (NITS, BCLI)), Add (Local5, 0x01)
+                        ))
+                    Increment (Local2)
                 }
 
-                BCLC = 0x01
+                Store (0x01, BCLC) /* \_SB_.BCLC */
             }
 
-            Return (DerefOf (BCLS [BCLI]))
+            Return (DerefOf (Index (BCLS, BCLI)))
         }
 
         Name (BRIG, 0x64)
         Method (BCM, 1, Serialized)
         {
-            Local0 = 0x00
-            If ((ILUX == 0x01))
+            Store (0x00, Local0)
+            If (LEqual (ILUX, 0x01))
             {
-                WDPE |= 0x40
-                Local0 = 0x01
+                Or (WDPE, 0x40, WDPE) /* \WDPE */
+                Store (0x01, Local0)
             }
-            ElseIf ((\WCOS () > 0x05))
+            ElseIf (LGreater (\WCOS (), 0x05))
             {
-                WDPE |= 0x40
-                Local0 = 0x01
-            }
-
-            BRIG = Arg0
-            Local1 = Match (DerefOf (BCLS [BCLI]), MGE, Arg0, MTR, 0x00, 
-                0x02)
-            If ((Local1 == Ones))
-            {
-                Local1 = (SizeOf (DerefOf (BCLS [BCLI])) - 0x01)
+                Or (WDPE, 0x40, WDPE) /* \WDPE */
+                Store (0x01, Local0)
             }
 
-            Local1 -= 0x02
+            Store (Arg0, BRIG) /* \_SB_.BRIG */
+            Store (Match (DerefOf (Index (BCLS, BCLI)), MGE, Arg0, MTR, 0x00, 0x02), 
+                Local1)
+            If (LEqual (Local1, Ones))
+            {
+                Subtract (SizeOf (DerefOf (Index (BCLS, BCLI))), 0x01, Local1)
+            }
+
+            Subtract (Local1, 0x02, Local1)
             If (Local0)
             {
-                BRID = Local1
+                Store (Local1, BRID) /* \BRID */
             }
 
             Return (Local0)
@@ -2470,26 +2470,26 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (BQC, 0, Serialized)
         {
-            Local0 = BRIG /* \_SB_.BRIG */
+            Store (BRIG, Local0)
             Return (Local0)
         }
 
         Method (HDDC, 1, Serialized)
         {
-            If ((Arg0 == 0x02))
+            If (LEqual (Arg0, 0x02))
             {
-                Local1 = EDID /* \EDID */
+                Store (EDID, Local1)
             }
             Else
             {
-                Local3 = EDID /* \EDID */
-                Local0 = 0x80
-                Local1 = Buffer (Local0){}
-                Local2 = 0x00
-                While ((Local2 < Local0))
+                Store (EDID, Local3)
+                Store (0x80, Local0)
+                Store (Buffer (Local0){}, Local1)
+                Store (0x00, Local2)
+                While (LLess (Local2, Local0))
                 {
-                    Local1 [Local2] = DerefOf (Local3 [Local2])
-                    Local2++
+                    Store (DerefOf (Index (Local3, Local2)), Index (Local1, Local2))
+                    Increment (Local2)
                 }
             }
 
@@ -2498,29 +2498,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
         Method (SBRC, 0, Serialized)
         {
-            Local0 = BRID /* \BRID */
+            Store (BRID, Local0)
             \_SB.ODGW (0x8687)
             \_SB.ODGW (Local0)
-            Local4 = (BRCT - 0x01)
-            If ((BRID > Local4))
+            Subtract (BRCT, 0x01, Local4)
+            If (LGreater (BRID, Local4))
             {
-                Local0 = Local4
+                Store (Local4, Local0)
             }
 
-            If ((BRID < 0x00))
+            If (LLess (BRID, 0x00))
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
             }
 
-            Local2 = BRLV /* \BRLV */
-            Local5 = BMAP /* \BMAP */
-            If ((BRCT == 0x0B))
+            Store (BRLV, Local2)
+            Store (BMAP, Local5)
+            If (LEqual (BRCT, 0x0B))
             {
-                Local0 = DerefOf (Local5 [Local0])
+                Store (DerefOf (Index (Local5, Local0)), Local0)
             }
 
-            Local1 = DerefOf (Local2 [Local0])
-            Debug = Local1
+            Store (DerefOf (Index (Local2, Local0)), Local1)
+            Store (Local1, Debug)
             \_SB.ODGW (Local1)
             Return (Local1)
         }
@@ -2531,24 +2531,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (DEPT, 0xFF)
             Method (INIT, 0, Serialized)
             {
-                If ((DEPT == 0x0F))
+                If (LEqual (DEPT, 0x0F))
                 {
-                    DEPT = 0xFF
+                    Store (0xFF, DEPT) /* \_SB_.WLBU.DEPT */
                 }
             }
 
             Method (_STA, 0, Serialized)  // _STA: Status
             {
-                If ((DEPT == 0xFF))
+                If (LEqual (DEPT, 0xFF))
                 {
-                    Local0 = 0x00
-                    If ((\WCOS () >= 0x08))
+                    Store (0x00, Local0)
+                    If (LGreaterEqual (\WCOS (), 0x08))
                     {
-                        Local0 = 0x0F
+                        Store (0x0F, Local0)
                         UWLS ()
                     }
 
-                    DEPT = Local0
+                    Store (Local0, DEPT) /* \_SB_.WLBU.DEPT */
                 }
 
                 Return (DEPT) /* \_SB_.WLBU.DEPT */
@@ -2556,44 +2556,44 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (UWLS, 0, Serialized)
             {
-                Local0 = WLDA /* \WLDA */
-                Local1 = DerefOf (Local0 [0x07])
-                If ((WLFL & 0x02))
+                Store (WLDA, Local0)
+                Store (DerefOf (Index (Local0, 0x07)), Local1)
+                If (And (WLFL, 0x02))
                 {
-                    WLFL &= ~0x02
+                    And (WLFL, Not (0x02), WLFL) /* \WLFL */
                 }
 
-                Local1 *= 0x10
-                Local1 += 0x10
-                Local2 = 0x1B
-                Local5 = 0x10
-                Local4 = 0x00
-                While ((Local2 < Local1))
+                Multiply (Local1, 0x10, Local1)
+                Add (Local1, 0x10, Local1)
+                Store (0x1B, Local2)
+                Store (0x10, Local5)
+                Store (0x00, Local4)
+                While (LLess (Local2, Local1))
                 {
-                    Local3 = DerefOf (Local0 [Local2])
-                    Local6 = DerefOf (Local0 [Local5])
-                    If (((Local3 & 0x0A) != 0x0A))
+                    Store (DerefOf (Index (Local0, Local2)), Local3)
+                    Store (DerefOf (Index (Local0, Local5)), Local6)
+                    If (LNotEqual (And (Local3, 0x0A), 0x0A))
                     {
-                        Local0 [Local2] = (Local3 | 0x0A)
-                        Local4 = 0x01
+                        Or (Local3, 0x0A, Index (Local0, Local2))
+                        Store (0x01, Local4)
                     }
 
-                    If ((Local6 == 0x00))
+                    If (LEqual (Local6, 0x00))
                     {
-                        If (((Local3 & 0x10) != 0x00))
+                        If (LNotEqual (And (Local3, 0x10), 0x00))
                         {
-                            Local0 [Local2] = (Local3 & 0xEF)
-                            Local4 = 0x01
+                            And (Local3, 0xEF, Index (Local0, Local2))
+                            Store (0x01, Local4)
                         }
                     }
 
-                    Local2 += 0x10
-                    Local5 += 0x10
+                    Add (Local2, 0x10, Local2)
+                    Add (Local5, 0x10, Local5)
                 }
 
                 If (Local4)
                 {
-                    WLDA = Local0
+                    Store (Local0, WLDA) /* \WLDA */
                     \_SB.SSMI (0xEA84, 0x00, 0x00, 0x00, 0x00)
                 }
             }
@@ -2860,9 +2860,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (DM_B, 0x00)
             Method (GEPB, 0, Serialized)
             {
-                If ((EP_B == 0x00))
+                If (LEqual (EP_B, 0x00))
                 {
-                    EP_B = (\_SB.PCI0.EPBR << 0x0C)
+                    ShiftLeft (\_SB.PCI0.EPBR, 0x0C, EP_B) /* \_SB_.PCI0.EP_B */
                 }
 
                 Return (EP_B) /* \_SB_.PCI0.EP_B */
@@ -2870,9 +2870,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GMHB, 0, Serialized)
             {
-                If ((MH_B == 0x00))
+                If (LEqual (MH_B, 0x00))
                 {
-                    MH_B = (\_SB.PCI0.MHBR << 0x0F)
+                    ShiftLeft (\_SB.PCI0.MHBR, 0x0F, MH_B) /* \_SB_.PCI0.MH_B */
                 }
 
                 Return (MH_B) /* \_SB_.PCI0.MH_B */
@@ -2880,9 +2880,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GPCB, 0, Serialized)
             {
-                If ((PC_B == 0x00))
+                If (LEqual (PC_B, 0x00))
                 {
-                    PC_B = (\_SB.PCI0.PXBR << 0x1A)
+                    ShiftLeft (\_SB.PCI0.PXBR, 0x1A, PC_B) /* \_SB_.PCI0.PC_B */
                 }
 
                 Return (PC_B) /* \_SB_.PCI0.PC_B */
@@ -2890,9 +2890,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GPCL, 0, Serialized)
             {
-                If ((PC_L == 0x00))
+                If (LEqual (PC_L, 0x00))
                 {
-                    PC_L = (0x10000000 >> \_SB.PCI0.PXSZ)
+                    ShiftRight (0x10000000, \_SB.PCI0.PXSZ, PC_L) /* \_SB_.PCI0.PC_L */
                 }
 
                 Return (PC_L) /* \_SB_.PCI0.PC_L */
@@ -2900,9 +2900,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GDMB, 0, Serialized)
             {
-                If ((DM_B == 0x00))
+                If (LEqual (DM_B, 0x00))
                 {
-                    DM_B = (\_SB.PCI0.DIBR << 0x0C)
+                    ShiftLeft (\_SB.PCI0.DIBR, 0x0C, DM_B) /* \_SB_.PCI0.DM_B */
                 }
 
                 Return (DM_B) /* \_SB_.PCI0.DM_B */
@@ -2910,180 +2910,180 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
             {
-                Local0 = \_SB.PCI0.GPCL ()
+                Store (\_SB.PCI0.GPCL (), Local0)
                 CreateWordField (BUF0, \_SB.PCI0._Y00._MAX, PBMX)  // _MAX: Maximum Base Address
-                PBMX = ((Local0 >> 0x14) - 0x02)
+                Store (Subtract (ShiftRight (Local0, 0x14), 0x02), PBMX) /* \_SB_.PCI0._CRS.PBMX */
                 CreateWordField (BUF0, \_SB.PCI0._Y00._LEN, PBLN)  // _LEN: Length
-                PBLN = ((Local0 >> 0x14) - 0x01)
+                Store (Subtract (ShiftRight (Local0, 0x14), 0x01), PBLN) /* \_SB_.PCI0._CRS.PBLN */
                 If (PM1L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y01._LEN, C0LN)  // _LEN: Length
-                    C0LN = Zero
+                    Store (Zero, C0LN) /* \_SB_.PCI0._CRS.C0LN */
                 }
 
-                If ((PM1L == 0x01))
+                If (LEqual (PM1L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y01._RW, C0RW)  // _RW_: Read-Write Status
-                    C0RW = Zero
+                    Store (Zero, C0RW) /* \_SB_.PCI0._CRS.C0RW */
                 }
 
                 If (PM1H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y02._LEN, C4LN)  // _LEN: Length
-                    C4LN = Zero
+                    Store (Zero, C4LN) /* \_SB_.PCI0._CRS.C4LN */
                 }
 
-                If ((PM1H == 0x01))
+                If (LEqual (PM1H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y02._RW, C4RW)  // _RW_: Read-Write Status
-                    C4RW = Zero
+                    Store (Zero, C4RW) /* \_SB_.PCI0._CRS.C4RW */
                 }
 
                 If (PM2L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y03._LEN, C8LN)  // _LEN: Length
-                    C8LN = Zero
+                    Store (Zero, C8LN) /* \_SB_.PCI0._CRS.C8LN */
                 }
 
-                If ((PM2L == 0x01))
+                If (LEqual (PM2L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y03._RW, C8RW)  // _RW_: Read-Write Status
-                    C8RW = Zero
+                    Store (Zero, C8RW) /* \_SB_.PCI0._CRS.C8RW */
                 }
 
                 If (PM2H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y04._LEN, CCLN)  // _LEN: Length
-                    CCLN = Zero
+                    Store (Zero, CCLN) /* \_SB_.PCI0._CRS.CCLN */
                 }
 
-                If ((PM2H == 0x01))
+                If (LEqual (PM2H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y04._RW, CCRW)  // _RW_: Read-Write Status
-                    CCRW = Zero
+                    Store (Zero, CCRW) /* \_SB_.PCI0._CRS.CCRW */
                 }
 
                 If (PM3L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y05._LEN, D0LN)  // _LEN: Length
-                    D0LN = Zero
+                    Store (Zero, D0LN) /* \_SB_.PCI0._CRS.D0LN */
                 }
 
-                If ((PM3L == 0x01))
+                If (LEqual (PM3L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y05._RW, D0RW)  // _RW_: Read-Write Status
-                    D0RW = Zero
+                    Store (Zero, D0RW) /* \_SB_.PCI0._CRS.D0RW */
                 }
 
                 If (PM3H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y06._LEN, D4LN)  // _LEN: Length
-                    D4LN = Zero
+                    Store (Zero, D4LN) /* \_SB_.PCI0._CRS.D4LN */
                 }
 
-                If ((PM3H == 0x01))
+                If (LEqual (PM3H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y06._RW, D4RW)  // _RW_: Read-Write Status
-                    D4RW = Zero
+                    Store (Zero, D4RW) /* \_SB_.PCI0._CRS.D4RW */
                 }
 
                 If (PM4L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y07._LEN, D8LN)  // _LEN: Length
-                    D8LN = Zero
+                    Store (Zero, D8LN) /* \_SB_.PCI0._CRS.D8LN */
                 }
 
-                If ((PM4L == 0x01))
+                If (LEqual (PM4L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y07._RW, D8RW)  // _RW_: Read-Write Status
-                    D8RW = Zero
+                    Store (Zero, D8RW) /* \_SB_.PCI0._CRS.D8RW */
                 }
 
                 If (PM4H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y08._LEN, DCLN)  // _LEN: Length
-                    DCLN = Zero
+                    Store (Zero, DCLN) /* \_SB_.PCI0._CRS.DCLN */
                 }
 
-                If ((PM4H == 0x01))
+                If (LEqual (PM4H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y08._RW, DCRW)  // _RW_: Read-Write Status
-                    DCRW = Zero
+                    Store (Zero, DCRW) /* \_SB_.PCI0._CRS.DCRW */
                 }
 
                 If (PM5L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y09._LEN, E0LN)  // _LEN: Length
-                    E0LN = Zero
+                    Store (Zero, E0LN) /* \_SB_.PCI0._CRS.E0LN */
                 }
 
-                If ((PM5L == 0x01))
+                If (LEqual (PM5L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y09._RW, E0RW)  // _RW_: Read-Write Status
-                    E0RW = Zero
+                    Store (Zero, E0RW) /* \_SB_.PCI0._CRS.E0RW */
                 }
 
                 If (PM5H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y0A._LEN, E4LN)  // _LEN: Length
-                    E4LN = Zero
+                    Store (Zero, E4LN) /* \_SB_.PCI0._CRS.E4LN */
                 }
 
-                If ((PM5H == 0x01))
+                If (LEqual (PM5H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y0A._RW, E4RW)  // _RW_: Read-Write Status
-                    E4RW = Zero
+                    Store (Zero, E4RW) /* \_SB_.PCI0._CRS.E4RW */
                 }
 
                 If (PM6L)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y0B._LEN, E8LN)  // _LEN: Length
-                    E8LN = Zero
+                    Store (Zero, E8LN) /* \_SB_.PCI0._CRS.E8LN */
                 }
 
-                If ((PM6L == 0x01))
+                If (LEqual (PM6L, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y0B._RW, E8RW)  // _RW_: Read-Write Status
-                    E8RW = Zero
+                    Store (Zero, E8RW) /* \_SB_.PCI0._CRS.E8RW */
                 }
 
                 If (PM6H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y0C._LEN, ECLN)  // _LEN: Length
-                    ECLN = Zero
+                    Store (Zero, ECLN) /* \_SB_.PCI0._CRS.ECLN */
                 }
 
-                If ((PM6H == 0x01))
+                If (LEqual (PM6H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y0C._RW, ECRW)  // _RW_: Read-Write Status
-                    ECRW = Zero
+                    Store (Zero, ECRW) /* \_SB_.PCI0._CRS.ECRW */
                 }
 
                 If (PM0H)
                 {
                     CreateDWordField (BUF0, \_SB.PCI0._Y0D._LEN, F0LN)  // _LEN: Length
-                    F0LN = Zero
+                    Store (Zero, F0LN) /* \_SB_.PCI0._CRS.F0LN */
                 }
 
-                If ((PM0H == 0x01))
+                If (LEqual (PM0H, 0x01))
                 {
                     CreateBitField (BUF0, \_SB.PCI0._Y0D._RW, F0RW)  // _RW_: Read-Write Status
-                    F0RW = Zero
+                    Store (Zero, F0RW) /* \_SB_.PCI0._CRS.F0RW */
                 }
 
                 CreateDWordField (BUF0, \_SB.PCI0._Y0E._MIN, M1MN)  // _MIN: Minimum Base Address
                 CreateDWordField (BUF0, \_SB.PCI0._Y0E._MAX, M1MX)  // _MAX: Maximum Base Address
                 CreateDWordField (BUF0, \_SB.PCI0._Y0E._LEN, M1LN)  // _LEN: Length
-                M1MN = (TLUD << 0x14)
-                Local0 = (PXBR << 0x1A)
-                M1MX = (Local0 - 0x01)
-                M1LN = ((M1MX - M1MN) + 0x01)
+                ShiftLeft (TLUD, 0x14, M1MN) /* \_SB_.PCI0._CRS.M1MN */
+                ShiftLeft (PXBR, 0x1A, Local0)
+                Subtract (Local0, 0x01, M1MX) /* \_SB_.PCI0._CRS.M1MX */
+                Add (Subtract (M1MX, M1MN), 0x01, M1LN) /* \_SB_.PCI0._CRS.M1LN */
                 CreateDWordField (BUF0, \_SB.PCI0._Y0F._MIN, M2MN)  // _MIN: Minimum Base Address
                 CreateDWordField (BUF0, \_SB.PCI0._Y0F._MAX, M2MX)  // _MAX: Maximum Base Address
                 CreateDWordField (BUF0, \_SB.PCI0._Y0F._LEN, M2LN)  // _LEN: Length
-                Local1 = (0x10000000 >> PXSZ) /* \_SB_.PCI0.PXSZ */
-                M2MN = (Local0 + Local1)
-                M2LN = ((M2MX - M2MN) + 0x01)
+                ShiftRight (0x10000000, PXSZ, Local1)
+                Add (Local0, Local1, M2MN) /* \_SB_.PCI0._CRS.M2MN */
+                Add (Subtract (M2MX, M2MN), 0x01, M2LN) /* \_SB_.PCI0._CRS.M2LN */
                 Return (BUF0) /* \_SB_.PCI0.BUF0 */
             }
 
@@ -3145,21 +3145,21 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
                 {
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y10._BAS, RBR0)  // _BAS: Base Address
-                    RBR0 = (\_SB.PCI0.LPCB.RCBA << 0x0E)
+                    ShiftLeft (\_SB.PCI0.LPCB.RCBA, 0x0E, RBR0) /* \_SB_.PCI0.PDRC._CRS.RBR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y11._BAS, SNR0)  // _BAS: Base Address
-                    SNR0 = SRMB /* \_SB_.PCI0.SRMB */
+                    Store (SRMB, SNR0) /* \_SB_.PCI0.PDRC._CRS.SNR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y12._BAS, XWT0)  // _BAS: Base Address
-                    XWT0 = XWMB /* \_SB_.PCI0.XWMB */
+                    Store (XWMB, XWT0) /* \_SB_.PCI0.PDRC._CRS.XWT0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y13._BAS, MBR0)  // _BAS: Base Address
-                    MBR0 = \_SB.PCI0.GMHB ()
+                    Store (\_SB.PCI0.GMHB (), MBR0) /* \_SB_.PCI0.PDRC._CRS.MBR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y14._BAS, DBR0)  // _BAS: Base Address
-                    DBR0 = \_SB.PCI0.GDMB ()
+                    Store (\_SB.PCI0.GDMB (), DBR0) /* \_SB_.PCI0.PDRC._CRS.DBR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y15._BAS, EBR0)  // _BAS: Base Address
-                    EBR0 = \_SB.PCI0.GEPB ()
+                    Store (\_SB.PCI0.GEPB (), EBR0) /* \_SB_.PCI0.PDRC._CRS.EBR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y16._BAS, XBR0)  // _BAS: Base Address
-                    XBR0 = \_SB.PCI0.GPCB ()
+                    Store (\_SB.PCI0.GPCB (), XBR0) /* \_SB_.PCI0.PDRC._CRS.XBR0 */
                     CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y16._LEN, XSZ0)  // _LEN: Length
-                    XSZ0 = \_SB.PCI0.GPCL ()
+                    Store (\_SB.PCI0.GPCL (), XSZ0) /* \_SB_.PCI0.PDRC._CRS.XSZ0 */
                     Return (BUF0) /* \_SB_.PCI0.PDRC.BUF0 */
                 }
             }
@@ -3262,25 +3262,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (Arg0)
                     {
-                        GENG = 0x01
-                        PMEG = 0x01
+                        Store (0x01, GENG) /* \_SB_.PCI0.PEGP.GENG */
+                        Store (0x01, PMEG) /* \_SB_.PCI0.PEGP.PMEG */
                     }
                     Else
                     {
-                        GENG = 0x00
-                        PMEG = 0x00
+                        Store (0x00, GENG) /* \_SB_.PCI0.PEGP.GENG */
+                        Store (0x00, PMEG) /* \_SB_.PCI0.PEGP.PMEG */
                     }
                 }
 
                 Method (HPME, 0, Serialized)
                 {
-                    PSTS = 0x01
+                    Store (0x01, PSTS) /* \_SB_.PCI0.PEGP.PSTS */
                 }
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRS = LTRA /* External reference */
-                    OBFS = OBFA /* External reference */
+                    Store (LTRA, LTRS) /* \_SB_.PCI0.LTRS */
+                    Store (OBFA, OBFS) /* \_SB_.PCI0.OBFS */
                 }
 
                 Name (LTRV, Package (0x04)
@@ -3293,23 +3293,23 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (OPTS, 0x00)
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
                             Case (0x00)
                             {
-                                If ((Arg1 == 0x02))
+                                If (LEqual (Arg1, 0x02))
                                 {
-                                    OPTS = 0x01
+                                    Store (0x01, OPTS) /* \_SB_.PCI0.PEGP.OPTS */
                                     If (LTRS)
                                     {
-                                        OPTS |= 0x40
+                                        Or (OPTS, 0x40, OPTS) /* \_SB_.PCI0.PEGP.OPTS */
                                     }
 
                                     If (OBFS)
                                     {
-                                        OPTS |= 0x10
+                                        Or (OPTS, 0x10, OPTS) /* \_SB_.PCI0.PEGP.OPTS */
                                     }
 
                                     Return (OPTS) /* \_SB_.PCI0.PEGP.OPTS */
@@ -3321,7 +3321,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 == 0x02))
+                                If (LEqual (Arg1, 0x02))
                                 {
                                     If (OBFS)
                                     {
@@ -3343,14 +3343,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 == 0x02))
+                                If (LEqual (Arg1, 0x02))
                                 {
                                     If (LTRS)
                                     {
-                                        LTRV [0x00] = ((SMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (SMSL & 0x03FF)
-                                        LTRV [0x02] = ((SNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (SNSL & 0x03FF)
+                                        Store (And (ShiftRight (SMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (SMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (SNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (SNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.PEGP.LTRV */
                                     }
                                     Else
@@ -3375,189 +3375,189 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (_ADR, 0x00020000)  // _ADR: Address
                 Method (_DOS, 1, NotSerialized)  // _DOS: Disable Output Switching
                 {
-                    DSEN = (Arg0 & 0x07)
+                    Store (And (Arg0, 0x07), DSEN) /* \DSEN */
                     HDOS (Arg0)
                 }
 
                 Method (_DOD, 0, NotSerialized)  // _DOD: Display Output Devices
                 {
-                    If ((DODC == 0x00))
+                    If (LEqual (DODC, 0x00))
                     {
-                        DODC = 0x01
+                        Store (0x01, DODC) /* \_SB_.PCI0.GFX0.DODC */
                         If (SCIP ())
                         {
                             HDOD ()
-                            NDID = 0x00
+                            Store (0x00, NDID) /* \NDID */
                             If (CondRefOf (IDAB)){}
                             Else
                             {
-                                If ((DIDL != Zero))
+                                If (LNotEqual (DIDL, Zero))
                                 {
-                                    DID1 = SDDL (DIDL)
+                                    Store (SDDL (DIDL), DID1) /* \DID1 */
                                 }
 
-                                If ((DDL2 != Zero))
+                                If (LNotEqual (DDL2, Zero))
                                 {
-                                    DID2 = SDDL (DDL2)
+                                    Store (SDDL (DDL2), DID2) /* \DID2 */
                                 }
 
-                                If ((DDL3 != Zero))
+                                If (LNotEqual (DDL3, Zero))
                                 {
-                                    DID3 = SDDL (DDL3)
+                                    Store (SDDL (DDL3), DID3) /* \DID3 */
                                 }
 
-                                If ((DDL4 != Zero))
+                                If (LNotEqual (DDL4, Zero))
                                 {
-                                    DID4 = SDDL (DDL4)
+                                    Store (SDDL (DDL4), DID4) /* \DID4 */
                                 }
 
-                                If ((DDL5 != Zero))
+                                If (LNotEqual (DDL5, Zero))
                                 {
-                                    DID5 = SDDL (DDL5)
+                                    Store (SDDL (DDL5), DID5) /* \DID5 */
                                 }
 
-                                If ((DDL6 != Zero))
+                                If (LNotEqual (DDL6, Zero))
                                 {
-                                    DID6 = SDDL (DDL6)
+                                    Store (SDDL (DDL6), DID6) /* \DID6 */
                                 }
 
-                                If ((DDL7 != Zero))
+                                If (LNotEqual (DDL7, Zero))
                                 {
-                                    DID7 = SDDL (DDL7)
+                                    Store (SDDL (DDL7), DID7) /* \DID7 */
                                 }
 
-                                If ((DDL8 != Zero))
+                                If (LNotEqual (DDL8, Zero))
                                 {
-                                    DID8 = SDDL (DDL8)
+                                    Store (SDDL (DDL8), DID8) /* \DID8 */
                                 }
                             }
                         }
 
-                        If ((NDID == 0x00))
+                        If (LEqual (NDID, 0x00))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = 0x0400
+                            Store (0x0400, Index (DerefOf (Index (DODS, NDID)), 0x00))
                         }
 
-                        If ((NDID == 0x01))
+                        If (LEqual (NDID, 0x01))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
                         }
 
-                        If ((NDID == 0x02))
+                        If (LEqual (NDID, 0x02))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
                         }
 
-                        If ((NDID == 0x03))
+                        If (LEqual (NDID, 0x03))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
                         }
 
-                        If ((NDID == 0x04))
+                        If (LEqual (NDID, 0x04))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
-                            DerefOf (DODS [NDID]) [0x03] = (0x00010000 | DID4
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
+                            Store (Or (0x00010000, DID4), Index (DerefOf (Index (DODS, NDID)), 0x03
+                                ))
                         }
 
-                        If ((NDID == 0x05))
+                        If (LEqual (NDID, 0x05))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
-                            DerefOf (DODS [NDID]) [0x03] = (0x00010000 | DID4
-                                )
-                            DerefOf (DODS [NDID]) [0x04] = (0x00010000 | DID5
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
+                            Store (Or (0x00010000, DID4), Index (DerefOf (Index (DODS, NDID)), 0x03
+                                ))
+                            Store (Or (0x00010000, DID5), Index (DerefOf (Index (DODS, NDID)), 0x04
+                                ))
                         }
 
-                        If ((NDID == 0x06))
+                        If (LEqual (NDID, 0x06))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
-                            DerefOf (DODS [NDID]) [0x03] = (0x00010000 | DID4
-                                )
-                            DerefOf (DODS [NDID]) [0x04] = (0x00010000 | DID5
-                                )
-                            DerefOf (DODS [NDID]) [0x05] = (0x00010000 | DID6
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
+                            Store (Or (0x00010000, DID4), Index (DerefOf (Index (DODS, NDID)), 0x03
+                                ))
+                            Store (Or (0x00010000, DID5), Index (DerefOf (Index (DODS, NDID)), 0x04
+                                ))
+                            Store (Or (0x00010000, DID6), Index (DerefOf (Index (DODS, NDID)), 0x05
+                                ))
                         }
 
-                        If ((NDID == 0x07))
+                        If (LEqual (NDID, 0x07))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
-                            DerefOf (DODS [NDID]) [0x03] = (0x00010000 | DID4
-                                )
-                            DerefOf (DODS [NDID]) [0x04] = (0x00010000 | DID5
-                                )
-                            DerefOf (DODS [NDID]) [0x05] = (0x00010000 | DID6
-                                )
-                            DerefOf (DODS [NDID]) [0x06] = (0x00010000 | DID7
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
+                            Store (Or (0x00010000, DID4), Index (DerefOf (Index (DODS, NDID)), 0x03
+                                ))
+                            Store (Or (0x00010000, DID5), Index (DerefOf (Index (DODS, NDID)), 0x04
+                                ))
+                            Store (Or (0x00010000, DID6), Index (DerefOf (Index (DODS, NDID)), 0x05
+                                ))
+                            Store (Or (0x00010000, DID7), Index (DerefOf (Index (DODS, NDID)), 0x06
+                                ))
                         }
 
-                        If ((NDID == 0x08))
+                        If (LEqual (NDID, 0x08))
                         {
-                            DerefOf (DODS [NDID]) [0x00] = (0x00010000 | DID1
-                                )
-                            DerefOf (DODS [NDID]) [0x01] = (0x00010000 | DID2
-                                )
-                            DerefOf (DODS [NDID]) [0x02] = (0x00010000 | DID3
-                                )
-                            DerefOf (DODS [NDID]) [0x03] = (0x00010000 | DID4
-                                )
-                            DerefOf (DODS [NDID]) [0x04] = (0x00010000 | DID5
-                                )
-                            DerefOf (DODS [NDID]) [0x05] = (0x00010000 | DID6
-                                )
-                            DerefOf (DODS [NDID]) [0x06] = (0x00010000 | DID7
-                                )
-                            DerefOf (DODS [NDID]) [0x07] = (0x00010000 | DID8
-                                )
+                            Store (Or (0x00010000, DID1), Index (DerefOf (Index (DODS, NDID)), 0x00
+                                ))
+                            Store (Or (0x00010000, DID2), Index (DerefOf (Index (DODS, NDID)), 0x01
+                                ))
+                            Store (Or (0x00010000, DID3), Index (DerefOf (Index (DODS, NDID)), 0x02
+                                ))
+                            Store (Or (0x00010000, DID4), Index (DerefOf (Index (DODS, NDID)), 0x03
+                                ))
+                            Store (Or (0x00010000, DID5), Index (DerefOf (Index (DODS, NDID)), 0x04
+                                ))
+                            Store (Or (0x00010000, DID6), Index (DerefOf (Index (DODS, NDID)), 0x05
+                                ))
+                            Store (Or (0x00010000, DID7), Index (DerefOf (Index (DODS, NDID)), 0x06
+                                ))
+                            Store (Or (0x00010000, DID8), Index (DerefOf (Index (DODS, NDID)), 0x07
+                                ))
                         }
                     }
 
-                    Local0 = NDID /* \NDID */
-                    If ((NDID > 0x08))
+                    Store (NDID, Local0)
+                    If (LGreater (NDID, 0x08))
                     {
-                        Local0 = 0x00
+                        Store (0x00, Local0)
                     }
 
-                    Return (DerefOf (DODS [Local0]))
+                    Return (DerefOf (Index (DODS, Local0)))
                 }
 
                 Method (_REG, 2, NotSerialized)  // _REG: Region Availability
                 {
-                    If ((\_SB.PCI0.GFX0.INIM == 0x01))
+                    If (LEqual (\_SB.PCI0.GFX0.INIM, 0x01))
                     {
                         \_SB.PCI0.GFX0.GLID (\_SB.LID._LID ())
-                        \_SB.PCI0.GFX0.INIM = 0x00
+                        Store (0x00, \_SB.PCI0.GFX0.INIM)
                     }
                 }
 
@@ -3565,13 +3565,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID1 == 0x00))
+                        If (LEqual (DID1, 0x00))
                         {
                             Return (0x01)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID1))
+                            Return (And (0xFFFF, DID1))
                         }
                     }
 
@@ -3592,9 +3592,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3603,19 +3603,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID2 == 0x00))
+                        If (LEqual (DID2, 0x00))
                         {
                             Return (0x02)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID2))
+                            Return (And (0xFFFF, DID2))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((LIDS == 0x00))
+                        If (LEqual (LIDS, 0x00))
                         {
                             Return (0x00)
                         }
@@ -3635,9 +3635,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3646,19 +3646,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID3 == 0x00))
+                        If (LEqual (DID3, 0x00))
                         {
                             Return (0x03)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID3))
+                            Return (And (0xFFFF, DID3))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID3 == 0x00))
+                        If (LEqual (DID3, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3680,9 +3680,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3691,19 +3691,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID4 == 0x00))
+                        If (LEqual (DID4, 0x00))
                         {
                             Return (0x04)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID4))
+                            Return (And (0xFFFF, DID4))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID4 == 0x00))
+                        If (LEqual (DID4, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3725,9 +3725,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3736,19 +3736,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID5 == 0x00))
+                        If (LEqual (DID5, 0x00))
                         {
                             Return (0x05)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID5))
+                            Return (And (0xFFFF, DID5))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID5 == 0x00))
+                        If (LEqual (DID5, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3770,9 +3770,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3781,19 +3781,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID6 == 0x00))
+                        If (LEqual (DID6, 0x00))
                         {
                             Return (0x06)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID6))
+                            Return (And (0xFFFF, DID6))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID6 == 0x00))
+                        If (LEqual (DID6, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3815,9 +3815,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3826,19 +3826,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID7 == 0x00))
+                        If (LEqual (DID7, 0x00))
                         {
                             Return (0x07)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID7))
+                            Return (And (0xFFFF, DID7))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID7 == 0x00))
+                        If (LEqual (DID7, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3860,9 +3860,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
@@ -3871,19 +3871,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_ADR, 0, Serialized)  // _ADR: Address
                     {
-                        If ((DID8 == 0x00))
+                        If (LEqual (DID8, 0x00))
                         {
                             Return (0x08)
                         }
                         Else
                         {
-                            Return ((0xFFFF & DID8))
+                            Return (And (0xFFFF, DID8))
                         }
                     }
 
                     Method (_DCS, 0, NotSerialized)  // _DCS: Display Current Status
                     {
-                        If ((DID8 == 0x00))
+                        If (LEqual (DID8, 0x00))
                         {
                             Return (0x0B)
                         }
@@ -3905,54 +3905,54 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_DSS, 1, NotSerialized)  // _DSS: Device Set State
                     {
-                        If (((Arg0 & 0xC0000000) == 0xC0000000))
+                        If (LEqual (And (Arg0, 0xC0000000), 0xC0000000))
                         {
-                            CSTE = NSTE /* \NSTE */
+                            Store (NSTE, CSTE) /* \CSTE */
                         }
                     }
                 }
 
                 Method (SDDL, 1, NotSerialized)
                 {
-                    NDID++
-                    Local0 = (Arg0 & 0x0F0F)
-                    Local1 = (0x80000000 | Local0)
-                    If ((DIDL == Local0))
+                    Increment (NDID)
+                    Store (And (Arg0, 0x0F0F), Local0)
+                    Or (0x80000000, Local0, Local1)
+                    If (LEqual (DIDL, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL2 == Local0))
+                    If (LEqual (DDL2, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL3 == Local0))
+                    If (LEqual (DDL3, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL4 == Local0))
+                    If (LEqual (DDL4, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL5 == Local0))
+                    If (LEqual (DDL5, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL6 == Local0))
+                    If (LEqual (DDL6, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL7 == Local0))
+                    If (LEqual (DDL7, Local0))
                     {
                         Return (Local1)
                     }
 
-                    If ((DDL8 == Local0))
+                    If (LEqual (DDL8, Local0))
                     {
                         Return (Local1)
                     }
@@ -3962,48 +3962,48 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (CDDS, 1, NotSerialized)
                 {
-                    Local0 = (Arg0 & 0x0F0F)
-                    If ((0x00 == Local0))
+                    Store (And (Arg0, 0x0F0F), Local0)
+                    If (LEqual (0x00, Local0))
                     {
                         Return (0x1D)
                     }
 
-                    If ((CADL == Local0))
+                    If (LEqual (CADL, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL2 == Local0))
+                    If (LEqual (CAL2, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL3 == Local0))
+                    If (LEqual (CAL3, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL4 == Local0))
+                    If (LEqual (CAL4, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL5 == Local0))
+                    If (LEqual (CAL5, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL6 == Local0))
+                    If (LEqual (CAL6, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL7 == Local0))
+                    If (LEqual (CAL7, Local0))
                     {
                         Return (0x1F)
                     }
 
-                    If ((CAL8 == Local0))
+                    If (LEqual (CAL8, Local0))
                     {
                         Return (0x1F)
                     }
@@ -4013,48 +4013,48 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (NDDS, 1, NotSerialized)
                 {
-                    Local0 = (Arg0 & 0x0F0F)
-                    If ((0x00 == Local0))
+                    Store (And (Arg0, 0x0F0F), Local0)
+                    If (LEqual (0x00, Local0))
                     {
                         Return (0x00)
                     }
 
-                    If ((NADL == Local0))
+                    If (LEqual (NADL, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL2 == Local0))
+                    If (LEqual (NDL2, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL3 == Local0))
+                    If (LEqual (NDL3, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL4 == Local0))
+                    If (LEqual (NDL4, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL5 == Local0))
+                    If (LEqual (NDL5, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL6 == Local0))
+                    If (LEqual (NDL6, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL7 == Local0))
+                    If (LEqual (NDL7, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((NDL8 == Local0))
+                    If (LEqual (NDL8, Local0))
                     {
                         Return (0x01)
                     }
@@ -4274,122 +4274,122 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (GBDA, 0, Serialized)
                     {
-                        If ((GESF == 0x00))
+                        If (LEqual (GESF, 0x00))
                         {
-                            PARM = 0x59
-                            GESF = Zero
+                            Store (0x59, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x01))
+                        If (LEqual (GESF, 0x01))
                         {
-                            PARM = 0x00600080
-                            If ((\_SB.PCI0.D3EN == 0x00))
+                            Store (0x00600080, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            If (LEqual (\_SB.PCI0.D3EN, 0x00))
                             {
-                                PARM &= 0xFFDFFFFF
+                                And (PARM, 0xFFDFFFFF, PARM) /* \_SB_.PCI0.GFX0.PARM */
                             }
 
-                            If ((S0ID == One))
+                            If (LEqual (S0ID, One))
                             {
-                                PARM |= 0x0100
+                                Or (PARM, 0x0100, PARM) /* \_SB_.PCI0.GFX0.PARM */
                             }
 
-                            GESF = Zero
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x04))
+                        If (LEqual (GESF, 0x04))
                         {
-                            PARM = 0x30000000
-                            GESF = Zero
+                            Store (0x30000000, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x05))
+                        If (LEqual (GESF, 0x05))
                         {
-                            PARM |= (LIDS << 0x10)
-                            PARM += 0x00010000
-                            GESF = Zero
+                            Or (PARM, ShiftLeft (LIDS, 0x10), PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Add (PARM, 0x00010000, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x06))
+                        If (LEqual (GESF, 0x06))
                         {
-                            PARM = Zero
-                            GESF = Zero
+                            Store (Zero, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (Zero)
                         }
 
-                        If ((GESF == 0x07))
+                        If (LEqual (GESF, 0x07))
                         {
-                            PARM = GIVD /* \_SB_.PCI0.GFX0.GIVD */
-                            PARM ^= 0x01
-                            PARM |= (GMFN << 0x01)
-                            PARM |= (0x03 << 0x0B)
-                            PARM |= (IDMS << 0x11)
-                            PARM |= (DerefOf (DerefOf (CDCT [HVCO]) [CDVL]) << 
-                                0x15) /* \_SB_.PCI0.GFX0.PARM */
-                            GESF = 0x01
+                            Store (GIVD, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            XOr (PARM, 0x01, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Or (PARM, ShiftLeft (GMFN, 0x01), PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Or (PARM, ShiftLeft (0x03, 0x0B), PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Or (PARM, ShiftLeft (IDMS, 0x11), PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Or (ShiftLeft (DerefOf (Index (DerefOf (Index (CDCT, HVCO)), CDVL)), 0x15
+                                ), PARM, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (0x01, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x0A))
+                        If (LEqual (GESF, 0x0A))
                         {
-                            PARM = 0x00
-                            GESF = 0x00
+                            Store (0x00, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (0x00, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (Zero)
                         }
 
-                        GESF = Zero
+                        Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                         Return (CRIT) /* \_SB_.PCI0.GFX0.CRIT */
                     }
 
                     Method (SBCB, 0, Serialized)
                     {
-                        If ((GESF == 0x00))
+                        If (LEqual (GESF, 0x00))
                         {
-                            PARM = 0x00
-                            PARM = 0x000200C0
-                            GESF = Zero
+                            Store (0x00, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (0x000200C0, PARM) /* \_SB_.PCI0.GFX0.PARM */
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x07))
+                        If (LEqual (GESF, 0x07))
                         {
-                            If ((S0ID == One))
+                            If (LEqual (S0ID, One))
                             {
-                                If (((PARM & 0xFF) == 0x01))
+                                If (LEqual (And (PARM, 0xFF), 0x01))
                                 {
                                     \GUAM (One)
                                 }
                             }
 
-                            GESF = Zero
-                            PARM = Zero
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
+                            Store (Zero, PARM) /* \_SB_.PCI0.GFX0.PARM */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x08))
+                        If (LEqual (GESF, 0x08))
                         {
-                            If ((S0ID == One))
+                            If (LEqual (S0ID, One))
                             {
-                                Local0 = ((PARM >> 0x08) & 0xFF)
-                                If ((Local0 == 0x00))
+                                Store (And (ShiftRight (PARM, 0x08), 0xFF), Local0)
+                                If (LEqual (Local0, 0x00))
                                 {
                                     \GUAM (Zero)
                                 }
                             }
 
-                            GESF = Zero
-                            PARM = Zero
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
+                            Store (Zero, PARM) /* \_SB_.PCI0.GFX0.PARM */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x15))
+                        If (LEqual (GESF, 0x15))
                         {
-                            If ((PARM == 0x01))
+                            If (LEqual (PARM, 0x01))
                             {
-                                \_SB.PCI0.AUDE |= 0x20
+                                Or (\_SB.PCI0.AUDE, 0x20, \_SB.PCI0.AUDE)
                                 \_SB.PCI0.B0D3.ABWA (0x01)
                                 \_SB.PCI0.B0D3.ARST ()
                                 \_SB.PCI0.B0D3.ASTR ()
@@ -4399,59 +4399,59 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 Notify (\_SB.PCI0, 0x00) // Bus Check
                             }
 
-                            If ((PARM == 0x00))
+                            If (LEqual (PARM, 0x00))
                             {
-                                \_SB.PCI0.AUDE &= 0xDF
+                                And (\_SB.PCI0.AUDE, 0xDF, \_SB.PCI0.AUDE)
                                 Notify (\_SB.PCI0, 0x00) // Bus Check
                             }
 
-                            GESF = Zero
-                            PARM = Zero
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
+                            Store (Zero, PARM) /* \_SB_.PCI0.GFX0.PARM */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        If ((GESF == 0x16))
+                        If (LEqual (GESF, 0x16))
                         {
-                            Local0 = (PARM & 0x03)
+                            And (PARM, 0x03, Local0)
                             \_SB.PCI0.B0D3.DCCC (Local0)
-                            GESF = Zero
+                            Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                             Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
 
-                        GESF = Zero
+                        Store (Zero, GESF) /* \_SB_.PCI0.GFX0.GESF */
                         Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                     }
 
-                    If ((GEFC == 0x04))
+                    If (LEqual (GEFC, 0x04))
                     {
-                        GXFC = GBDA ()
+                        Store (GBDA (), GXFC) /* \_SB_.PCI0.GFX0.GXFC */
                     }
 
-                    If ((GEFC == 0x06))
+                    If (LEqual (GEFC, 0x06))
                     {
-                        GXFC = SBCB ()
+                        Store (SBCB (), GXFC) /* \_SB_.PCI0.GFX0.GXFC */
                     }
 
-                    GEFC = 0x00
-                    SCIS = 0x01
-                    GSSE = 0x00
-                    SCIE = 0x00
+                    Store (0x00, GEFC) /* \_SB_.PCI0.GFX0.GEFC */
+                    Store (0x01, SCIS) /* \SCIS */
+                    Store (0x00, GSSE) /* \_SB_.PCI0.GFX0.GSSE */
+                    Store (0x00, SCIE) /* \_SB_.PCI0.GFX0.SCIE */
                     Return (Zero)
                 }
 
                 Method (PDRD, 0, NotSerialized)
                 {
-                    Return (!DRDY)
+                    Return (LNot (DRDY))
                 }
 
                 Method (PSTS, 0, NotSerialized)
                 {
-                    If ((CSTS > 0x02))
+                    If (LGreater (CSTS, 0x02))
                     {
                         Sleep (ASLP)
                     }
 
-                    Return ((CSTS == 0x03))
+                    Return (LEqual (CSTS, 0x03))
                 }
 
                 Method (GNOT, 2, NotSerialized)
@@ -4461,9 +4461,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x01)
                     }
 
-                    CEVT = Arg0
-                    CSTS = 0x03
-                    If (((CHPD == 0x00) && (Arg1 == 0x00)))
+                    Store (Arg0, CEVT) /* \_SB_.PCI0.GFX0.CEVT */
+                    Store (0x03, CSTS) /* \_SB_.PCI0.GFX0.CSTS */
+                    If (LAnd (LEqual (CHPD, 0x00), LEqual (Arg1, 0x00)))
                     {
                         Notify (\_SB.PCI0.GFX0, Arg1)
                     }
@@ -4477,9 +4477,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Notify (\_SB.PCI0.GFX0, 0x80) // Status Change
                     }
 
-                    If (!PSTS ())
+                    If (LNot (PSTS ()))
                     {
-                        CEVT = 0x00
+                        Store (0x00, CEVT) /* \_SB_.PCI0.GFX0.CEVT */
                     }
 
                     Return (0x00)
@@ -4487,24 +4487,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (GHDS, 1, NotSerialized)
                 {
-                    TIDX = Arg0
+                    Store (Arg0, TIDX) /* \_SB_.PCI0.GFX0.TIDX */
                     Return (GNOT (0x01, 0x00))
                 }
 
                 Method (GLID, 1, NotSerialized)
                 {
-                    If ((Arg0 == 0x01))
+                    If (LEqual (Arg0, 0x01))
                     {
-                        CLID = 0x03
+                        Store (0x03, CLID) /* \_SB_.PCI0.GFX0.CLID */
                     }
                     Else
                     {
-                        CLID = Arg0
+                        Store (Arg0, CLID) /* \_SB_.PCI0.GFX0.CLID */
                     }
 
                     If (GNOT (0x02, 0x00))
                     {
-                        CLID |= 0x80000000
+                        Or (CLID, 0x80000000, CLID) /* \_SB_.PCI0.GFX0.CLID */
                         Return (0x01)
                     }
 
@@ -4513,25 +4513,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (GDCK, 1, NotSerialized)
                 {
-                    CDCK = Arg0
+                    Store (Arg0, CDCK) /* \_SB_.PCI0.GFX0.CDCK */
                     Return (GNOT (0x04, 0x00))
                 }
 
                 Method (PARD, 0, NotSerialized)
                 {
-                    If (!ARDY)
+                    If (LNot (ARDY))
                     {
                         Sleep (ASLP)
                     }
 
-                    Return (!ARDY)
+                    Return (LNot (ARDY))
                 }
 
                 Method (IUEH, 1, Serialized)
                 {
-                    IUER &= 0xC0
-                    IUER ^= (0x01 << Arg0)
-                    If ((Arg0 <= 0x04))
+                    And (IUER, 0xC0, IUER) /* \_SB_.PCI0.GFX0.IUER */
+                    XOr (IUER, ShiftLeft (0x01, Arg0), IUER) /* \_SB_.PCI0.GFX0.IUER */
+                    If (LLessEqual (Arg0, 0x04))
                     {
                         Return (AINT (0x05, 0x00))
                     }
@@ -4543,7 +4543,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (AINT, 2, NotSerialized)
                 {
-                    If (!(TCHE & (0x01 << Arg0)))
+                    If (LNot (And (TCHE, ShiftLeft (0x01, Arg0))))
                     {
                         Return (0x01)
                     }
@@ -4553,107 +4553,107 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x01)
                     }
 
-                    If (((Arg0 >= 0x05) && (Arg0 <= 0x07)))
+                    If (LAnd (LGreaterEqual (Arg0, 0x05), LLessEqual (Arg0, 0x07)))
                     {
-                        ASLC = (0x01 << Arg0)
-                        ASLE = 0x01
-                        Local2 = 0x00
-                        While (((Local2 < 0xFA) && (ASLC != 0x00)))
+                        Store (ShiftLeft (0x01, Arg0), ASLC) /* \_SB_.PCI0.GFX0.ASLC */
+                        Store (0x01, ASLE) /* \_SB_.PCI0.GFX0.ASLE */
+                        Store (0x00, Local2)
+                        While (LAnd (LLess (Local2, 0xFA), LNotEqual (ASLC, 0x00)))
                         {
                             Sleep (0x04)
-                            Local2++
+                            Increment (Local2)
                         }
 
                         Return (0x00)
                     }
 
-                    If ((Arg0 == 0x02))
+                    If (LEqual (Arg0, 0x02))
                     {
                         If (CPFM)
                         {
-                            Local0 = (CPFM & 0x0F)
-                            Local1 = (EPFM & 0x0F)
-                            If ((Local0 == 0x01))
+                            And (CPFM, 0x0F, Local0)
+                            And (EPFM, 0x0F, Local1)
+                            If (LEqual (Local0, 0x01))
                             {
-                                If ((Local1 & 0x06))
+                                If (And (Local1, 0x06))
                                 {
-                                    PFIT = 0x06
+                                    Store (0x06, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
-                                ElseIf ((Local1 & 0x08))
+                                ElseIf (And (Local1, 0x08))
                                 {
-                                    PFIT = 0x08
+                                    Store (0x08, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                                 Else
                                 {
-                                    PFIT = 0x01
+                                    Store (0x01, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                             }
 
-                            If ((Local0 == 0x06))
+                            If (LEqual (Local0, 0x06))
                             {
-                                If ((Local1 & 0x08))
+                                If (And (Local1, 0x08))
                                 {
-                                    PFIT = 0x08
+                                    Store (0x08, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
-                                ElseIf ((Local1 & 0x01))
+                                ElseIf (And (Local1, 0x01))
                                 {
-                                    PFIT = 0x01
+                                    Store (0x01, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                                 Else
                                 {
-                                    PFIT = 0x06
+                                    Store (0x06, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                             }
 
-                            If ((Local0 == 0x08))
+                            If (LEqual (Local0, 0x08))
                             {
-                                If ((Local1 & 0x01))
+                                If (And (Local1, 0x01))
                                 {
-                                    PFIT = 0x01
+                                    Store (0x01, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
-                                ElseIf ((Local1 & 0x06))
+                                ElseIf (And (Local1, 0x06))
                                 {
-                                    PFIT = 0x06
+                                    Store (0x06, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                                 Else
                                 {
-                                    PFIT = 0x08
+                                    Store (0x08, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                                 }
                             }
                         }
                         Else
                         {
-                            PFIT ^= 0x07
+                            XOr (PFIT, 0x07, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
                         }
 
-                        PFIT |= 0x80000000
-                        ASLC = 0x04
+                        Or (PFIT, 0x80000000, PFIT) /* \_SB_.PCI0.GFX0.PFIT */
+                        Store (0x04, ASLC) /* \_SB_.PCI0.GFX0.ASLC */
                     }
-                    ElseIf ((Arg0 == 0x01))
+                    ElseIf (LEqual (Arg0, 0x01))
                     {
-                        BCLP = Arg1
-                        BCLP |= 0x80000000
-                        ASLC = 0x02
+                        Store (Arg1, BCLP) /* \_SB_.PCI0.GFX0.BCLP */
+                        Or (BCLP, 0x80000000, BCLP) /* \_SB_.PCI0.GFX0.BCLP */
+                        Store (0x02, ASLC) /* \_SB_.PCI0.GFX0.ASLC */
                     }
-                    ElseIf ((Arg0 == 0x00))
+                    ElseIf (LEqual (Arg0, 0x00))
                     {
-                        ALSI = Arg1
-                        ASLC = 0x01
+                        Store (Arg1, ALSI) /* \_SB_.PCI0.GFX0.ALSI */
+                        Store (0x01, ASLC) /* \_SB_.PCI0.GFX0.ASLC */
                     }
                     Else
                     {
                         Return (0x01)
                     }
 
-                    ASLE = 0x01
+                    Store (0x01, ASLE) /* \_SB_.PCI0.GFX0.ASLE */
                     Return (0x00)
                 }
 
                 Method (SCIP, 0, NotSerialized)
                 {
-                    If ((OVER != 0x00))
+                    If (LNotEqual (OVER, 0x00))
                     {
-                        Return (!GSMI)
+                        Return (LNot (GSMI))
                     }
 
                     Return (0x00)
@@ -4678,7 +4678,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     {
                         If (IGDS)
                         {
-                            If ((PNHM == 0x000306C1))
+                            If (LEqual (PNHM, 0x000306C1))
                             {
                                 Return (0x0F)
                             }
@@ -4699,18 +4699,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     {
                          0x00                                             // .
                     })
-                    If ((Arg0 == ToUUID ("6f3975e1-7a82-4f67-8b97-15bee060bedf") /* Unknown UUID */))
+                    If (LEqual (Arg0, ToUUID ("6f3975e1-7a82-4f67-8b97-15bee060bedf") /* Unknown UUID */))
                     {
-                        If ((Arg2 == 0x00))
+                        If (LEqual (Arg2, 0x00))
                         {
                             CreateWordField (DRET, 0x00, F0SS)
-                            F0SS = 0x02
+                            Store (0x02, F0SS) /* \_SB_.PCI0.GFX0._DSM.F0SS */
                             Return (DRET) /* \_SB_.PCI0.GFX0._DSM.DRET */
                         }
 
-                        If ((Arg2 == 0x01))
+                        If (LEqual (Arg2, 0x01))
                         {
-                            If ((\_SB.PCI0.RP05.DGFX.LNKV == 0x03))
+                            If (LEqual (\_SB.PCI0.RP05.DGFX.LNKV, 0x03))
                             {
                                 Return (0x00)
                             }
@@ -4829,18 +4829,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    INIM = 0x01
+                    Store (0x01, INIM) /* \_SB_.PCI0.GFX0.INIM */
                     IDKE ()
-                    WDSA = 0x00
-                    WDST = 0x00
-                    WDGN = 0x00
+                    Store (0x00, WDSA) /* \WDSA */
+                    Store (0x00, WDST) /* \WDST */
+                    Store (0x00, WDGN) /* \WDGN */
                 }
 
                 Method (HDOS, 1, NotSerialized)
                 {
-                    Local0 = (WDPE & 0xF8)
-                    Local1 = (WDPE & 0x87)
-                    WDPE = (Local0 | Arg0)
+                    And (WDPE, 0xF8, Local0)
+                    And (WDPE, 0x87, Local1)
+                    Or (Local0, Arg0, WDPE) /* \WDPE */
                     If (CondRefOf (^PDOS, Local2))
                     {
                         ^PDOS (Arg0, Local1)
@@ -4849,59 +4849,59 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (HDOD, 0, NotSerialized)
                 {
-                    Local1 = 0x01
-                    If ((TCHE & 0x02))
+                    Store (0x01, Local1)
+                    If (And (TCHE, 0x02))
                     {
-                        Local1 = 0x03
+                        Store (0x03, Local1)
                     }
 
-                    DCAP |= Local1
+                    Or (DCAP, Local1, DCAP) /* \DCAP */
                 }
 
                 Method (PDDS, 1, NotSerialized)
                 {
-                    Local0 = (Arg0 & 0x0F0F)
-                    If ((0x00 == Local0))
+                    Store (And (Arg0, 0x0F0F), Local0)
+                    If (LEqual (0x00, Local0))
                     {
                         Return (0x00)
                     }
 
-                    If ((CPDL == Local0))
+                    If (LEqual (CPDL, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL2 == Local0))
+                    If (LEqual (CPL2, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL3 == Local0))
+                    If (LEqual (CPL3, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL4 == Local0))
+                    If (LEqual (CPL4, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL5 == Local0))
+                    If (LEqual (CPL5, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL6 == Local0))
+                    If (LEqual (CPL6, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL7 == Local0))
+                    If (LEqual (CPL7, Local0))
                     {
                         Return (0x01)
                     }
 
-                    If ((CPL8 == Local0))
+                    If (LEqual (CPL8, Local0))
                     {
                         Return (0x01)
                     }
@@ -4911,52 +4911,52 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (UPNA, 2, Serialized)
                 {
-                    If ((Arg0 == 0x00))
+                    If (LEqual (Arg0, 0x00))
                     {
-                        Local1 = NADL /* \_SB_.PCI0.GFX0.NADL */
-                        NADL = Arg1
+                        Store (NADL, Local1)
+                        Store (Arg1, NADL) /* \_SB_.PCI0.GFX0.NADL */
                     }
 
-                    If ((Arg0 == 0x01))
+                    If (LEqual (Arg0, 0x01))
                     {
-                        Local1 = NDL2 /* \_SB_.PCI0.GFX0.NDL2 */
-                        NDL2 = Arg1
+                        Store (NDL2, Local1)
+                        Store (Arg1, NDL2) /* \_SB_.PCI0.GFX0.NDL2 */
                     }
 
-                    If ((Arg0 == 0x02))
+                    If (LEqual (Arg0, 0x02))
                     {
-                        Local1 = NDL3 /* \_SB_.PCI0.GFX0.NDL3 */
-                        NDL3 = Arg1
+                        Store (NDL3, Local1)
+                        Store (Arg1, NDL3) /* \_SB_.PCI0.GFX0.NDL3 */
                     }
 
-                    If ((Arg0 == 0x03))
+                    If (LEqual (Arg0, 0x03))
                     {
-                        Local1 = NDL4 /* \_SB_.PCI0.GFX0.NDL4 */
-                        NDL4 = Arg1
+                        Store (NDL4, Local1)
+                        Store (Arg1, NDL4) /* \_SB_.PCI0.GFX0.NDL4 */
                     }
 
-                    If ((Arg0 == 0x04))
+                    If (LEqual (Arg0, 0x04))
                     {
-                        Local1 = NDL5 /* \_SB_.PCI0.GFX0.NDL5 */
-                        NDL5 = Arg1
+                        Store (NDL5, Local1)
+                        Store (Arg1, NDL5) /* \_SB_.PCI0.GFX0.NDL5 */
                     }
 
-                    If ((Arg0 == 0x05))
+                    If (LEqual (Arg0, 0x05))
                     {
-                        Local1 = NDL6 /* \_SB_.PCI0.GFX0.NDL6 */
-                        NDL6 = Arg1
+                        Store (NDL6, Local1)
+                        Store (Arg1, NDL6) /* \_SB_.PCI0.GFX0.NDL6 */
                     }
 
-                    If ((Arg0 == 0x06))
+                    If (LEqual (Arg0, 0x06))
                     {
-                        Local1 = NDL7 /* \_SB_.PCI0.GFX0.NDL7 */
-                        NDL7 = Arg1
+                        Store (NDL7, Local1)
+                        Store (Arg1, NDL7) /* \_SB_.PCI0.GFX0.NDL7 */
                     }
 
-                    If ((Arg0 == 0x07))
+                    If (LEqual (Arg0, 0x07))
                     {
-                        Local1 = NDL8 /* \_SB_.PCI0.GFX0.NDL8 */
-                        NDL8 = Arg1
+                        Store (NDL8, Local1)
+                        Store (Arg1, NDL8) /* \_SB_.PCI0.GFX0.NDL8 */
                     }
 
                     Return (Local1)
@@ -4964,81 +4964,81 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (UPAA, 0, Serialized)
                 {
-                    Local1 = 0x00
-                    While ((Local1 < SizeOf (HPDD)))
+                    Store (0x00, Local1)
+                    While (LLess (Local1, SizeOf (HPDD)))
                     {
-                        Local0 = (0x01 << Local1)
-                        Local2 = DerefOf (HPDD [Local1])
+                        ShiftLeft (0x01, Local1, Local0)
+                        Store (DerefOf (Index (HPDD, Local1)), Local2)
                         If (PDDS (Local2))
                         {
-                            WDST |= Local0
+                            Or (WDST, Local0, WDST) /* \WDST */
                         }
                         Else
                         {
-                            WDST &= ~Local0
+                            And (WDST, Not (Local0), WDST) /* \WDST */
                         }
 
-                        If ((CDDS (Local2) == 0x1F))
+                        If (LEqual (CDDS (Local2), 0x1F))
                         {
-                            WDSA |= Local0
+                            Or (WDSA, Local0, WDSA) /* \WDSA */
                         }
                         Else
                         {
-                            WDSA &= ~Local0
+                            And (WDSA, Not (Local0), WDSA) /* \WDSA */
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
                 }
 
                 Method (UPND, 0, Serialized)
                 {
-                    Local1 = WDGN /* \WDGN */
-                    Local0 = 0x00
-                    Local2 = 0x00
-                    While (((Local0 < SizeOf (DSPR)) && Local1))
+                    Store (WDGN, Local1)
+                    Store (0x00, Local0)
+                    Store (0x00, Local2)
+                    While (LAnd (LLess (Local0, SizeOf (DSPR)), Local1))
                     {
-                        Local3 = DerefOf (DSPR [Local0])
-                        Local4 = (0x01 << Local3)
-                        If ((Local1 & Local4))
+                        Store (DerefOf (Index (DSPR, Local0)), Local3)
+                        ShiftLeft (0x01, Local3, Local4)
+                        If (And (Local1, Local4))
                         {
-                            Local5 = DerefOf (HPDD [Local3])
+                            Store (DerefOf (Index (HPDD, Local3)), Local5)
                             UPNA (Local2, Local5)
-                            Local2++
-                            Local1 &= ~Local4
+                            Increment (Local2)
+                            And (Local1, Not (Local4), Local1)
                         }
 
-                        If ((Local2 >= 0x02))
+                        If (LGreaterEqual (Local2, 0x02))
                         {
                             Break
                         }
 
-                        Local0++
+                        Increment (Local0)
                     }
 
-                    WDGN ^= Local1
-                    Local1 = 0x01
-                    While (((Local2 < 0x08) && Local1))
+                    XOr (WDGN, Local1, WDGN) /* \WDGN */
+                    Store (0x01, Local1)
+                    While (LAnd (LLess (Local2, 0x08), Local1))
                     {
-                        Local1 = UPNA (Local2, 0x00)
-                        Local2++
+                        Store (UPNA (Local2, 0x00), Local1)
+                        Increment (Local2)
                     }
                 }
 
                 Method (IF4E, 1, Serialized)
                 {
                     UPAA ()
-                    If ((WDSA == 0x01))
+                    If (LEqual (WDSA, 0x01))
                     {
-                        WDGN = (WDST | 0x01)
+                        Or (WDST, 0x01, WDGN) /* \WDGN */
                     }
-                    ElseIf ((WDSA & 0x01))
+                    ElseIf (And (WDSA, 0x01))
                     {
-                        WDGN = (WDST & ~0x01)
+                        And (WDST, Not (0x01), WDGN) /* \WDGN */
                     }
                     Else
                     {
-                        WDGN = 0x01
+                        Store (0x01, WDGN) /* \WDGN */
                     }
 
                     UPND ()
@@ -5049,14 +5049,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (IDKE, 0, NotSerialized)
                 {
-                    If ((\_SB.PCI0.GFX0.GIVD == 0x00))
+                    If (LEqual (\_SB.PCI0.GFX0.GIVD, 0x00))
                     {
-                        Debug = "GFX DockEvent Enter"
-                        Local0 = \_SB.DCKD ()
-                        Debug = "Dock Status"
-                        Debug = Local0
+                        Store ("GFX DockEvent Enter", Debug)
+                        Store (\_SB.DCKD (), Local0)
+                        Store ("Dock Status", Debug)
+                        Store (Local0, Debug)
                         \_SB.PCI0.GFX0.GDCK (Local0)
-                        Debug = "GFX DockEvent Exit"
+                        Store ("GFX DockEvent Exit", Debug)
                     }
 
                     Return (0x00)
@@ -5082,22 +5082,22 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (ISBR, 0, Serialized)
                 {
-                    Debug = "Set Brightness"
-                    If (((DCAP & 0x02) == 0x00))
+                    Store ("Set Brightness", Debug)
+                    If (LEqual (And (DCAP, 0x02), 0x00))
                     {
-                        If ((TCHE & 0x02))
+                        If (And (TCHE, 0x02))
                         {
-                            Debug = "TCHE set"
-                            DCAP |= 0x02
+                            Store ("TCHE set", Debug)
+                            Or (DCAP, 0x02, DCAP) /* \DCAP */
                         }
                     }
 
-                    Local3 = (DCAP & 0x02)
+                    And (DCAP, 0x02, Local3)
                     If (Local3)
                     {
-                        Debug = "OpRegion take control of Brightness"
-                        Local1 = \_SB.SBRC ()
-                        Debug = Local1
+                        Store ("OpRegion take control of Brightness", Debug)
+                        Store (\_SB.SBRC (), Local1)
+                        Store (Local1, Debug)
                         AINT (0x01, Local1)
                     }
 
@@ -5108,11 +5108,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_BCL, 0, Serialized)  // _BCL: Brightness Control Levels
                     {
-                        If ((ILUX == 0x01))
+                        If (LEqual (ILUX, 0x01))
                         {
                             Return (\_SB.BCL ())
                         }
-                        ElseIf ((\WCOS () <= 0x07))
+                        ElseIf (LLessEqual (\WCOS (), 0x07))
                         {
                             Return (\_SB.BCL ())
                         }
@@ -5229,18 +5229,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_BCM, 1, Serialized)  // _BCM: Brightness Control Method
                     {
-                        Local0 = \_SB.BCM (Arg0)
+                        Store (\_SB.BCM (Arg0), Local0)
                         If (Local0)
                         {
-                            Local1 = BRID /* \BRID */
-                            If ((VACC == 0x00))
+                            Store (BRID, Local1)
+                            If (LEqual (VACC, 0x00))
                             {
-                                If ((\_SB.PCI0.GFX0.ISBR () == 0x00))
+                                If (LEqual (\_SB.PCI0.GFX0.ISBR (), 0x00))
                                 {
                                     \_SB.SSMI (0xEA74, 0x04, Local1, 0x00, 0x00)
                                 }
                             }
-                            ElseIf ((\_SB.PCI0.RP05.DGFX.SBRV == 0x00))
+                            ElseIf (LEqual (\_SB.PCI0.RP05.DGFX.SBRV, 0x00))
                             {
                                 \_SB.SSMI (0xEA74, 0x04, Local1, 0x00, 0x00)
                             }
@@ -5259,15 +5259,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (_L66, 0, NotSerialized)  // _Lxx: Level-Triggered GPE, xx=0x00-0xFF
                     {
-                        If ((\_SB.PCI0.GFX0.GIVD == 0x00))
+                        If (LEqual (\_SB.PCI0.GFX0.GIVD, 0x00))
                         {
-                            If ((\_SB.PCI0.GFX0.GSSE && !GSMI))
+                            If (LAnd (\_SB.PCI0.GFX0.GSSE, LNot (GSMI)))
                             {
                                 \_SB.PCI0.GFX0.GSCI ()
                             }
                             Else
                             {
-                                SCIS = 0x01
+                                Store (0x01, SCIS) /* \SCIS */
                             }
                         }
                     }
@@ -5275,12 +5275,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Name (WOAT, 0xFF)
                     Method (CNDD, 1, NotSerialized)
                     {
-                        If ((\_SB.PCI0.GFX0.GIVD == 0x00))
+                        If (LEqual (\_SB.PCI0.GFX0.GIVD, 0x00))
                         {
-                            If ((Arg0 || (WDST != WOAT)))
+                            If (LOr (Arg0, LNotEqual (WDST, WOAT)))
                             {
-                                WOAT = WDST /* \WDST */
-                                If ((\WCOS () >= 0x04))
+                                Store (WDST, WOAT) /* \_GPE.WOAT */
+                                If (LGreaterEqual (\WCOS (), 0x04))
                                 {
                                     Notify (\_SB.PCI0, 0x00) // Bus Check
                                 }
@@ -5296,7 +5296,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (VHIV, 3, Serialized)
                     {
-                        If ((VACC != 0x00))
+                        If (LNotEqual (VACC, 0x00))
                         {
                             Return (0x01)
                         }
@@ -5310,16 +5310,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             Case (0x01)
                             {
-                                If ((Arg0 & 0x80))
+                                If (And (Arg0, 0x80))
                                 {
                                     Notify (\_SB.PCI0.GFX0.DD01, Arg0)
                                 }
                                 Else
                                 {
-                                    Debug = "Verify no OS controlled brightness b/c VideoBrightnessEvent"
-                                    If (((WDPE & 0x44) == 0x00))
+                                    Store ("Verify no OS controlled brightness b/c VideoBrightnessEvent", Debug)
+                                    If (LEqual (And (WDPE, 0x44), 0x00))
                                     {
-                                        Debug = "VBRE method, use OpRegion method"
+                                        Store ("VBRE method, use OpRegion method", Debug)
                                         \_SB.PCI0.GFX0.ISBR ()
                                     }
                                 }
@@ -5327,9 +5327,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Case (0x02)
                             {
                                 \_SB.PCI0.GFX0.GDCC (0x01)
-                                If (((WDPE & 0x03) == 0x00))
+                                If (LEqual (And (WDPE, 0x03), 0x00))
                                 {
-                                    If ((DCAP & 0x01))
+                                    If (And (DCAP, 0x01))
                                     {
                                         \_SB.PCI0.GFX0.IDKE ()
                                     }
@@ -5343,14 +5343,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x03)
                             {
-                                \_SB.PCI0.GFX0.CLID = \_SB.LID._LID ()
-                                If (((\WCOS () < 0x06) || ((WDPE & 0x03) == 0x00)))
+                                Store (\_SB.LID._LID (), \_SB.PCI0.GFX0.CLID)
+                                If (LOr (LLess (\WCOS (), 0x06), LEqual (And (WDPE, 0x03), 0x00)))
                                 {
-                                    If ((DCAP & 0x01))
+                                    If (And (DCAP, 0x01))
                                     {
                                         If (\_SB.PCI0.GFX0.GLID (\_SB.LID._LID ()))
                                         {
-                                            \_SB.PCI0.GFX0.CLID |= 0x80000000
+                                            Or (0x80000000, \_SB.PCI0.GFX0.CLID, \_SB.PCI0.GFX0.CLID)
                                         }
                                     }
                                     Else
@@ -5358,18 +5358,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                         \_SB.SSMI (0xEA74, 0x05, 0x00, 0x00, 0x00)
                                         CNDD (0x01)
                                         Notify (\_SB.PCI0.GFX0, 0x80) // Status Change
-                                        If ((\WCOS () < 0x06))
+                                        If (LLess (\WCOS (), 0x06))
                                         {
-                                            LRSC = 0x00
+                                            Store (0x00, LRSC) /* \_GPE.LRSC */
                                         }
                                     }
                                 }
                             }
                             Case (0x04)
                             {
-                                If (((WDPE & 0x03) == 0x00))
+                                If (LEqual (And (WDPE, 0x03), 0x00))
                                 {
-                                    If ((DCAP & 0x01))
+                                    If (And (DCAP, 0x01))
                                     {
                                         \_SB.PCI0.GFX0.IF4E (0x00)
                                     }
@@ -5382,7 +5382,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((DCAP & 0x01))
+                                If (And (DCAP, 0x01))
                                 {
                                     \_SB.PCI0.GFX0.ISNX ()
                                 }
@@ -5398,31 +5398,31 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x08)
                             {
-                                If ((Arg0 == 0x04))
+                                If (LEqual (Arg0, 0x04))
                                 {
                                     \_SB.PCI0.GFX0.GLID (\_SB.LID._LID ())
                                     \_SB.PCI0.GFX0.IDKE ()
                                 }
 
-                                If ((Arg0 >= 0x03))
+                                If (LGreaterEqual (Arg0, 0x03))
                                 {
-                                    If (((WDPE & 0x44) == 0x00))
+                                    If (LEqual (And (WDPE, 0x44), 0x00))
                                     {
-                                        Local0 = \_SB.SBRC ()
-                                        \_SB.PCI0.GFX0.BCLP = (Local0 | 0x80000000)
+                                        Store (\_SB.SBRC (), Local0)
+                                        Or (Local0, 0x80000000, \_SB.PCI0.GFX0.BCLP)
                                     }
                                 }
                             }
                             Case (0x09)
                             {
-                                If (((WDPE & 0x04) == 0x00))
+                                If (LEqual (And (WDPE, 0x04), 0x00))
                                 {
                                     \_SB.PCI0.GFX0.ISBR ()
                                 }
                             }
                             Case (0x0A)
                             {
-                                If ((\_SB.PCI0.RP05.DGFX.VVID == 0x1002))
+                                If (LEqual (\_SB.PCI0.RP05.DGFX.VVID, 0x1002))
                                 {
                                     \_SB.ODGW (0xFF01)
                                     \_SB.PCI0.GFX0.DGCE ()
@@ -5439,23 +5439,23 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (VBRE, 1, Serialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (Arg0, 0x00, 0x01)
+                            Store (\_GPE.VHIV (Arg0, 0x00, 0x01), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x01 = \_GPE.VHOV (Arg0, 0x00)
+                            Store (\_GPE.VHOV (Arg0, 0x00), 0x01)
                             Local1
                         }
 
-                        If ((SGME & 0x0F))
+                        If (And (SGME, 0x0F))
                         {
-                            If ((\_SB.PCI0.RP05.DGFX.SVID != 0xFFFF))
+                            If (LNotEqual (\_SB.PCI0.RP05.DGFX.SVID, 0xFFFF))
                             {
-                                If ((Arg0 & 0x80))
+                                If (And (Arg0, 0x80))
                                 {
                                     Notify (\_SB.PCI0.RP05.DGFX.DD01, Arg0)
                                 }
@@ -5466,30 +5466,30 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (VFN4, 0, Serialized)
                     {
                         Signal (\_SB.F4EV)
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (0x00, 0x00, 0x04)
+                            Store (\_GPE.VHIV (0x00, 0x00, 0x04), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x04 = \_GPE.VHOV (0x00, 0x00)
+                            Store (\_GPE.VHOV (0x00, 0x00), 0x04)
                             Local1
                         }
                     }
 
                     Method (VDET, 0, Serialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (0x00, 0x00, 0x02)
+                            Store (\_GPE.VHIV (0x00, 0x00, 0x02), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x02 = \_GPE.VHOV (0x00, 0x00)
+                            Store (\_GPE.VHOV (0x00, 0x00), 0x02)
                             Local1
                         }
                     }
@@ -5497,16 +5497,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Name (LRSC, 0x01)
                     Method (VLET, 0, Serialized)
                     {
-                        LRSC = 0x01
-                        Local1 = 0x01
+                        Store (0x01, LRSC) /* \_GPE.LRSC */
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (0x00, 0x00, 0x03)
+                            Store (\_GPE.VHIV (0x00, 0x00, 0x03), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x03 = \_GPE.VHOV (0x00, 0x00)
+                            Store (\_GPE.VHOV (0x00, 0x00), 0x03)
                             Local1
                         }
 
@@ -5515,30 +5515,30 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (VPUP, 2, Serialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (Arg0, Arg1, 0x05)
+                            Store (\_GPE.VHIV (Arg0, Arg1, 0x05), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x05 = \_GPE.VHOV (Arg0, Arg1)
+                            Store (\_GPE.VHOV (Arg0, Arg1), 0x05)
                             Local1
                         }
                     }
 
                     Method (VDCE, 0, Serialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (0x00, 0x00, 0x0A)
+                            Store (\_GPE.VHIV (0x00, 0x00, 0x0A), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x0A = \_GPE.VHOV (0x00, 0x00)
+                            Store (\_GPE.VHOV (0x00, 0x00), 0x0A)
                             Local1
                         }
                     }
@@ -5548,24 +5548,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Method (VSDD, 1, Serialized)
                     {
-                        If ((DCAP & 0x04))
+                        If (And (DCAP, 0x04))
                         {
                             Return (0xFFFF)
                         }
                         Else
                         {
-                            If (((WDPE & 0x03) == 0x00))
+                            If (LEqual (And (WDPE, 0x03), 0x00))
                             {
-                                WDGN = Arg0
-                                Local1 = 0x01
+                                Store (Arg0, WDGN) /* \WDGN */
+                                Store (0x01, Local1)
                                 If (Local1)
                                 {
-                                    Local1 = \_GPE.VHIV (Arg0, 0x00, 0x06)
+                                    Store (\_GPE.VHIV (Arg0, 0x00, 0x06), Local1)
                                 }
 
                                 If (Local1)
                                 {
-                                    0x06 = \_GPE.VHOV (Arg0, 0x00)
+                                    Store (\_GPE.VHOV (Arg0, 0x00), 0x06)
                                     Local1
                                 }
                             }
@@ -5578,28 +5578,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (VGDD, 1, Serialized)
                     {
-                        If (((DCAP & 0x04) && Arg0))
+                        If (LAnd (And (DCAP, 0x04), Arg0))
                         {
                             Return (0xFFFF)
                         }
                         Else
                         {
-                            If ((DCAP & 0x01))
+                            If (And (DCAP, 0x01))
                             {
-                                If ((Arg0 == 0x00))
+                                If (LEqual (Arg0, 0x00))
                                 {
                                     Wait (\_SB.F4EV, 0x0500)
                                 }
 
-                                Local1 = 0x01
+                                Store (0x01, Local1)
                                 If (Local1)
                                 {
-                                    Local1 = \_GPE.VHIV (Arg0, 0x00, 0x07)
+                                    Store (\_GPE.VHIV (Arg0, 0x00, 0x07), Local1)
                                 }
 
                                 If (Local1)
                                 {
-                                    0x07 = \_GPE.VHOV (Arg0, 0x00)
+                                    Store (\_GPE.VHOV (Arg0, 0x00), 0x07)
                                     Local1
                                 }
                             }
@@ -5614,30 +5614,30 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (VWAK, 1, Serialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (Arg0, 0x00, 0x08)
+                            Store (\_GPE.VHIV (Arg0, 0x00, 0x08), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x08 = \_GPE.VHOV (Arg0, 0x00)
+                            Store (\_GPE.VHOV (Arg0, 0x00), 0x08)
                             Local1
                         }
                     }
 
                     Method (WBRT, 0, NotSerialized)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                         If (Local1)
                         {
-                            Local1 = \_GPE.VHIV (0x00, 0x00, 0x09)
+                            Store (\_GPE.VHIV (0x00, 0x00, 0x09), Local1)
                         }
 
                         If (Local1)
                         {
-                            0x09 = \_GPE.VHOV (0x00, 0x00)
+                            Store (\_GPE.VHOV (0x00, 0x00), 0x09)
                             Local1
                         }
                     }
@@ -5646,15 +5646,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (DCSC, 0xFF)
                 Method (GDCC, 1, Serialized)
                 {
-                    If ((Arg0 && (DCSC == 0xFF)))
+                    If (LAnd (Arg0, LEqual (DCSC, 0xFF)))
                     {
-                        Local0 = (0x01 | (0x02 | 0x04))
+                        Store (Or (0x01, Or (0x02, 0x04)), Local0)
                         If (\_SB.DCKD ())
                         {
-                            Local0 |= 0x08
+                            Or (Local0, 0x08, Local0)
                         }
 
-                        DCSC = Local0
+                        Store (Local0, DCSC) /* \_SB_.PCI0.GFX0.DCSC */
                     }
 
                     Return (DCSC) /* \_SB_.PCI0.GFX0.DCSC */
@@ -5819,7 +5819,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Offset (0x66)
                 }
 
-                OperationRegion (PMLP, SystemIO, (0x1800 + 0x80), 0x20)
+                OperationRegion (PMLP, SystemIO, Add (0x1800, 0x80), 0x20)
                 Field (PMLP, ByteAcc, NoLock, Preserve)
                 {
                     Offset (0x10), 
@@ -5987,36 +5987,36 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (GETP, 1, Serialized)
                 {
-                    If (((Arg0 & 0x09) == 0x00))
+                    If (LEqual (And (Arg0, 0x09), 0x00))
                     {
                         Return (0xFFFFFFFF)
                     }
 
-                    If (((Arg0 & 0x09) == 0x08))
+                    If (LEqual (And (Arg0, 0x09), 0x08))
                     {
                         Return (0x0384)
                     }
 
-                    Local0 = ((Arg0 & 0x0300) >> 0x08)
-                    Local1 = ((Arg0 & 0x3000) >> 0x0C)
-                    Return ((0x1E * (0x09 - (Local0 + Local1))))
+                    ShiftRight (And (Arg0, 0x0300), 0x08, Local0)
+                    ShiftRight (And (Arg0, 0x3000), 0x0C, Local1)
+                    Return (Multiply (0x1E, Subtract (0x09, Add (Local0, Local1))))
                 }
 
                 Method (GDMA, 5, Serialized)
                 {
                     If (Arg0)
                     {
-                        If ((Arg1 && Arg4))
+                        If (LAnd (Arg1, Arg4))
                         {
                             Return (0x14)
                         }
 
-                        If ((Arg2 && Arg4))
+                        If (LAnd (Arg2, Arg4))
                         {
-                            Return (((0x04 - Arg3) * 0x0F))
+                            Return (Multiply (Subtract (0x04, Arg3), 0x0F))
                         }
 
-                        Return (((0x04 - Arg3) * 0x1E))
+                        Return (Multiply (Subtract (0x04, Arg3), 0x1E))
                     }
 
                     Return (0xFFFFFFFF)
@@ -6024,8 +6024,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (GETT, 1, Serialized)
                 {
-                    Return ((0x1E * (0x09 - (((Arg0 >> 0x02) & 0x03
-                        ) + (Arg0 & 0x03)))))
+                    Return (Multiply (0x1E, Subtract (0x09, Add (And (ShiftRight (Arg0, 0x02), 0x03
+                        ), And (Arg0, 0x03)))))
                 }
 
                 Method (GETF, 3, Serialized)
@@ -6033,27 +6033,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Name (TMPF, 0x00)
                     If (Arg0)
                     {
-                        TMPF |= 0x01
+                        Or (TMPF, 0x01, TMPF) /* \GETF.TMPF */
                     }
 
-                    If ((Arg2 & 0x02))
+                    If (And (Arg2, 0x02))
                     {
-                        TMPF |= 0x02
+                        Or (TMPF, 0x02, TMPF) /* \GETF.TMPF */
                     }
 
                     If (Arg1)
                     {
-                        TMPF |= 0x04
+                        Or (TMPF, 0x04, TMPF) /* \GETF.TMPF */
                     }
 
-                    If ((Arg2 & 0x20))
+                    If (And (Arg2, 0x20))
                     {
-                        TMPF |= 0x08
+                        Or (TMPF, 0x08, TMPF) /* \GETF.TMPF */
                     }
 
-                    If ((Arg2 & 0x4000))
+                    If (And (Arg2, 0x4000))
                     {
-                        TMPF |= 0x10
+                        Or (TMPF, 0x10, TMPF) /* \GETF.TMPF */
                     }
 
                     Return (TMPF) /* \GETF.TMPF */
@@ -6061,20 +6061,20 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (SETP, 3, Serialized)
                 {
-                    If ((Arg0 > 0xF0))
+                    If (LGreater (Arg0, 0xF0))
                     {
                         Return (0x08)
                     }
                     Else
                     {
-                        If ((Arg1 & 0x02))
+                        If (And (Arg1, 0x02))
                         {
-                            If (((Arg0 <= 0x78) && (Arg2 & 0x02)))
+                            If (LAnd (LLessEqual (Arg0, 0x78), And (Arg2, 0x02)))
                             {
                                 Return (0x2301)
                             }
 
-                            If (((Arg0 <= 0xB4) && (Arg2 & 0x01)))
+                            If (LAnd (LLessEqual (Arg0, 0xB4), And (Arg2, 0x01)))
                             {
                                 Return (0x2101)
                             }
@@ -6086,27 +6086,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (SDMA, 1, Serialized)
                 {
-                    If ((Arg0 <= 0x14))
+                    If (LLessEqual (Arg0, 0x14))
                     {
                         Return (0x01)
                     }
 
-                    If ((Arg0 <= 0x1E))
+                    If (LLessEqual (Arg0, 0x1E))
                     {
                         Return (0x02)
                     }
 
-                    If ((Arg0 <= 0x2D))
+                    If (LLessEqual (Arg0, 0x2D))
                     {
                         Return (0x01)
                     }
 
-                    If ((Arg0 <= 0x3C))
+                    If (LLessEqual (Arg0, 0x3C))
                     {
                         Return (0x02)
                     }
 
-                    If ((Arg0 <= 0x5A))
+                    If (LLessEqual (Arg0, 0x5A))
                     {
                         Return (0x01)
                     }
@@ -6116,14 +6116,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (SETT, 3, Serialized)
                 {
-                    If ((Arg1 & 0x02))
+                    If (And (Arg1, 0x02))
                     {
-                        If (((Arg0 <= 0x78) && (Arg2 & 0x02)))
+                        If (LAnd (LLessEqual (Arg0, 0x78), And (Arg2, 0x02)))
                         {
                             Return (0x0B)
                         }
 
-                        If (((Arg0 <= 0xB4) && (Arg2 & 0x01)))
+                        If (LAnd (LLessEqual (Arg0, 0xB4), And (Arg2, 0x01)))
                         {
                             Return (0x09)
                         }
@@ -6137,9 +6137,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 Method (RDGI, 1, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
@@ -6153,9 +6153,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (RDGP, 1, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
@@ -6169,9 +6169,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (WTGP, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
@@ -6179,15 +6179,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             TEMP,   1
                         }
 
-                        TEMP = Arg1
+                        Store (Arg1, TEMP) /* \_SB_.WTGP.TEMP */
                     }
                 }
 
                 Method (WTIN, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, ByteAcc, NoLock, Preserve)
                         {
@@ -6195,45 +6195,45 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             TEMP,   1
                         }
 
-                        TEMP = Arg1
+                        Store (Arg1, TEMP) /* \_SB_.WTIN.TEMP */
                     }
                 }
 
                 Method (WPGP, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0104) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0104), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
                             TEMP,   2
                         }
 
-                        TEMP = Arg1
+                        Store (Arg1, TEMP) /* \_SB_.WPGP.TEMP */
                     }
                 }
 
                 Method (GP2N, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x04)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
                             TEMP,   1
                         }
 
-                        TEMP = Arg1
+                        Store (Arg1, TEMP) /* \_SB_.GP2N.TEMP */
                     }
                 }
 
                 Method (GP2A, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = ((0x0800 + 0x0104) + (Arg0 * 0x08))
+                        Store (Add (Add (0x0800, 0x0104), Multiply (Arg0, 0x08)), Local0)
                         OperationRegion (LGP2, SystemIO, Local0, 0x04)
                         Field (LGP2, AnyAcc, NoLock, Preserve)
                         {
@@ -6241,81 +6241,81 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             GPIS,   1
                         }
 
-                        If ((Arg1 == 0x01))
+                        If (LEqual (Arg1, 0x01))
                         {
-                            GPIS = 0x00
-                            GPWP = 0x00
+                            Store (0x00, GPIS) /* \_SB_.GP2A.GPIS */
+                            Store (0x00, GPWP) /* \_SB_.GP2A.GPWP */
                         }
                         Else
                         {
-                            GPWP = 0x02
-                            GPIS = 0x01
+                            Store (0x02, GPWP) /* \_SB_.GP2A.GPWP */
+                            Store (0x01, GPIS) /* \_SB_.GP2A.GPIS */
                         }
 
-                        Local0 = (0x0800 + 0x10)
+                        Store (Add (0x0800, 0x10), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x02)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
                             TEMP,   16
                         }
 
-                        If ((Arg0 >= 0x2D))
+                        If (LGreaterEqual (Arg0, 0x2D))
                         {
-                            Local1 = (Arg0 - 0x28)
+                            Subtract (Arg0, 0x28, Local1)
                         }
-                        ElseIf ((Arg0 <= 0x0A))
+                        ElseIf (LLessEqual (Arg0, 0x0A))
                         {
-                            Local1 = (Arg0 - 0x08)
+                            Subtract (Arg0, 0x08, Local1)
                         }
                         Else
                         {
-                            Local1 = (Arg0 - 0x0A)
+                            Subtract (Arg0, 0x0A, Local1)
                         }
 
-                        Local2 = (0x01 << Local1)
+                        Store (ShiftLeft (0x01, Local1), Local2)
                         If (Arg1)
                         {
-                            TEMP |= Local2
+                            Or (TEMP, Local2, TEMP) /* \_SB_.GP2A.TEMP */
                         }
                         Else
                         {
-                            TEMP &= ~Local2
+                            And (TEMP, Not (Local2), TEMP) /* \_SB_.GP2A.TEMP */
                         }
                     }
                 }
 
                 Method (GP2B, 2, Serialized)
                 {
-                    If ((Arg0 <= 0x5E))
+                    If (LLessEqual (Arg0, 0x5E))
                     {
-                        Local0 = (0x0800 + 0x10)
+                        Store (Add (0x0800, 0x10), Local0)
                         OperationRegion (LGPI, SystemIO, Local0, 0x02)
                         Field (LGPI, AnyAcc, NoLock, Preserve)
                         {
                             TEMP,   16
                         }
 
-                        If ((Arg0 >= 0x2D))
+                        If (LGreaterEqual (Arg0, 0x2D))
                         {
-                            Local1 = (Arg0 - 0x28)
+                            Subtract (Arg0, 0x28, Local1)
                         }
-                        ElseIf ((Arg0 <= 0x0A))
+                        ElseIf (LLessEqual (Arg0, 0x0A))
                         {
-                            Local1 = (Arg0 - 0x08)
+                            Subtract (Arg0, 0x08, Local1)
                         }
                         Else
                         {
-                            Local1 = (Arg0 - 0x0A)
+                            Subtract (Arg0, 0x0A, Local1)
                         }
 
-                        Local2 = (0x01 << Local1)
+                        Store (ShiftLeft (0x01, Local1), Local2)
                         If (Arg1)
                         {
-                            TEMP |= Local2
+                            Or (TEMP, Local2, TEMP) /* \_SB_.GP2B.TEMP */
                         }
                         Else
                         {
-                            TEMP &= ~Local2
+                            And (TEMP, Not (Local2), TEMP) /* \_SB_.GP2B.TEMP */
                         }
                     }
                 }
@@ -6326,14 +6326,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (_ADR, 0x00190000)  // _ADR: Address
                 Method (_PRW, 0, Serialized)  // _PRW: Power Resources for Wake
                 {
-                    Local0 = Package (0x02)
+                    Store (Package (0x02)
                         {
                             0x6D, 
                             0x05
-                        }
+                        }, Local0)
                     If (WOLD)
                     {
-                        Local0 [0x01] = 0x00
+                        Store (0x00, Index (Local0, 0x01))
                     }
 
                     Return (Local0)
@@ -6388,10 +6388,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_REG, 2, NotSerialized)  // _REG: Region Availability
                 {
-                    If (((Arg0 == 0x02) && (Arg1 == 0x01)))
+                    If (LAnd (LEqual (Arg0, 0x02), LEqual (Arg1, 0x01)))
                     {
-                        PMSK = 0x01
-                        PIMP = 0x01
+                        Store (0x01, PMSK) /* \_SB_.PCI0.EHC1.PMSK */
+                        Store (0x01, PIMP) /* \_SB_.PCI0.EHC1.PIMP */
                     }
                 }
 
@@ -6433,13 +6433,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x01)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x01))
+                            If (LNot (And (CUPM, 0x01)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6447,14 +6447,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x01))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x01)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT0._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT0._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6466,13 +6466,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x02)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x02))
+                            If (LNot (And (CUPM, 0x02)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6480,14 +6480,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x02))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x02)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT1._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT1._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6499,13 +6499,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x03)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x04))
+                            If (LNot (And (CUPM, 0x04)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6513,14 +6513,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x04))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x04)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6532,13 +6532,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x04)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x08))
+                            If (LNot (And (CUPM, 0x08)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6546,14 +6546,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x08))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x08)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT3._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT3._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6565,13 +6565,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x05)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x10))
+                            If (LNot (And (CUPM, 0x10)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6579,14 +6579,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x10))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x10)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT4._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT4._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6598,13 +6598,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x06)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x20))
+                            If (LNot (And (CUPM, 0x20)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6612,14 +6612,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x20))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x20)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT5._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT5._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6631,13 +6631,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x07)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x40))
+                            If (LNot (And (CUPM, 0x40)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6645,14 +6645,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x40))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x40)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT6._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT6._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6664,13 +6664,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_ADR, 0x08)  // _ADR: Address
                         Method (_UPC, 0, Serialized)  // _UPC: USB Port Capabilities
                         {
-                            If (!(CUPM & 0x80))
+                            If (LNot (And (CUPM, 0x80)))
                             {
-                                EUPC [0x00] = 0x00
+                                Store (0x00, Index (EUPC, 0x00))
                             }
                             Else
                             {
-                                EUPC [0x00] = 0xFF
+                                Store (0xFF, Index (EUPC, 0x00))
                             }
 
                             Return (EUPC) /* \EUPC */
@@ -6678,14 +6678,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            CreateBitField (DerefOf (EPLD [0x00]), 0x40, VIS)
-                            If (!(VUPM & 0x80))
+                            CreateBitField (DerefOf (Index (EPLD, 0x00)), 0x40, VIS)
+                            If (LNot (And (VUPM, 0x80)))
                             {
-                                VIS &= 0x00
+                                And (VIS, 0x00, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT7._PLD.VIS_ */
                             }
                             Else
                             {
-                                VIS = 0x01
+                                Store (0x01, VIS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT7._PLD.VIS_ */
                             }
 
                             Return (EPLD) /* \EPLD */
@@ -6719,7 +6719,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     PR3M,   32
                 }
 
-                OperationRegion (XHCP, SystemMemory, (\_SB.PCI0.GPCB () + 0x000A0000), 0x0100)
+                OperationRegion (XHCP, SystemMemory, Add (\_SB.PCI0.GPCB (), 0x000A0000), 0x0100)
                 Field (XHCP, AnyAcc, Lock, Preserve)
                 {
                     Offset (0x04), 
@@ -6730,7 +6730,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (PR2S, 1, Serialized)
                 {
-                    If (((CDID & 0xF000) == 0x8000))
+                    If (LEqual (And (CDID, 0xF000), 0x8000))
                     {
                         Switch (Arg0)
                         {
@@ -6845,16 +6845,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (XRST, Zero)
                 Method (_PS0, 0, Serialized)  // _PS0: Power State 0
                 {
-                    If ((^DVID == 0xFFFF))
+                    If (LEqual (^DVID, 0xFFFF))
                     {
                         Return (Zero)
                     }
 
-                    Local2 = ^MEMB /* \_SB_.PCI0.XHC_.MEMB */
-                    Local1 = ^PDBM /* \_SB_.PCI0.XHC_.PDBM */
-                    ^PDBM &= ~0x06
-                    ^MEMB = XWMB /* \_SB_.PCI0.XWMB */
-                    ^PDBM |= 0x02
+                    Store (^MEMB, Local2)
+                    Store (^PDBM, Local1)
+                    And (^PDBM, Not (0x06), ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
+                    Store (XWMB, ^MEMB) /* \_SB_.PCI0.XHC_.MEMB */
+                    Or (^PDBM, 0x02, ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
                     OperationRegion (MCA1, SystemMemory, XWMB, 0x9000)
                     Field (MCA1, DWordAcc, Lock, Preserve)
                     {
@@ -6879,42 +6879,42 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         CLK1,   1
                     }
 
-                    Local3 = ^D0D3 /* \_SB_.PCI0.XHC_.D0D3 */
-                    If ((Local3 == 0x03))
+                    Store (^D0D3, Local3)
+                    If (LEqual (Local3, 0x03))
                     {
-                        ^D0D3 = 0x00
+                        Store (0x00, ^D0D3) /* \_SB_.PCI0.XHC_.D0D3 */
                     }
 
-                    CLK2 = 0x01
+                    Store (0x01, CLK2) /* \_SB_.PCI0.XHC_._PS0.CLK2 */
                     If (CondRefOf (\_SB.PCI0.XHC.PS0X))
                     {
                         \_SB.PCI0.XHC.PS0X ()
                     }
 
-                    If ((Local3 == 0x03))
+                    If (LEqual (Local3, 0x03))
                     {
-                        ^D0D3 = 0x03
+                        Store (0x03, ^D0D3) /* \_SB_.PCI0.XHC_.D0D3 */
                     }
 
-                    ^PDBM &= ~0x02
-                    ^MEMB = Local2
-                    ^PDBM = Local1
+                    And (^PDBM, Not (0x02), ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
+                    Store (Local2, ^MEMB) /* \_SB_.PCI0.XHC_.MEMB */
+                    Store (Local1, ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
                 }
 
                 Method (_PS3, 0, Serialized)  // _PS3: Power State 3
                 {
-                    If ((^DVID == 0xFFFF))
+                    If (LEqual (^DVID, 0xFFFF))
                     {
                         Return (Zero)
                     }
 
-                    ^PMES = 0x01
-                    ^PMEE = 0x01
-                    Local2 = ^MEMB /* \_SB_.PCI0.XHC_.MEMB */
-                    Local1 = ^PDBM /* \_SB_.PCI0.XHC_.PDBM */
-                    ^PDBM &= ~0x06
-                    ^MEMB = XWMB /* \_SB_.PCI0.XWMB */
-                    ^PDBM |= 0x02
+                    Store (0x01, ^PMES) /* \_SB_.PCI0.XHC_.PMES */
+                    Store (0x01, ^PMEE) /* \_SB_.PCI0.XHC_.PMEE */
+                    Store (^MEMB, Local2)
+                    Store (^PDBM, Local1)
+                    And (^PDBM, Not (0x06), ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
+                    Store (XWMB, ^MEMB) /* \_SB_.PCI0.XHC_.MEMB */
+                    Or (^PDBM, 0x02, ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
                     OperationRegion (MCA1, SystemMemory, XWMB, 0x9000)
                     Field (MCA1, DWordAcc, Lock, Preserve)
                     {
@@ -6932,31 +6932,31 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Offset (0x8170)
                     }
 
-                    Local3 = ^D0D3 /* \_SB_.PCI0.XHC_.D0D3 */
-                    If ((Local3 == 0x03))
+                    Store (^D0D3, Local3)
+                    If (LEqual (Local3, 0x03))
                     {
-                        ^D0D3 = 0x00
+                        Store (0x00, ^D0D3) /* \_SB_.PCI0.XHC_.D0D3 */
                     }
 
-                    CLK2 = 0x00
+                    Store (0x00, CLK2) /* \_SB_.PCI0.XHC_._PS3.CLK2 */
                     If (CondRefOf (\_SB.PCI0.XHC.PS3X))
                     {
                         \_SB.PCI0.XHC.PS3X ()
                     }
 
-                    If ((Local3 == 0x03))
+                    If (LEqual (Local3, 0x03))
                     {
-                        ^D0D3 = 0x03
+                        Store (0x03, ^D0D3) /* \_SB_.PCI0.XHC_.D0D3 */
                     }
 
-                    ^PDBM &= ~0x02
-                    ^MEMB = Local2
-                    ^PDBM = Local1
+                    And (^PDBM, Not (0x02), ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
+                    Store (Local2, ^MEMB) /* \_SB_.PCI0.XHC_.MEMB */
+                    Store (Local1, ^PDBM) /* \_SB_.PCI0.XHC_.PDBM */
                 }
 
                 Method (CUID, 1, Serialized)
                 {
-                    If ((Arg0 == ToUUID ("7c9512a9-1705-4cb4-af7d-506a2423ab71") /* Unknown UUID */))
+                    If (LEqual (Arg0, ToUUID ("7c9512a9-1705-4cb4-af7d-506a2423ab71") /* Unknown UUID */))
                     {
                         Return (0x01)
                     }
@@ -6968,35 +6968,35 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     CreateDWordField (Arg2, 0x00, CDW1)
                     CreateDWordField (Arg2, 0x08, CDW3)
-                    If ((XHCI == 0x00))
+                    If (LEqual (XHCI, 0x00))
                     {
-                        CDW1 |= 0x02
+                        Or (CDW1, 0x02, CDW1) /* \_SB_.PCI0.XHC_.POSC.CDW1 */
                     }
 
-                    If (!(CDW1 & 0x01))
+                    If (LNot (And (CDW1, 0x01)))
                     {
-                        If ((CDW3 & 0x01))
+                        If (And (CDW3, 0x01))
                         {
                             ESEL ()
                         }
-                        ElseIf (((CDID & 0xF000) == 0x8000))
+                        ElseIf (LEqual (And (CDID, 0xF000), 0x8000))
                         {
-                            If ((Arg0 > 0x01))
+                            If (LGreater (Arg0, 0x01))
                             {
                                 XSEL ()
                             }
                             Else
                             {
-                                CDW1 |= 0x0A
+                                Or (CDW1, 0x0A, CDW1) /* \_SB_.PCI0.XHC_.POSC.CDW1 */
                             }
                         }
-                        ElseIf ((Arg0 > 0x02))
+                        ElseIf (LGreater (Arg0, 0x02))
                         {
                             XSEL ()
                         }
                         Else
                         {
-                            CDW1 |= 0x0A
+                            Or (CDW1, 0x0A, CDW1) /* \_SB_.PCI0.XHC_.POSC.CDW1 */
                         }
                     }
 
@@ -7005,29 +7005,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (XSEL, 0, Serialized)
                 {
-                    If ((XHCI != 0x00))
+                    If (LNotEqual (XHCI, 0x00))
                     {
-                        XUSB = 0x01
-                        XRST = 0x01
-                        Local0 = 0x00
-                        Local0 = (PR3 & 0xFFFFFFC0)
-                        Local0 |= XHPM /* \XHPM */
-                        PR3 = (Local0 & PR3M) /* \_SB_.PCI0.XHC_.PR3M */
-                        Local0 = 0x00
-                        Local0 = (PR2 & 0xFFFF8000)
-                        Local0 |= XHPM /* \XHPM */
-                        PR2 = (Local0 & PR2M) /* \_SB_.PCI0.XHC_.PR2M */
+                        Store (0x01, XUSB) /* \_SB_.XUSB */
+                        Store (0x01, XRST) /* \_SB_.PCI0.XHC_.XRST */
+                        Store (0x00, Local0)
+                        And (PR3, 0xFFFFFFC0, Local0)
+                        Or (Local0, XHPM, Local0)
+                        And (Local0, PR3M, PR3) /* \_SB_.PCI0.XHC_.PR3_ */
+                        Store (0x00, Local0)
+                        And (PR2, 0xFFFF8000, Local0)
+                        Or (Local0, XHPM, Local0)
+                        And (Local0, PR2M, PR2) /* \_SB_.PCI0.XHC_.PR2_ */
                     }
                 }
 
                 Method (ESEL, 0, Serialized)
                 {
-                    If (((XHCI == 0x02) || (XHCI == 0x03)))
+                    If (LOr (LEqual (XHCI, 0x02), LEqual (XHCI, 0x03)))
                     {
-                        PR3 &= 0xFFFFFFC0
-                        PR2 &= 0xFFFF8000
-                        XUSB = 0x00
-                        XRST = 0x00
+                        And (PR3, 0xFFFFFFC0, PR3) /* \_SB_.PCI0.XHC_.PR3_ */
+                        And (PR2, 0xFFFF8000, PR2) /* \_SB_.PCI0.XHC_.PR2_ */
+                        Store (0x00, XUSB) /* \_SB_.XUSB */
+                        Store (0x00, XRST) /* \_SB_.PCI0.XHC_.XRST */
                     }
                 }
 
@@ -7038,7 +7038,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (XWAK, 0, Serialized)
                 {
-                    If (((XUSB == 0x01) || (XRST == 0x01)))
+                    If (LOr (LEqual (XUSB, 0x01), LEqual (XRST, 0x01)))
                     {
                         XSEL ()
                     }
@@ -7059,7 +7059,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Name (_ADR, Zero)  // _ADR: Address
                     Method (_PS0, 0, Serialized)  // _PS0: Power State 0
                     {
-                        If ((\_SB.PCI0.XHC.DVID == 0xFFFF))
+                        If (LEqual (\_SB.PCI0.XHC.DVID, 0xFFFF))
                         {
                             Return (Zero)
                         }
@@ -7107,16 +7107,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x01) | !(CUPM & 0x01)
+                            If (Or (LNot (And (PR2, 0x01)), LNot (And (CUPM, 0x01))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x01) | !(VUPM & 0x01)
+                            If (Or (LNot (And (PR2, 0x01)), LNot (And (VUPM, 0x01))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS01._UPC.UPCP */
@@ -7124,7 +7124,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x01) | !(VUPM & 0x01)
+                            If (Or (LNot (And (PR2, 0x01)), LNot (And (VUPM, 0x01))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7138,8 +7138,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x01
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x01, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS01._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS01._PLD.PLDP */
                         }
                     }
@@ -7157,16 +7157,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x02) | !(CUPM & 0x02)
+                            If (Or (LNot (And (PR2, 0x02)), LNot (And (CUPM, 0x02))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x02) | !(VUPM & 0x02)
+                            If (Or (LNot (And (PR2, 0x02)), LNot (And (VUPM, 0x02))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS02._UPC.UPCP */
@@ -7174,7 +7174,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x02) | !(VUPM & 0x02)
+                            If (Or (LNot (And (PR2, 0x02)), LNot (And (VUPM, 0x02))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7188,8 +7188,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x02
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x02, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS02._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS02._PLD.PLDP */
                         }
                     }
@@ -7207,16 +7207,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x04) | !(CUPM & 0x04)
+                            If (Or (LNot (And (PR2, 0x04)), LNot (And (CUPM, 0x04))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x04) | !(VUPM & 0x04)
+                            If (Or (LNot (And (PR2, 0x04)), LNot (And (VUPM, 0x04))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS03._UPC.UPCP */
@@ -7224,7 +7224,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x04) | !(VUPM & 0x04)
+                            If (Or (LNot (And (PR2, 0x04)), LNot (And (VUPM, 0x04))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.HS03.PLDE */
@@ -7238,8 +7238,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x03
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x03, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS03._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS03._PLD.PLDP */
                         }
                     }
@@ -7257,16 +7257,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x08) | !(CUPM & 0x08)
+                            If (Or (LNot (And (PR2, 0x08)), LNot (And (CUPM, 0x08))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x08) | !(VUPM & 0x08)
+                            If (Or (LNot (And (PR2, 0x08)), LNot (And (VUPM, 0x08))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS04._UPC.UPCP */
@@ -7274,7 +7274,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x08) | !(VUPM & 0x08)
+                            If (Or (LNot (And (PR2, 0x08)), LNot (And (VUPM, 0x08))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7288,8 +7288,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS04._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS04._PLD.PLDP */
                         }
                     }
@@ -7307,16 +7307,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x10) | !(CUPM & 0x10)
+                            If (Or (LNot (And (PR2, 0x10)), LNot (And (CUPM, 0x10))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x10) | !(VUPM & 0x10)
+                            If (Or (LNot (And (PR2, 0x10)), LNot (And (VUPM, 0x10))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS05._UPC.UPCP */
@@ -7324,7 +7324,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x10) | !(VUPM & 0x10)
+                            If (Or (LNot (And (PR2, 0x10)), LNot (And (VUPM, 0x10))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7338,8 +7338,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS05._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS05._PLD.PLDP */
                         }
                     }
@@ -7357,16 +7357,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x20) | !(CUPM & 0x20)
+                            If (Or (LNot (And (PR2, 0x20)), LNot (And (CUPM, 0x20))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x20) | !(VUPM & 0x20)
+                            If (Or (LNot (And (PR2, 0x20)), LNot (And (VUPM, 0x20))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS06._UPC.UPCP */
@@ -7374,7 +7374,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x20) | !(VUPM & 0x20)
+                            If (Or (LNot (And (PR2, 0x20)), LNot (And (VUPM, 0x20))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7388,8 +7388,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS06._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS06._PLD.PLDP */
                         }
                     }
@@ -7407,16 +7407,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x40) | !(CUPM & 0x40)
+                            If (Or (LNot (And (PR2, 0x40)), LNot (And (CUPM, 0x40))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x40) | !(VUPM & 0x40)
+                            If (Or (LNot (And (PR2, 0x40)), LNot (And (VUPM, 0x40))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS07._UPC.UPCP */
@@ -7424,7 +7424,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x40) | !(VUPM & 0x40)
+                            If (Or (LNot (And (PR2, 0x40)), LNot (And (VUPM, 0x40))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7438,8 +7438,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS07._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS07._PLD.PLDP */
                         }
                     }
@@ -7457,16 +7457,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR2 & 0x80) | !(CUPM & 0x80)
+                            If (Or (LNot (And (PR2, 0x80)), LNot (And (CUPM, 0x80))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR2 & 0x80) | !(VUPM & 0x80)
+                            If (Or (LNot (And (PR2, 0x80)), LNot (And (VUPM, 0x80))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS08._UPC.UPCP */
@@ -7474,7 +7474,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR2 & 0x80) | !(VUPM & 0x80)
+                            If (Or (LNot (And (PR2, 0x80)), LNot (And (VUPM, 0x80))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7488,8 +7488,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS08._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS08._PLD.PLDP */
                         }
                     }
@@ -7597,16 +7597,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR3 & 0x01) | !(CUPM & 0x01)
+                            If (Or (LNot (And (PR3, 0x01)), LNot (And (CUPM, 0x01))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR3 & 0x01) | !(VUPM & 0x01)
+                            If (Or (LNot (And (PR3, 0x01)), LNot (And (VUPM, 0x01))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP1._UPC.UPCP */
@@ -7614,7 +7614,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR3 & 0x01) | !(VUPM & 0x01)
+                            If (Or (LNot (And (PR3, 0x01)), LNot (And (VUPM, 0x01))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7628,8 +7628,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x01
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x01, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP1._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP1._PLD.PLDP */
                         }
                     }
@@ -7647,16 +7647,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR3 & 0x02) | !(CUPM & 0x02)
+                            If (Or (LNot (And (PR3, 0x02)), LNot (And (CUPM, 0x02))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR3 & 0x02) | !(VUPM & 0x02)
+                            If (Or (LNot (And (PR3, 0x02)), LNot (And (VUPM, 0x02))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP2._UPC.UPCP */
@@ -7664,7 +7664,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR3 & 0x02) | !(VUPM & 0x02)
+                            If (Or (LNot (And (PR3, 0x02)), LNot (And (VUPM, 0x02))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7678,8 +7678,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x02
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x02, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP2._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP2._PLD.PLDP */
                         }
                     }
@@ -7697,16 +7697,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR3 & 0x04) | !(CUPM & 0x04)
+                            If (Or (LNot (And (PR3, 0x04)), LNot (And (CUPM, 0x04))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR3 & 0x04) | !(VUPM & 0x04)
+                            If (Or (LNot (And (PR3, 0x04)), LNot (And (VUPM, 0x04))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP3._UPC.UPCP */
@@ -7714,7 +7714,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR3 & 0x04) | !(VUPM & 0x04)
+                            If (Or (LNot (And (PR3, 0x04)), LNot (And (VUPM, 0x04))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.SSP3.PLDE */
@@ -7728,8 +7728,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x03
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x03, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP3._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP3._PLD.PLDP */
                         }
                     }
@@ -7747,16 +7747,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 0x00, 
                                 0x00
                             })
-                            If ((!(PR3 & 0x08) | !(CUPM & 0x08)
+                            If (Or (LNot (And (PR3, 0x08)), LNot (And (CUPM, 0x08))
                                 ))
                             {
-                                UPCP [0x00] = 0x00
+                                Store (0x00, Index (UPCP, 0x00))
                             }
 
-                            If ((!(PR3 & 0x08) | !(VUPM & 0x08)
+                            If (Or (LNot (And (PR3, 0x08)), LNot (And (VUPM, 0x08))
                                 ))
                             {
-                                UPCP [0x01] = 0xFF
+                                Store (0xFF, Index (UPCP, 0x01))
                             }
 
                             Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP4._UPC.UPCP */
@@ -7764,7 +7764,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                         {
-                            If ((!(PR3 & 0x08) | !(VUPM & 0x08)
+                            If (Or (LNot (And (PR3, 0x08)), LNot (And (VUPM, 0x08))
                                 ))
                             {
                                 Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.PLDE */
@@ -7778,8 +7778,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                                 }
                             })
-                            CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                            GPOS = 0x00
+                            CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                            Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP4._PLD.GPOS */
                             Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP4._PLD.PLDP */
                         }
                     }
@@ -7874,15 +7874,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x00)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP1._UPC.UPCP */
@@ -7890,8 +7890,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x00)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.PLDE */
                         }
@@ -7904,8 +7904,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x00
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x00, GPOS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP1._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP1._PLD.PLDP */
                     }
                 }
@@ -7922,15 +7922,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x01)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP2._UPC.UPCP */
@@ -7938,8 +7938,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x01)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.PLDE */
                         }
@@ -7952,8 +7952,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x01
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x01, GPOS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP2._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP2._PLD.PLDP */
                     }
                 }
@@ -7970,15 +7970,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x02)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP3._UPC.UPCP */
@@ -7986,8 +7986,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x02)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.PLDE */
                         }
@@ -8000,8 +8000,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x02
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x02, GPOS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP3._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP3._PLD.PLDP */
                     }
                 }
@@ -8018,15 +8018,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x03)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP4._UPC.UPCP */
@@ -8034,8 +8034,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x03)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.PLDE */
                         }
@@ -8048,8 +8048,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x03
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x03, GPOS) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP4._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.EHC1.RHUB.PRT0.HPT2.SHP4._PLD.PLDP */
                     }
                 }
@@ -8077,15 +8077,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x00)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP1._UPC.UPCP */
@@ -8093,8 +8093,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x00)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.HS03.PLDE */
                         }
@@ -8107,8 +8107,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x00
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP1._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP1._PLD.PLDP */
                     }
                 }
@@ -8125,15 +8125,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x01)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP2._UPC.UPCP */
@@ -8141,8 +8141,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x01)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.HS03.PLDE */
                         }
@@ -8155,8 +8155,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x01
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x01, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP2._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP2._PLD.PLDP */
                     }
                 }
@@ -8173,15 +8173,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x02)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP3._UPC.UPCP */
@@ -8189,8 +8189,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x02)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.HS03.PLDE */
                         }
@@ -8203,8 +8203,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x02
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x02, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP3._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP3._PLD.PLDP */
                     }
                 }
@@ -8221,15 +8221,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x03)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP4._UPC.UPCP */
@@ -8237,8 +8237,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x03)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.HS03.PLDE */
                         }
@@ -8251,8 +8251,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x03
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x03, GPOS) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP4._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.HS03.SHP4._PLD.PLDP */
                     }
                 }
@@ -8280,15 +8280,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x00)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP1._UPC.UPCP */
@@ -8296,8 +8296,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x00)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x00, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.SSP3.PLDE */
                         }
@@ -8310,8 +8310,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x00
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x00, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP1._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP1._PLD.PLDP */
                     }
                 }
@@ -8328,15 +8328,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x01)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP2._UPC.UPCP */
@@ -8344,8 +8344,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x01)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x01, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.SSP3.PLDE */
                         }
@@ -8358,8 +8358,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x01
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x01, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP2._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP2._PLD.PLDP */
                     }
                 }
@@ -8376,15 +8376,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x02)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP3._UPC.UPCP */
@@ -8392,8 +8392,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x02)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x02, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.SSP3.PLDE */
                         }
@@ -8406,8 +8406,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x02
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x02, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP3._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP3._PLD.PLDP */
                     }
                 }
@@ -8424,15 +8424,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Local1 = (One << 0x03)
-                        If (!(CSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (CSUM, Local1)))
                         {
-                            UPCP [0x00] = 0x00
+                            Store (0x00, Index (UPCP, 0x00))
                         }
 
-                        If (!(VSUM & Local1))
+                        If (LNot (And (VSUM, Local1)))
                         {
-                            UPCP [0x01] = 0xFF
+                            Store (0xFF, Index (UPCP, 0x01))
                         }
 
                         Return (UPCP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP4._UPC.UPCP */
@@ -8440,8 +8440,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
                     {
-                        Local1 = (One << 0x03)
-                        If (!(VSUM & Local1))
+                        ShiftLeft (One, 0x03, Local1)
+                        If (LNot (And (VSUM, Local1)))
                         {
                             Return (PLDE) /* \_SB_.PCI0.XHC_.RHUB.SSP3.PLDE */
                         }
@@ -8454,8 +8454,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 /* 0008 */  0x69, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // i.......
                             }
                         })
-                        CreateField (DerefOf (PLDP [0x00]), 0x57, 0x08, GPOS)
-                        GPOS = 0x03
+                        CreateField (DerefOf (Index (PLDP, 0x00)), 0x57, 0x08, GPOS)
+                        Store (0x03, GPOS) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP4._PLD.GPOS */
                         Return (PLDP) /* \_SB_.PCI0.XHC_.RHUB.SSP3.SHP4._PLD.PLDP */
                     }
                 }
@@ -8505,7 +8505,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x01)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PARC |= 0x80
+                            Or (PARC, 0x80, PARC) /* \_SB_.PARC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8521,8 +8521,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLA, \_SB.LNKA._CRS._Y17._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PARC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKA._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PARC, 0x0F), IRQ0) /* \_SB_.LNKA._CRS.IRQ0 */
                             Return (RTLA) /* \_SB_.LNKA._CRS.RTLA */
                         }
 
@@ -8530,13 +8530,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PARC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PARC) /* \_SB_.PARC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PARC & 0x80))
+                            If (And (PARC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8553,7 +8553,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x02)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PBRC |= 0x80
+                            Or (PBRC, 0x80, PBRC) /* \_SB_.PBRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8569,8 +8569,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLB, \_SB.LNKB._CRS._Y18._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PBRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKB._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PBRC, 0x0F), IRQ0) /* \_SB_.LNKB._CRS.IRQ0 */
                             Return (RTLB) /* \_SB_.LNKB._CRS.RTLB */
                         }
 
@@ -8578,13 +8578,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PBRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PBRC) /* \_SB_.PBRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PBRC & 0x80))
+                            If (And (PBRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8601,7 +8601,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x03)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PCRC |= 0x80
+                            Or (PCRC, 0x80, PCRC) /* \_SB_.PCRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8617,8 +8617,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLC, \_SB.LNKC._CRS._Y19._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PCRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKC._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PCRC, 0x0F), IRQ0) /* \_SB_.LNKC._CRS.IRQ0 */
                             Return (RTLC) /* \_SB_.LNKC._CRS.RTLC */
                         }
 
@@ -8626,13 +8626,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PCRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PCRC) /* \_SB_.PCRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PCRC & 0x80))
+                            If (And (PCRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8649,7 +8649,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x04)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PDRC |= 0x80
+                            Or (PDRC, 0x80, PDRC) /* \_SB_.PDRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8665,8 +8665,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLD, \_SB.LNKD._CRS._Y1A._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PDRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKD._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PDRC, 0x0F), IRQ0) /* \_SB_.LNKD._CRS.IRQ0 */
                             Return (RTLD) /* \_SB_.LNKD._CRS.RTLD */
                         }
 
@@ -8674,13 +8674,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PDRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PDRC) /* \_SB_.PDRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PDRC & 0x80))
+                            If (And (PDRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8697,7 +8697,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x05)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PERC |= 0x80
+                            Or (PERC, 0x80, PERC) /* \_SB_.PERC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8713,8 +8713,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLE, \_SB.LNKE._CRS._Y1B._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PERC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKE._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PERC, 0x0F), IRQ0) /* \_SB_.LNKE._CRS.IRQ0 */
                             Return (RTLE) /* \_SB_.LNKE._CRS.RTLE */
                         }
 
@@ -8722,13 +8722,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PERC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PERC) /* \_SB_.PERC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PERC & 0x80))
+                            If (And (PERC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8745,7 +8745,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x06)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PFRC |= 0x80
+                            Or (PFRC, 0x80, PFRC) /* \_SB_.PFRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8761,8 +8761,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLF, \_SB.LNKF._CRS._Y1C._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PFRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKF._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PFRC, 0x0F), IRQ0) /* \_SB_.LNKF._CRS.IRQ0 */
                             Return (RTLF) /* \_SB_.LNKF._CRS.RTLF */
                         }
 
@@ -8770,13 +8770,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PFRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PFRC) /* \_SB_.PFRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PFRC & 0x80))
+                            If (And (PFRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8793,7 +8793,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x07)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PGRC |= 0x80
+                            Or (PGRC, 0x80, PGRC) /* \_SB_.PGRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8809,8 +8809,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLG, \_SB.LNKG._CRS._Y1D._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PGRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKG._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PGRC, 0x0F), IRQ0) /* \_SB_.LNKG._CRS.IRQ0 */
                             Return (RTLG) /* \_SB_.LNKG._CRS.RTLG */
                         }
 
@@ -8818,13 +8818,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PGRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PGRC) /* \_SB_.PGRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PGRC & 0x80))
+                            If (And (PGRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8841,7 +8841,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (_UID, 0x08)  // _UID: Unique ID
                         Method (_DIS, 0, Serialized)  // _DIS: Disable Device
                         {
-                            PHRC |= 0x80
+                            Or (PHRC, 0x80, PHRC) /* \_SB_.PHRC */
                         }
 
                         Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
@@ -8857,8 +8857,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                     {}
                             })
                             CreateWordField (RTLH, \_SB.LNKH._CRS._Y1E._INT, IRQ0)  // _INT: Interrupts
-                            IRQ0 = Zero
-                            IRQ0 = (0x01 << (PHRC & 0x0F))
+                            Store (Zero, IRQ0) /* \_SB_.LNKH._CRS.IRQ0 */
+                            ShiftLeft (0x01, And (PHRC, 0x0F), IRQ0) /* \_SB_.LNKH._CRS.IRQ0 */
                             Return (RTLH) /* \_SB_.LNKH._CRS.RTLH */
                         }
 
@@ -8866,13 +8866,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             CreateWordField (Arg0, 0x01, IRQ0)
                             FindSetRightBit (IRQ0, Local0)
-                            Local0--
-                            PHRC = Local0
+                            Decrement (Local0)
+                            Store (Local0, PHRC) /* \_SB_.PHRC */
                         }
 
                         Method (_STA, 0, Serialized)  // _STA: Status
                         {
-                            If ((PHRC & 0x80))
+                            If (And (PHRC, 0x80))
                             {
                                 Return (0x09)
                             }
@@ -8948,8 +8948,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (GBNT, 2, Serialized)
                     {
-                        Local0 = (One << Arg1)
-                        If (((Arg0 & Local0) == Local0))
+                        ShiftLeft (One, Arg1, Local0)
+                        If (LEqual (And (Arg0, Local0), Local0))
                         {
                             Return (One)
                         }
@@ -8961,9 +8961,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (ECRI, 0, Serialized)
                     {
-                        OST = \WCOS ()
+                        Store (\WCOS (), OST) /* \_SB_.PCI0.LPCB.EC0_.OST_ */
                         PWUP (0x07, 0xFF)
-                        Local0 = GBAP ()
+                        Store (GBAP (), Local0)
                         ITLB ()
                         SBTN (Local0, 0x81)
                         PRIT ()
@@ -8971,11 +8971,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_REG, 2, NotSerialized)  // _REG: Region Availability
                     {
-                        If ((Arg0 == 0x03))
+                        If (LEqual (Arg0, 0x03))
                         {
-                            ECRG = Arg1
-                            Local1 = ((\WCOS () == 0x01) || (\WCOS () == 0x02))
-                            If ((Arg1 && !Local1))
+                            Store (Arg1, ECRG) /* \_SB_.PCI0.LPCB.EC0_.ECRG */
+                            Store (LOr (LEqual (\WCOS (), 0x01), LEqual (\WCOS (), 0x02)), Local1)
+                            If (LAnd (Arg1, LNot (Local1)))
                             {
                                 ECRI ()
                             }
@@ -9182,7 +9182,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_INI, 0, NotSerialized)  // _INI: Initialize
                     {
-                        If (((\WCOS () == 0x01) || (\WCOS () == 0x02)))
+                        If (LOr (LEqual (\WCOS (), 0x01), LEqual (\WCOS (), 0x02)))
                         {
                             ECRI ()
                         }
@@ -9211,10 +9211,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            MFAC = Arg1
-                            If (((Arg0 >= 0x00) && (Arg0 <= 0x64)))
+                            Store (Arg1, MFAC) /* \_SB_.PCI0.LPCB.EC0_.MFAC */
+                            If (LAnd (LGreaterEqual (Arg0, 0x00), LLessEqual (Arg0, 0x64)))
                             {
-                                CFAN = Arg0
+                                Store (Arg0, CFAN) /* \_SB_.PCI0.LPCB.EC0_.CFAN */
                             }
                         }
 
@@ -9226,7 +9226,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            CFAN = Arg0
+                            Store (Arg0, CFAN) /* \_SB_.PCI0.LPCB.EC0_.CFAN */
                         }
 
                         Release (ECMX)
@@ -9234,11 +9234,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (KGFS, 0, NotSerialized)
                     {
-                        Local0 = 0x14
+                        Store (0x14, Local0)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = CFAN /* \_SB_.PCI0.LPCB.EC0_.CFAN */
+                            Store (CFAN, Local0)
                         }
 
                         Release (ECMX)
@@ -9247,11 +9247,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (KRFS, 0, NotSerialized)
                     {
-                        Local0 = 0x1E
+                        Store (0x1E, Local0)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = PFAN /* \_SB_.PCI0.LPCB.EC0_.PFAN */
+                            Store (PFAN, Local0)
                         }
 
                         Release (ECMX)
@@ -9260,37 +9260,37 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (SFSD, 1, Serialized)
                     {
-                        Local1 = (Arg0 * 0x40)
+                        Multiply (Arg0, 0x40, Local1)
                         Divide (Local1, 0x64, Local2, Local0)
-                        Local0 = (0x40 - Local0)
-                        Local1 = (PWM0 & 0x80)
-                        If ((Local0 == 0x40))
+                        Subtract (0x40, Local0, Local0)
+                        And (PWM0, 0x80, Local1)
+                        If (LEqual (Local0, 0x40))
                         {
-                            Local1 |= 0x01
+                            Or (Local1, 0x01, Local1)
                         }
                         Else
                         {
-                            Local0 <<= 0x01
-                            Local1 |= Local0
+                            ShiftLeft (Local0, 0x01, Local0)
+                            Or (Local0, Local1, Local1)
                         }
 
-                        PWM0 = Local1
+                        Store (Local1, PWM0) /* \_SB_.PCI0.LPCB.EC0_.PWM0 */
                     }
 
                     Method (GFSD, 0, Serialized)
                     {
-                        Local0 = (PWM0 & 0x7F)
-                        If ((Local0 & 0x01))
+                        And (PWM0, 0x7F, Local0)
+                        If (And (Local0, 0x01))
                         {
-                            Local1 = 0x00
+                            Store (0x00, Local1)
                         }
                         Else
                         {
-                            Local0 >>= 0x01
-                            Local0 = (0x40 - Local0)
-                            Local0 *= 0x64
-                            Divide ((Local0 + 0x20), 0x40, Local2, Local1)
-                            Local1++
+                            ShiftRight (Local0, 0x01, Local0)
+                            Subtract (0x40, Local0, Local0)
+                            Multiply (Local0, 0x64, Local0)
+                            Divide (Add (Local0, 0x20), 0x40, Local2, Local1)
+                            Increment (Local1)
                         }
 
                         Return (Local1)
@@ -9301,7 +9301,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = SHK /* \_SB_.PCI0.LPCB.EC0_.SHK_ */
+                            Store (SHK, Local0)
                         }
 
                         Release (ECMX)
@@ -9313,8 +9313,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Debug = Arg0
-                            SHK = Arg0
+                            Store (Arg0, Debug)
+                            Store (Arg0, SHK) /* \_SB_.PCI0.LPCB.EC0_.SHK_ */
                         }
 
                         Release (ECMX)
@@ -9322,12 +9322,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (SAST, 1, Serialized)
                     {
-                        Local0 = 0x00
+                        Store (0x00, Local0)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            AUDS = Arg0
-                            Local0 = 0x01
+                            Store (Arg0, AUDS) /* \_SB_.PCI0.LPCB.EC0_.AUDS */
+                            Store (0x01, Local0)
                         }
 
                         Release (ECMX)
@@ -9338,19 +9338,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     {
                         If (HSED)
                         {
-                            Local0 = HSWK /* \_SB_.PCI0.LPCB.EC0_.HSWK */
+                            Store (HSWK, Local0)
                             If (Arg0)
                             {
-                                HSWK = (Local0 | Arg1)
+                                Or (Local0, Arg1, HSWK) /* \_SB_.PCI0.LPCB.EC0_.HSWK */
                             }
                             Else
                             {
-                                HSWK = (Local0 & ~Arg1)
+                                And (Local0, Not (Arg1), HSWK) /* \_SB_.PCI0.LPCB.EC0_.HSWK */
                             }
                         }
                         Else
                         {
-                            HSWK = 0x00
+                            Store (0x00, HSWK) /* \_SB_.PCI0.LPCB.EC0_.HSWK */
                         }
                     }
 
@@ -9360,7 +9360,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (CHSW, 1, Serialized)
                     {
-                        Local1 = 0x00
+                        Store (0x00, Local1)
                         Return (Local1)
                     }
 
@@ -9371,11 +9371,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             If (Arg1)
                             {
-                                HSEN |= Arg0
+                                Or (HSEN, Arg0, HSEN) /* \_SB_.PCI0.LPCB.EC0_.HSEN */
                             }
                             Else
                             {
-                                HSEN &= ~Arg0
+                                And (HSEN, Not (Arg0), HSEN) /* \_SB_.PCI0.LPCB.EC0_.HSEN */
                             }
                         }
 
@@ -9387,7 +9387,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            WLP = (Arg0 ^ 0x00)
+                            XOr (Arg0, 0x00, WLP) /* \_SB_.PCI0.LPCB.EC0_.WLP_ */
                         }
 
                         Release (ECMX)
@@ -9398,12 +9398,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            If (((WWIX & 0x80) && (Arg0 == 0x00)))
+                            If (LAnd (And (WWIX, 0x80), LEqual (Arg0, 0x00)))
                             {
                                 Sleep (0x1388)
                             }
 
-                            WWP = ((Arg0 & 0x01) ^ 0x01)
+                            XOr (And (Arg0, 0x01), 0x01, WWP) /* \_SB_.PCI0.LPCB.EC0_.WWP_ */
                         }
 
                         Release (ECMX)
@@ -9411,35 +9411,35 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (ECAB, 4, Serialized)
                     {
-                        Local0 = 0xECAB
+                        Store (0xECAB, Local0)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = 0xFF00
-                            ABDI = Arg0
-                            ABAD = Arg1
-                            ABIX = Arg2
-                            If (((Arg1 & 0x01) == 0x00))
+                            Store (0xFF00, Local0)
+                            Store (Arg0, ABDI) /* \_SB_.PCI0.LPCB.EC0_.ABDI */
+                            Store (Arg1, ABAD) /* \_SB_.PCI0.LPCB.EC0_.ABAD */
+                            Store (Arg2, ABIX) /* \_SB_.PCI0.LPCB.EC0_.ABIX */
+                            If (LEqual (And (Arg1, 0x01), 0x00))
                             {
-                                ABDA = Arg3
+                                Store (Arg3, ABDA) /* \_SB_.PCI0.LPCB.EC0_.ABDA */
                             }
 
-                            ABST = 0xFF
+                            Store (0xFF, ABST) /* \_SB_.PCI0.LPCB.EC0_.ABST */
                             Sleep (0x5A)
-                            Local0 = 0x80
-                            Local1 = 0x0B
-                            While (((Local0 & 0x80) && (Local1 > 0x00)))
+                            Store (0x80, Local0)
+                            Store (0x0B, Local1)
+                            While (LAnd (And (Local0, 0x80), LGreater (Local1, 0x00)))
                             {
                                 Sleep (0x0A)
-                                Local0 = ABST /* \_SB_.PCI0.LPCB.EC0_.ABST */
-                                Local1--
+                                Store (ABST, Local0)
+                                Decrement (Local1)
                             }
 
-                            Local0 <<= 0x08
-                            If (((Local0 == 0x00) && (Arg1 & 0x01)))
+                            ShiftLeft (Local0, 0x08, Local0)
+                            If (LAnd (LEqual (Local0, 0x00), And (Arg1, 0x01)))
                             {
-                                Local1 = (ABDA & 0xFF)
-                                Local0 |= Local1
+                                And (ABDA, 0xFF, Local1)
+                                Or (Local0, Local1, Local0)
                             }
                         }
 
@@ -9461,34 +9461,34 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (UPAD, 0, Serialized)
                     {
                         Acquire (BTMX, 0xFFFF)
-                        If ((GACP & 0x01))
+                        If (And (GACP, 0x01))
                         {
-                            GACP &= 0x06
+                            And (GACP, 0x06, GACP) /* \_SB_.PCI0.LPCB.EC0_.GACP */
                             Release (BTMX)
-                            Local0 = 0x01
-                            Local1 = 0x00
+                            Store (0x01, Local0)
+                            Store (0x00, Local1)
                             Acquire (ECMX, 0xFFFF)
                             If (ECRG)
                             {
-                                Local0 = ADP /* \_SB_.PCI0.LPCB.EC0_.ADP_ */
-                                Local1 = ADID /* \_SB_.PCI0.LPCB.EC0_.ADID */
+                                Store (ADP, Local0)
+                                Store (ADID, Local1)
                             }
 
                             Release (ECMX)
-                            ACST = Local0
-                            If ((DTCD & 0x0800))
+                            Store (Local0, ACST) /* \_SB_.PCI0.LPCB.EC0_.ACST */
+                            If (And (DTCD, 0x0800))
                             {
-                                If ((DTCD & 0x1000))
+                                If (And (DTCD, 0x1000))
                                 {
-                                    ACST = 0x00
+                                    Store (0x00, ACST) /* \_SB_.PCI0.LPCB.EC0_.ACST */
                                 }
                                 Else
                                 {
-                                    ACST = 0x01
+                                    Store (0x01, ACST) /* \_SB_.PCI0.LPCB.EC0_.ACST */
                                 }
                             }
 
-                            SMAR = Local1
+                            Store (Local1, SMAR) /* \_SB_.PCI0.LPCB.EC0_.SMAR */
                         }
                         Else
                         {
@@ -9511,14 +9511,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GBAP, 0, Serialized)
                     {
                         Acquire (BTMX, 0xFFFF)
-                        If ((GACP & 0x02))
+                        If (And (GACP, 0x02))
                         {
-                            GACP &= 0x05
+                            And (GACP, 0x05, GACP) /* \_SB_.PCI0.LPCB.EC0_.GACP */
                             Release (BTMX)
                             Acquire (ECMX, 0xFFFF)
                             If (ECRG)
                             {
-                                NBAP = BATP /* \_SB_.PCI0.LPCB.EC0_.BATP */
+                                Store (BATP, NBAP) /* \_SB_.PCI0.LPCB.EC0_.NBAP */
                             }
 
                             Release (ECMX)
@@ -9533,23 +9533,23 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (PWUP, 2, Serialized)
                     {
-                        Local0 = 0x00
+                        Store (0x00, Local0)
                         Acquire (BTMX, 0xFFFF)
-                        Local1 = (Arg0 | GACP) /* \_SB_.PCI0.LPCB.EC0_.GACP */
-                        GACP = (Local1 & 0x07)
-                        If ((GACP & 0x02))
+                        Or (Arg0, GACP, Local1)
+                        And (Local1, 0x07, GACP) /* \_SB_.PCI0.LPCB.EC0_.GACP */
+                        If (And (GACP, 0x02))
                         {
-                            NGBF |= Arg1
+                            Or (NGBF, Arg1, NGBF) /* \_SB_.PCI0.LPCB.EC0_.NGBF */
                         }
 
-                        If ((GACP & 0x04))
+                        If (And (GACP, 0x04))
                         {
-                            If ((NGBT != 0xFF))
+                            If (LNotEqual (NGBT, 0xFF))
                             {
-                                Local0 = 0x01
+                                Store (0x01, Local0)
                             }
 
-                            NGBT |= Arg1
+                            Or (NGBT, Arg1, NGBT) /* \_SB_.PCI0.LPCB.EC0_.NGBT */
                         }
 
                         Release (BTMX)
@@ -9558,13 +9558,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (BTDR, 1, Serialized)
                     {
-                        If ((Arg0 == 0x01))
+                        If (LEqual (Arg0, 0x01))
                         {
-                            NNBO = 0x01
+                            Store (0x01, NNBO) /* \_SB_.PCI0.LPCB.EC0_.NNBO */
                         }
-                        ElseIf ((Arg0 == 0x00))
+                        ElseIf (LEqual (Arg0, 0x00))
                         {
-                            NNBO = 0x00
+                            Store (0x00, NNBO) /* \_SB_.PCI0.LPCB.EC0_.NNBO */
                         }
 
                         Return (NNBO) /* \_SB_.PCI0.LPCB.EC0_.NNBO */
@@ -9573,11 +9573,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (BSTA, 1, Serialized)
                     {
                         BTDR (0x01)
-                        Local0 = GBAP ()
-                        Local1 = 0x0F
-                        If ((Local0 & Arg0))
+                        Store (GBAP (), Local0)
+                        Store (0x0F, Local1)
+                        If (And (Local0, Arg0))
                         {
-                            Local1 = 0x1F
+                            Store (0x1F, Local1)
                         }
 
                         Return (Local1)
@@ -9586,37 +9586,37 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GBSS, 2, Serialized)
                     {
                         ToBCD (Arg0, Local0)
-                        Local3 = \ISTR (Local0, 0x05)
+                        Store (\ISTR (Local0, 0x05), Local3)
                         Concatenate (Local3, " ", Local4)
-                        Local0 = (Arg1 >> 0x09)
-                        Local1 = (Local0 + 0x07BC)
+                        ShiftRight (Arg1, 0x09, Local0)
+                        Add (Local0, 0x07BC, Local1)
                         ToBCD (Local1, Local0)
-                        Local2 = \ISTR (Local0, 0x04)
+                        Store (\ISTR (Local0, 0x04), Local2)
                         Concatenate (Local4, Local2, Local3)
                         Concatenate (Local3, "/", Local4)
-                        Local0 = (Arg1 >> 0x05)
-                        Local1 = (Local0 & 0x0F)
+                        ShiftRight (Arg1, 0x05, Local0)
+                        And (Local0, 0x0F, Local1)
                         ToBCD (Local1, Local0)
-                        Local2 = \ISTR (Local0, 0x02)
+                        Store (\ISTR (Local0, 0x02), Local2)
                         Concatenate (Local4, Local2, Local3)
                         Concatenate (Local3, "/", Local4)
-                        Local1 = (Arg1 & 0x1F)
+                        And (Arg1, 0x1F, Local1)
                         ToBCD (Local1, Local0)
-                        Local2 = \ISTR (Local0, 0x02)
+                        Store (\ISTR (Local0, 0x02), Local2)
                         Concatenate (Local4, Local2, Local3)
                         Return (Local3)
                     }
 
                     Method (GBMF, 0, Serialized)
                     {
-                        Local0 = Buffer (0x12){}
-                        Local3 = 0x00
-                        Local1 = BMF /* \_SB_.PCI0.LPCB.EC0_.BMF_ */
-                        While (((Local3 < 0x10) && (Local1 != 0x00)))
+                        Store (Buffer (0x12){}, Local0)
+                        Store (0x00, Local3)
+                        Store (BMF, Local1)
+                        While (LAnd (LLess (Local3, 0x10), LNotEqual (Local1, 0x00)))
                         {
-                            Local0 [Local3] = Local1
-                            Local3++
-                            Local1 = BMF /* \_SB_.PCI0.LPCB.EC0_.BMF_ */
+                            Store (Local1, Index (Local0, Local3))
+                            Increment (Local3)
+                            Store (BMF, Local1)
                         }
 
                         Return (Local0)
@@ -9625,13 +9625,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GCTL, 1, Serialized)
                     {
                         Name (CTBF, Buffer (0x10){})
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x10))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x10))
                         {
-                            CTBF [Local2] = CTLB /* \_SB_.PCI0.LPCB.EC0_.CTLB */
-                            Local2++
-                            Local3++
+                            Store (CTLB, Index (CTBF, Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (CTBF) /* \_SB_.PCI0.LPCB.EC0_.GCTL.CTBF */
@@ -9640,13 +9640,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GDNM, 1, Serialized)
                     {
                         Name (DNBF, Buffer (0x07){})
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x07))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x07))
                         {
-                            DNBF [Local2] = BDN /* \_SB_.PCI0.LPCB.EC0_.BDN_ */
-                            Local2++
-                            Local3++
+                            Store (BDN, Index (DNBF, Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (DNBF) /* \_SB_.PCI0.LPCB.EC0_.GDNM.DNBF */
@@ -9655,13 +9655,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GDCH, 1, Serialized)
                     {
                         Name (DCBF, Buffer (0x04){})
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x04))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x04))
                         {
-                            DCBF [Local2] = BTY /* \_SB_.PCI0.LPCB.EC0_.BTY_ */
-                            Local2++
-                            Local3++
+                            Store (BTY, Index (DCBF, Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (DCBF) /* \_SB_.PCI0.LPCB.EC0_.GDCH.DCBF */
@@ -9669,73 +9669,73 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (BTIF, 1, Serialized)
                     {
-                        Local7 = (0x01 << Arg0)
+                        ShiftLeft (0x01, Arg0, Local7)
                         BTDR (0x01)
-                        If ((BSTA (Local7) == 0x0F))
+                        If (LEqual (BSTA (Local7), 0x0F))
                         {
                             Return (0xFF)
                         }
 
                         Acquire (BTMX, 0xFFFF)
-                        Local0 = NGBF /* \_SB_.PCI0.LPCB.EC0_.NGBF */
+                        Store (NGBF, Local0)
                         Release (BTMX)
-                        If (((Local0 & Local7) == 0x00))
+                        If (LEqual (And (Local0, Local7), 0x00))
                         {
                             Return (0x00)
                         }
 
-                        NBST [Arg0] = NDBS /* \_SB_.NDBS */
+                        Store (NDBS, Index (NBST, Arg0))
                         Acquire (BTMX, 0xFFFF)
-                        NGBT |= Local7
+                        Or (NGBT, Local7, NGBT) /* \_SB_.PCI0.LPCB.EC0_.NGBT */
                         Release (BTMX)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            BSEL = Arg0
-                            Local0 = BFC /* \_SB_.PCI0.LPCB.EC0_.BFC_ */
-                            DerefOf (NBTI [Arg0]) [0x01] = Local0
-                            DerefOf (NBTI [Arg0]) [0x02] = Local0
-                            DerefOf (NBTI [Arg0]) [0x04] = BDV /* \_SB_.PCI0.LPCB.EC0_.BDV_ */
-                            DerefOf (NBTI [Arg0]) [0x05] = NLB1 /* \_SB_.PCI0.LPCB.EC0_.NLB1 */
-                            DerefOf (NBTI [Arg0]) [0x06] = NLB2 /* \_SB_.PCI0.LPCB.EC0_.NLB2 */
-                            Local0 = BSN /* \_SB_.PCI0.LPCB.EC0_.BSN_ */
-                            Local1 = BDAT /* \_SB_.PCI0.LPCB.EC0_.BDAT */
+                            Store (Arg0, BSEL) /* \_SB_.PCI0.LPCB.EC0_.BSEL */
+                            Store (BFC, Local0)
+                            Store (Local0, Index (DerefOf (Index (NBTI, Arg0)), 0x01))
+                            Store (Local0, Index (DerefOf (Index (NBTI, Arg0)), 0x02))
+                            Store (BDV, Index (DerefOf (Index (NBTI, Arg0)), 0x04))
+                            Store (NLB1, Index (DerefOf (Index (NBTI, Arg0)), 0x05))
+                            Store (NLB2, Index (DerefOf (Index (NBTI, Arg0)), 0x06))
+                            Store (BSN, Local0)
+                            Store (BDAT, Local1)
                         }
 
                         Release (ECMX)
-                        Local2 = GBSS (Local0, Local1)
-                        DerefOf (NBTI [Arg0]) [0x0A] = Local2
+                        Store (GBSS (Local0, Local1), Local2)
+                        Store (Local2, Index (DerefOf (Index (NBTI, Arg0)), 0x0A))
                         Acquire (BTMX, 0xFFFF)
-                        NGBF &= ~Local7
+                        And (NGBF, Not (Local7), NGBF) /* \_SB_.PCI0.LPCB.EC0_.NGBF */
                         Release (BTMX)
                         Return (0x00)
                     }
 
                     Method (BTST, 2, Serialized)
                     {
-                        Local7 = (0x01 << Arg0)
+                        ShiftLeft (0x01, Arg0, Local7)
                         BTDR (0x01)
-                        If ((BSTA (Local7) == 0x0F))
+                        If (LEqual (BSTA (Local7), 0x0F))
                         {
-                            NBST [Arg0] = Package (0x04)
+                            Store (Package (0x04)
                                 {
                                     0x00, 
                                     0xFFFFFFFF, 
                                     0xFFFFFFFF, 
                                     0xFFFFFFFF
-                                }
+                                }, Index (NBST, Arg0))
                             Return (0xFF)
                         }
 
                         Acquire (BTMX, 0xFFFF)
                         If (Arg1)
                         {
-                            NGBT = 0xFF
+                            Store (0xFF, NGBT) /* \_SB_.PCI0.LPCB.EC0_.NGBT */
                         }
 
-                        Local0 = NGBT /* \_SB_.PCI0.LPCB.EC0_.NGBT */
+                        Store (NGBT, Local0)
                         Release (BTMX)
-                        If (((Local0 & Local7) == 0x00))
+                        If (LEqual (And (Local0, Local7), 0x00))
                         {
                             Return (0x00)
                         }
@@ -9743,229 +9743,229 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            BSEL = Arg0
-                            Local0 = BST /* \_SB_.PCI0.LPCB.EC0_.BST_ */
-                            Local3 = BPR /* \_SB_.PCI0.LPCB.EC0_.BPR_ */
-                            DerefOf (NBST [Arg0]) [0x02] = BRC /* \_SB_.PCI0.LPCB.EC0_.BRC_ */
-                            DerefOf (NBST [Arg0]) [0x03] = BPV /* \_SB_.PCI0.LPCB.EC0_.BPV_ */
+                            Store (Arg0, BSEL) /* \_SB_.PCI0.LPCB.EC0_.BSEL */
+                            Store (BST, Local0)
+                            Store (BPR, Local3)
+                            Store (BRC, Index (DerefOf (Index (NBST, Arg0)), 0x02))
+                            Store (BPV, Index (DerefOf (Index (NBST, Arg0)), 0x03))
                         }
 
                         Release (ECMX)
-                        If ((GACS () == 0x01))
+                        If (LEqual (GACS (), 0x01))
                         {
-                            Local0 &= ~0x01
+                            And (Not (0x01), Local0, Local0)
                         }
                         Else
                         {
-                            Local0 &= ~0x02
+                            And (Not (0x02), Local0, Local0)
                         }
 
-                        If ((Local0 & 0x01))
+                        If (And (Local0, 0x01))
                         {
                             Acquire (BTMX, 0xFFFF)
-                            NDCB = Local7
+                            Store (Local7, NDCB) /* \_SB_.PCI0.LPCB.EC0_.NDCB */
                             Release (BTMX)
                         }
 
-                        DerefOf (NBST [Arg0]) [0x00] = Local0
-                        If ((Local0 & 0x01))
+                        Store (Local0, Index (DerefOf (Index (NBST, Arg0)), 0x00))
+                        If (And (Local0, 0x01))
                         {
-                            If (((Local3 < 0x0190) || (Local3 > 0x1964)))
+                            If (LOr (LLess (Local3, 0x0190), LGreater (Local3, 0x1964)))
                             {
-                                Local5 = DerefOf (DerefOf (NBST [Arg0]) [0x01])
-                                If (((Local5 < 0x0190) || (Local5 > 0x1964)))
+                                Store (DerefOf (Index (DerefOf (Index (NBST, Arg0)), 0x01)), Local5)
+                                If (LOr (LLess (Local5, 0x0190), LGreater (Local5, 0x1964)))
                                 {
-                                    Local3 = (0x1AF4 / 0x02)
+                                    Store (Divide (0x1AF4, 0x02, ), Local3)
                                 }
                                 Else
                                 {
-                                    Local3 = Local5
+                                    Store (Local5, Local3)
                                 }
                             }
                         }
-                        ElseIf (((Local0 & 0x02) == 0x00))
+                        ElseIf (LEqual (And (Local0, 0x02), 0x00))
                         {
-                            Local3 = 0x00
+                            Store (0x00, Local3)
                         }
 
-                        DerefOf (NBST [Arg0]) [0x01] = Local3
+                        Store (Local3, Index (DerefOf (Index (NBST, Arg0)), 0x01))
                         Acquire (BTMX, 0xFFFF)
-                        NGBT &= ~Local7
+                        And (NGBT, Not (Local7), NGBT) /* \_SB_.PCI0.LPCB.EC0_.NGBT */
                         Release (BTMX)
                         Return (0x00)
                     }
 
                     Method (ITLB, 0, NotSerialized)
                     {
-                        Divide ((NLB1 + 0x09), 0x0A, Local0, Local1)
-                        Divide ((0x96 + 0x09), 0x0A, Local0, Local2)
+                        Divide (Add (NLB1, 0x09), 0x0A, Local0, Local1)
+                        Divide (Add (0x96, 0x09), 0x0A, Local0, Local2)
                         If (ECRG)
                         {
-                            LB1 = Local1
-                            LB2 = Local2
+                            Store (Local1, LB1) /* \_SB_.PCI0.LPCB.EC0_.LB1_ */
+                            Store (Local2, LB2) /* \_SB_.PCI0.LPCB.EC0_.LB2_ */
                         }
                     }
 
                     Method (GBTI, 1, NotSerialized)
                     {
-                        Debug = "Enter getbattinfo"
+                        Store ("Enter getbattinfo", Debug)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            If ((BATP & (0x01 << Arg0)))
+                            If (And (BATP, ShiftLeft (0x01, Arg0)))
                             {
-                                BSEL = Arg0
-                                Local0 = Package (0x03)
+                                Store (Arg0, BSEL) /* \_SB_.PCI0.LPCB.EC0_.BSEL */
+                                Store (Package (0x03)
                                     {
                                         0x00, 
                                         0x6B, 
                                         Buffer (0x6B){}
-                                    }
-                                DerefOf (Local0 [0x02]) [0x00] = BDC /* \_SB_.PCI0.LPCB.EC0_.BDC_ */
-                                DerefOf (Local0 [0x02]) [0x01] = (BDC >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x02] = BFC /* \_SB_.PCI0.LPCB.EC0_.BFC_ */
-                                DerefOf (Local0 [0x02]) [0x03] = (BFC >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x04] = BRC /* \_SB_.PCI0.LPCB.EC0_.BRC_ */
-                                DerefOf (Local0 [0x02]) [0x05] = (BRC >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x06] = BME /* \_SB_.PCI0.LPCB.EC0_.BME_ */
-                                DerefOf (Local0 [0x02]) [0x07] = (BME >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x08] = BCC /* \_SB_.PCI0.LPCB.EC0_.BCC_ */
-                                DerefOf (Local0 [0x02]) [0x09] = (BCC >> 0x08
-                                    )
-                                Local1 = CBT /* \_SB_.PCI0.LPCB.EC0_.CBT_ */
-                                Local1 -= 0x0AAC
+                                    }, Local0)
+                                Store (BDC, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                                Store (ShiftRight (BDC, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x01
+                                    ))
+                                Store (BFC, Index (DerefOf (Index (Local0, 0x02)), 0x02))
+                                Store (ShiftRight (BFC, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x03
+                                    ))
+                                Store (BRC, Index (DerefOf (Index (Local0, 0x02)), 0x04))
+                                Store (ShiftRight (BRC, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x05
+                                    ))
+                                Store (BME, Index (DerefOf (Index (Local0, 0x02)), 0x06))
+                                Store (ShiftRight (BME, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x07
+                                    ))
+                                Store (BCC, Index (DerefOf (Index (Local0, 0x02)), 0x08))
+                                Store (ShiftRight (BCC, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x09
+                                    ))
+                                Store (CBT, Local1)
+                                Subtract (Local1, 0x0AAC, Local1)
                                 Divide (Local1, 0x0A, Local2, Local3)
-                                DerefOf (Local0 [0x02]) [0x0A] = Local3
-                                DerefOf (Local0 [0x02]) [0x0B] = (Local3 >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x0C] = BPV /* \_SB_.PCI0.LPCB.EC0_.BPV_ */
-                                DerefOf (Local0 [0x02]) [0x0D] = (BPV >> 0x08
-                                    )
-                                Local1 = BPR /* \_SB_.PCI0.LPCB.EC0_.BPR_ */
+                                Store (Local3, Index (DerefOf (Index (Local0, 0x02)), 0x0A))
+                                Store (ShiftRight (Local3, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x0B
+                                    ))
+                                Store (BPV, Index (DerefOf (Index (Local0, 0x02)), 0x0C))
+                                Store (ShiftRight (BPV, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x0D
+                                    ))
+                                Store (BPR, Local1)
                                 If (Local1)
                                 {
-                                    If ((BSTS & 0x40))
+                                    If (And (BSTS, 0x40))
                                     {
-                                        Local1 = (~Local1 + 0x01)
-                                        Local1 &= 0xFFFF
+                                        Add (Not (Local1), 0x01, Local1)
+                                        And (Local1, 0xFFFF, Local1)
                                     }
                                 }
 
-                                DerefOf (Local0 [0x02]) [0x0E] = Local1
-                                DerefOf (Local0 [0x02]) [0x0F] = (Local1 >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x10] = BDV /* \_SB_.PCI0.LPCB.EC0_.BDV_ */
-                                DerefOf (Local0 [0x02]) [0x11] = (BDV >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x12] = BSTS /* \_SB_.PCI0.LPCB.EC0_.BSTS */
-                                DerefOf (Local0 [0x02]) [0x13] = (BSTS >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x14] = BCV1 /* \_SB_.PCI0.LPCB.EC0_.BCV1 */
-                                DerefOf (Local0 [0x02]) [0x15] = (BCV1 >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x16] = BCV2 /* \_SB_.PCI0.LPCB.EC0_.BCV2 */
-                                DerefOf (Local0 [0x02]) [0x17] = (BCV2 >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x18] = BCV3 /* \_SB_.PCI0.LPCB.EC0_.BCV3 */
-                                DerefOf (Local0 [0x02]) [0x19] = (BCV3 >> 0x08
-                                    )
-                                DerefOf (Local0 [0x02]) [0x1A] = BCV4 /* \_SB_.PCI0.LPCB.EC0_.BCV4 */
-                                DerefOf (Local0 [0x02]) [0x1B] = (BCV4 >> 0x08
-                                    )
-                                CreateField (DerefOf (Local0 [0x02]), (0x1C * 0x08), (0x10 * 
+                                Store (Local1, Index (DerefOf (Index (Local0, 0x02)), 0x0E))
+                                Store (ShiftRight (Local1, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x0F
+                                    ))
+                                Store (BDV, Index (DerefOf (Index (Local0, 0x02)), 0x10))
+                                Store (ShiftRight (BDV, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x11
+                                    ))
+                                Store (BSTS, Index (DerefOf (Index (Local0, 0x02)), 0x12))
+                                Store (ShiftRight (BSTS, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x13
+                                    ))
+                                Store (BCV1, Index (DerefOf (Index (Local0, 0x02)), 0x14))
+                                Store (ShiftRight (BCV1, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x15
+                                    ))
+                                Store (BCV2, Index (DerefOf (Index (Local0, 0x02)), 0x16))
+                                Store (ShiftRight (BCV2, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x17
+                                    ))
+                                Store (BCV3, Index (DerefOf (Index (Local0, 0x02)), 0x18))
+                                Store (ShiftRight (BCV3, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x19
+                                    ))
+                                Store (BCV4, Index (DerefOf (Index (Local0, 0x02)), 0x1A))
+                                Store (ShiftRight (BCV4, 0x08), Index (DerefOf (Index (Local0, 0x02)), 0x1B
+                                    ))
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (0x1C, 0x08), Multiply (0x10, 
                                     0x08), BTSN)
-                                BTSN = GBSS (BSN, BDAT)
-                                Local1 = GBMF ()
-                                Local2 = SizeOf (Local1)
-                                CreateField (DerefOf (Local0 [0x02]), (0x2C * 0x08), (Local2 * 
+                                Store (GBSS (BSN, BDAT), BTSN) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BTSN */
+                                Store (GBMF (), Local1)
+                                Store (SizeOf (Local1), Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (0x2C, 0x08), Multiply (Local2, 
                                     0x08), BMAN)
-                                BMAN = Local1
-                                Local2 += 0x2C
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x10 * 
+                                Store (Local1, BMAN) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BMAN */
+                                Add (Local2, 0x2C, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x10, 
                                     0x08), CLBL)
-                                CLBL = GCTL (0x00)
-                                Local2 += 0x11
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x07 * 
+                                Store (GCTL (0x00), CLBL) /* \_SB_.PCI0.LPCB.EC0_.GBTI.CLBL */
+                                Add (Local2, 0x11, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x07, 
                                     0x08), DNAM)
-                                DNAM = GDNM (0x00)
-                                Local2 += 0x07
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x04 * 
+                                Store (GDNM (0x00), DNAM) /* \_SB_.PCI0.LPCB.EC0_.GBTI.DNAM */
+                                Add (Local2, 0x07, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x04, 
                                     0x08), DCHE)
-                                DCHE = GDCH (0x00)
-                                Local2 += 0x04
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (GDCH (0x00), DCHE) /* \_SB_.PCI0.LPCB.EC0_.GBTI.DCHE */
+                                Add (Local2, 0x04, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), BMAC)
-                                BMAC = 0x00
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (0x00, BMAC) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BMAC */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), BMAD)
-                                BMAD = BDAT /* \_SB_.PCI0.LPCB.EC0_.BDAT */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (BDAT, BMAD) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BMAD */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), BCCU)
-                                BCCU = BRCC /* \_SB_.PCI0.LPCB.EC0_.BRCC */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (BRCC, BCCU) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BCCU */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), BCVO)
-                                BCVO = BRCV /* \_SB_.PCI0.LPCB.EC0_.BRCV */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (BRCV, BCVO) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BCVO */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), BAVC)
-                                Local1 = BCR /* \_SB_.PCI0.LPCB.EC0_.BCR_ */
+                                Store (BCR, Local1)
                                 If (Local1)
                                 {
-                                    If ((BSTS & 0x40))
+                                    If (And (BSTS, 0x40))
                                     {
-                                        Local1 = (~Local1 + 0x01)
-                                        Local1 &= 0xFFFF
+                                        Add (Not (Local1), 0x01, Local1)
+                                        And (Local1, 0xFFFF, Local1)
                                     }
                                 }
 
-                                BAVC = Local1
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (Local1, BAVC) /* \_SB_.PCI0.LPCB.EC0_.GBTI.BAVC */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), RTTE)
-                                RTTE = BRTE /* \_SB_.PCI0.LPCB.EC0_.BRTE */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (BRTE, RTTE) /* \_SB_.PCI0.LPCB.EC0_.GBTI.RTTE */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), ATTE)
-                                RTTE = BATE /* \_SB_.PCI0.LPCB.EC0_.BATE */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x02 * 
+                                Store (BATE, RTTE) /* \_SB_.PCI0.LPCB.EC0_.GBTI.RTTE */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x02, 
                                     0x08), ATTF)
-                                RTTE = BATF /* \_SB_.PCI0.LPCB.EC0_.BATF */
-                                Local2 += 0x02
-                                CreateField (DerefOf (Local0 [0x02]), (Local2 * 0x08), (0x01 * 
+                                Store (BATF, RTTE) /* \_SB_.PCI0.LPCB.EC0_.GBTI.RTTE */
+                                Add (Local2, 0x02, Local2)
+                                CreateField (DerefOf (Index (Local0, 0x02)), Multiply (Local2, 0x08), Multiply (0x01, 
                                     0x08), NOBS)
-                                If (((PRDT == 0x50) || (PRDT == 0x53)))
+                                If (LOr (LEqual (PRDT, 0x50), LEqual (PRDT, 0x53)))
                                 {
-                                    NOBS = 0x01
+                                    Store (0x01, NOBS) /* \_SB_.PCI0.LPCB.EC0_.GBTI.NOBS */
                                 }
                                 Else
                                 {
-                                    NOBS = 0x02
+                                    Store (0x02, NOBS) /* \_SB_.PCI0.LPCB.EC0_.GBTI.NOBS */
                                 }
                             }
                             Else
                             {
-                                Local0 = Package (0x02)
+                                Store (Package (0x02)
                                     {
                                         0x34, 
                                         0x00
-                                    }
+                                    }, Local0)
                             }
                         }
                         Else
                         {
-                            Local0 = Package (0x02)
+                            Store (Package (0x02)
                                 {
                                     0x0D, 
                                     0x00
-                                }
+                                }, Local0)
                         }
 
                         Release (ECMX)
@@ -9974,87 +9974,87 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (GBTC, 0, NotSerialized)
                     {
-                        Debug = "Enter GetBatteryControl"
+                        Store ("Enter GetBatteryControl", Debug)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = Package (0x03)
+                            Store (Package (0x03)
                                 {
                                     0x00, 
                                     0x04, 
                                     Buffer (0x04){}
-                                }
-                            If ((BATP & 0x01))
+                                }, Local0)
+                            If (And (BATP, 0x01))
                             {
-                                BSEL = 0x00
-                                DerefOf (Local0 [0x02]) [0x00] = 0x00
-                                If ((((INAC == 0x00) && (INCH == 0x00)) && (IDIS == 0x00)))
+                                Store (0x00, BSEL) /* \_SB_.PCI0.LPCB.EC0_.BSEL */
+                                Store (0x00, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                                If (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x00)), LEqual (IDIS, 0x00)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x00] = 0x00
+                                    Store (0x00, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                                 }
-                                ElseIf (((((INAC == 0x00) && (INCH == 0x02)) && (
-                                    IDIS == 0x01)) && (MAXC == 0x00)))
+                                ElseIf (LAnd (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x02)), LEqual (
+                                    IDIS, 0x01)), LEqual (MAXC, 0x00)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x00] = 0x01
+                                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                                 }
-                                ElseIf (((INAC == 0x01) && (IDIS == 0x02)))
+                                ElseIf (LAnd (LEqual (INAC, 0x01), LEqual (IDIS, 0x02)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x00] = 0x02
+                                    Store (0x02, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                                 }
-                                ElseIf (((((INAC == 0x00) && (INCH == 0x02)) && (
-                                    IDIS == 0x01)) && (MAXC == 0xFA)))
+                                ElseIf (LAnd (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x02)), LEqual (
+                                    IDIS, 0x01)), LEqual (MAXC, 0xFA)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x00] = 0x03
+                                    Store (0x03, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                                 }
-                                ElseIf (((INAC == 0x00) && (INCH == 0x03)))
+                                ElseIf (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x03)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x00] = 0x04
+                                    Store (0x04, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                                 }
                             }
                             Else
                             {
-                                DerefOf (Local0 [0x02]) [0x00] = 0xFF
+                                Store (0xFF, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                             }
 
-                            If ((BATP & 0x02))
+                            If (And (BATP, 0x02))
                             {
-                                BSEL = 0x01
-                                DerefOf (Local0 [0x02]) [0x01] = 0x00
-                                If ((((INAC == 0x00) && (INCH == 0x00)) && (IDIS == 0x00)))
+                                Store (0x01, BSEL) /* \_SB_.PCI0.LPCB.EC0_.BSEL */
+                                Store (0x00, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                                If (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x00)), LEqual (IDIS, 0x00)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x01] = 0x00
+                                    Store (0x00, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                                 }
-                                ElseIf (((((INAC == 0x00) && (INCH == 0x01)) && (
-                                    IDIS == 0x02)) && (MAXC == 0x00)))
+                                ElseIf (LAnd (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x01)), LEqual (
+                                    IDIS, 0x02)), LEqual (MAXC, 0x00)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x01] = 0x01
+                                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                                 }
-                                ElseIf (((INAC == 0x01) && (IDIS == 0x01)))
+                                ElseIf (LAnd (LEqual (INAC, 0x01), LEqual (IDIS, 0x01)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x01] = 0x02
+                                    Store (0x02, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                                 }
-                                ElseIf (((((INAC == 0x00) && (INCH == 0x01)) && (
-                                    IDIS == 0x02)) && (MAXC == 0xFA)))
+                                ElseIf (LAnd (LAnd (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x01)), LEqual (
+                                    IDIS, 0x02)), LEqual (MAXC, 0xFA)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x01] = 0x03
+                                    Store (0x03, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                                 }
-                                ElseIf (((INAC == 0x00) && (INCH == 0x03)))
+                                ElseIf (LAnd (LEqual (INAC, 0x00), LEqual (INCH, 0x03)))
                                 {
-                                    DerefOf (Local0 [0x02]) [0x01] = 0x04
+                                    Store (0x04, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                                 }
                             }
                             Else
                             {
-                                DerefOf (Local0 [0x02]) [0x01] = 0xFF
+                                Store (0xFF, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                             }
                         }
                         Else
                         {
-                            Local0 = Package (0x02)
+                            Store (Package (0x02)
                                 {
                                     0x35, 
                                     0x00
-                                }
+                                }, Local0)
                         }
 
                         Release (ECMX)
@@ -10063,203 +10063,203 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (SBTC, 3, NotSerialized)
                     {
-                        Debug = "Enter SetBatteryControl"
+                        Store ("Enter SetBatteryControl", Debug)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = Arg2
-                            Debug = Local0
-                            Local4 = Package (0x02)
+                            Store (Arg2, Local0)
+                            Store (Local0, Debug)
+                            Store (Package (0x02)
                                 {
                                     0x06, 
                                     0x00
-                                }
-                            Local1 = 0x00
-                            Local2 = 0x00
-                            Local1 = DerefOf (Local0 [0x10])
-                            If ((Local1 == 0x00))
+                                }, Local4)
+                            Store (0x00, Local1)
+                            Store (0x00, Local2)
+                            Store (DerefOf (Index (Local0, 0x10)), Local1)
+                            If (LEqual (Local1, 0x00))
                             {
-                                Debug = "battery 0"
-                                If ((BATP & 0x01))
+                                Store ("battery 0", Debug)
+                                If (And (BATP, 0x01))
                                 {
-                                    Local2 = DerefOf (Local0 [0x11])
-                                    If ((Local2 == 0x00))
+                                    Store (DerefOf (Index (Local0, 0x11)), Local2)
+                                    If (LEqual (Local2, 0x00))
                                     {
-                                        INCH = 0x00
-                                        IDIS = 0x00
-                                        INAC = 0x00
-                                        MAXC = 0x00
-                                        PSSB = 0x01
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x00, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x00, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x01, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x01))
+                                    If (LEqual (Local2, 0x01))
                                     {
-                                        INAC = 0x00
-                                        INCH = 0x02
-                                        IDIS = 0x01
-                                        MAXC = 0x00
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x02, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x01, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x02))
+                                    If (LEqual (Local2, 0x02))
                                     {
-                                        INAC = 0x01
-                                        INCH = 0x01
-                                        IDIS = 0x02
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x01, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x01, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x02, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x03))
+                                    If (LEqual (Local2, 0x03))
                                     {
-                                        INCH = 0x02
-                                        IDIS = 0x01
-                                        INAC = 0x00
-                                        MAXC = 0xFA
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x02, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x01, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0xFA, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x04))
+                                    If (LEqual (Local2, 0x04))
                                     {
-                                        MAXC = 0xFA
-                                        Local4 = Package (0x02)
+                                        Store (0xFA, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x05))
+                                    If (LEqual (Local2, 0x05))
                                     {
-                                        INAC = 0x00
-                                        INCH = 0x03
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x03, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
                                 }
                                 Else
                                 {
-                                    Local4 = Package (0x02)
+                                    Store (Package (0x02)
                                         {
                                             0x34, 
                                             0x00
-                                        }
+                                        }, Local4)
                                 }
                             }
 
-                            If ((Local1 == 0x01))
+                            If (LEqual (Local1, 0x01))
                             {
-                                If ((BATP & 0x02))
+                                If (And (BATP, 0x02))
                                 {
-                                    Debug = "battery 1"
-                                    Local2 = DerefOf (Local0 [0x11])
-                                    If ((Local2 == 0x00))
+                                    Store ("battery 1", Debug)
+                                    Store (DerefOf (Index (Local0, 0x11)), Local2)
+                                    If (LEqual (Local2, 0x00))
                                     {
-                                        INCH = 0x00
-                                        IDIS = 0x00
-                                        INAC = 0x00
-                                        MAXC = 0x00
-                                        PSSB = 0x01
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x00, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x00, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x01, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x01))
+                                    If (LEqual (Local2, 0x01))
                                     {
-                                        INAC = 0x00
-                                        INCH = 0x01
-                                        IDIS = 0x02
-                                        MAXC = 0x00
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x01, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x02, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x02))
+                                    If (LEqual (Local2, 0x02))
                                     {
-                                        INAC = 0x01
-                                        INCH = 0x02
-                                        IDIS = 0x01
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x01, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x02, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x01, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x03))
+                                    If (LEqual (Local2, 0x03))
                                     {
-                                        INCH = 0x01
-                                        IDIS = 0x02
-                                        INAC = 0x00
-                                        MAXC = 0xFA
-                                        PSSB = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x01, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x02, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0xFA, MAXC) /* \_SB_.PCI0.LPCB.EC0_.MAXC */
+                                        Store (0x00, PSSB) /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x04))
+                                    If (LEqual (Local2, 0x04))
                                     {
-                                        INCH = 0x00
-                                        IDIS = 0x00
-                                        INAC = 0x00
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (0x00, IDIS) /* \_SB_.PCI0.LPCB.EC0_.IDIS */
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
 
-                                    If ((Local2 == 0x05))
+                                    If (LEqual (Local2, 0x05))
                                     {
-                                        INAC = 0x00
-                                        INCH = 0x03
-                                        Local4 = Package (0x02)
+                                        Store (0x00, INAC) /* \_SB_.PCI0.LPCB.EC0_.INAC */
+                                        Store (0x03, INCH) /* \_SB_.PCI0.LPCB.EC0_.INCH */
+                                        Store (Package (0x02)
                                             {
                                                 0x00, 
                                                 0x00
-                                            }
+                                            }, Local4)
                                     }
                                 }
                                 Else
                                 {
-                                    Local4 = Package (0x02)
+                                    Store (Package (0x02)
                                         {
                                             0x34, 
                                             0x00
-                                        }
+                                        }, Local4)
                                 }
                             }
                         }
@@ -10282,7 +10282,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (_Q03, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
                         Acquire (BTMX, 0xFFFF)
-                        Local0 = NDCB /* \_SB_.PCI0.LPCB.EC0_.NDCB */
+                        Store (NDCB, Local0)
                         Release (BTMX)
                         PWUP (0x04, Local0)
                         SBTN (Local0, 0x80)
@@ -10291,10 +10291,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (_Q04, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
                         Acquire (OTMT, 0xFFFF)
-                        OTLL = GTST ()
-                        OTSI = 0x01
+                        Store (GTST (), OTLL) /* \_SB_.PCI0.LPCB.EC0_.OTLL */
+                        Store (0x01, OTSI) /* \_SB_.PCI0.LPCB.EC0_.OTSI */
                         Release (OTMT)
-                        If ((RPPC (0x00) != 0x00))
+                        If (LNotEqual (RPPC (0x00), 0x00))
                         {
                             PPNT ()
                         }
@@ -10302,13 +10302,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_Q05, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        Local0 = THEM /* \_SB_.PCI0.LPCB.EC0_.THEM */
+                        Store (THEM, Local0)
                         \_TZ.ECTE (Local0)
                     }
 
                     Method (_Q06, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        PWUP (0x05, (0x02 | 0x01))
+                        PWUP (0x05, Or (0x02, 0x01))
                         If (BTDR (0x02))
                         {
                             Notify (\_SB.AC, 0x80) // Status Change
@@ -10320,8 +10320,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (_Q08, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
                         PWUP (0x06, 0x01)
-                        Local0 = GBAP ()
-                        If ((Local0 != 0x02))
+                        Store (GBAP (), Local0)
+                        If (LNotEqual (Local0, 0x02))
                         {
                             PWUP (0x04, 0x02)
                             If (BTDR (0x02))
@@ -10338,10 +10338,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_Q0A, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        Local4 = \_GPE.VLET ()
+                        Store (\_GPE.VLET (), Local4)
                         Notify (\_SB.LID, 0x80) // Status Change
                         \_SB.PCI0.ACEL.AJAL ()
-                        \_SB.WMID.WGWE (0x08, (\_SB.LID._LID () + 0x01))
+                        \_SB.WMID.WGWE (0x08, Add (\_SB.LID._LID (), 0x01))
                     }
 
                     Method (_Q09, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
@@ -10360,15 +10360,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_Q0C, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        Local0 = THEM /* \_SB_.PCI0.LPCB.EC0_.THEM */
+                        Store (THEM, Local0)
                         \_TZ.ECTE (Local0)
                     }
 
                     Method (_Q18, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
                         PWUP (0x06, 0x02)
-                        Local0 = GBAP ()
-                        If ((Local0 != 0x01))
+                        Store (GBAP (), Local0)
+                        If (LNotEqual (Local0, 0x01))
                         {
                             PWUP (0x04, 0x01)
                             If (BTDR (0x02))
@@ -10397,46 +10397,46 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = (PSSA & 0x01)
-                            Local1 = (PSSB & 0x01)
-                            Local2 = (PSSA & 0x02)
-                            Local3 = (PSSB & 0x02)
-                            Local4 = (PSSA & 0x10)
-                            Local5 = (PSSB & 0x10)
-                            If (((Local0 != Local1) && (Local0 == 0x00)))
+                            Store (And (PSSA, 0x01), Local0)
+                            Store (And (PSSB, 0x01), Local1)
+                            Store (And (PSSA, 0x02), Local2)
+                            Store (And (PSSB, 0x02), Local3)
+                            Store (And (PSSA, 0x10), Local4)
+                            Store (And (PSSB, 0x10), Local5)
+                            If (LAnd (LNotEqual (Local0, Local1), LEqual (Local0, 0x00)))
                             {
                                 \_SB.WMID.WGWE (0x0F, 0x00)
-                                PSSA = PSSB /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                Store (PSSB, PSSA) /* \PSSA */
                             }
-                            ElseIf (((Local4 != Local5) && (Local4 == 0x00)))
+                            ElseIf (LAnd (LNotEqual (Local4, Local5), LEqual (Local4, 0x00)))
                             {
                                 \_SB.WMID.WGWE (0x0F, 0x03)
-                                PSSA = PSSB /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                Store (PSSB, PSSA) /* \PSSA */
                             }
-                            ElseIf (((Local0 != Local1) && (Local0 == 0x01)))
+                            ElseIf (LAnd (LNotEqual (Local0, Local1), LEqual (Local0, 0x01)))
                             {
                                 \_SB.WMID.WGWE (0x0F, 0x01)
-                                PSSA = PSSB /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                Store (PSSB, PSSA) /* \PSSA */
                             }
-                            ElseIf (((Local2 != Local3) && (Local2 == 0x02)))
+                            ElseIf (LAnd (LNotEqual (Local2, Local3), LEqual (Local2, 0x02)))
                             {
-                                If (!BCIE)
+                                If (LNot (BCIE))
                                 {
                                     \_SB.WMID.WGWE (0x10, 0x00)
                                 }
 
-                                BCIE = 0x00
-                                PSSA = PSSB /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                Store (0x00, BCIE) /* \BCIE */
+                                Store (PSSB, PSSA) /* \PSSA */
                             }
-                            ElseIf (((Local2 != Local3) && (Local2 == 0x00)))
+                            ElseIf (LAnd (LNotEqual (Local2, Local3), LEqual (Local2, 0x00)))
                             {
-                                If (!BCIE)
+                                If (LNot (BCIE))
                                 {
                                     \_SB.WMID.WGWE (0x10, 0x01)
                                 }
 
-                                BCIE = 0x00
-                                PSSA = PSSB /* \_SB_.PCI0.LPCB.EC0_.PSSB */
+                                Store (0x00, BCIE) /* \BCIE */
+                                Store (PSSB, PSSA) /* \PSSA */
                             }
                         }
 
@@ -10449,7 +10449,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             Notify (\_SB.ISCT, 0x80) // Status Change
                             Stall (0x0A)
-                            If ((SCCB & 0x01))
+                            If (And (SCCB, 0x01))
                             {
                                 \_SB.ISCT.SAOS (0x00)
                             }
@@ -10458,13 +10458,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_Q22, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        \_SB.PCI0.LPCB.EC0.TBOS = 0x01
+                        Store (0x01, \_SB.PCI0.LPCB.EC0.TBOS)
                         \_SB.PCI0.LPCB.EC0.SMCP (\_SB.PCI0.LPCB.EC0.ADP)
                     }
 
                     Method (_Q23, 0, NotSerialized)  // _Qxx: EC Query, xx=0x00-0xFF
                     {
-                        \_SB.PCI0.LPCB.EC0.TBOS = 0x00
+                        Store (0x00, \_SB.PCI0.LPCB.EC0.TBOS)
                         \_SB.PCI0.LPCB.EC0.SMCP (\_SB.PCI0.LPCB.EC0.ADP)
                     }
 
@@ -10474,7 +10474,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             If (CondRefOf (\_SB.PCI0.CTCN))
                             {
-                                \_SB.PCI0.CTCL = 0x01
+                                Store (0x01, \_SB.PCI0.CTCL) /* External reference */
                                 \_SB.PCI0.CTCN ()
                             }
                         }
@@ -10496,9 +10496,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            GBPS = \_SB.PCI0.LPCB.EC0.VBPS
-                            If ((\WCOS () >= 0x09)){}
-                            ElseIf ((\WCOS () == 0x08)){}
+                            Store (\_SB.PCI0.LPCB.EC0.VBPS, GBPS) /* \_SB_.PCI0.LPCB.EC0_.GBPS */
+                            If (LGreaterEqual (\WCOS (), 0x09)){}
+                            ElseIf (LEqual (\WCOS (), 0x08)){}
                             Else
                             {
                             }
@@ -10512,9 +10512,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            GBPS = \_SB.PCI0.LPCB.EC0.VBPS
-                            If ((\WCOS () >= 0x09)){}
-                            ElseIf ((\WCOS () == 0x08)){}
+                            Store (\_SB.PCI0.LPCB.EC0.VBPS, GBPS) /* \_SB_.PCI0.LPCB.EC0_.GBPS */
+                            If (LGreaterEqual (\WCOS (), 0x09)){}
+                            ElseIf (LEqual (\WCOS (), 0x08)){}
                             Else
                             {
                             }
@@ -10525,12 +10525,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (SBTN, 2, Serialized)
                     {
-                        If ((Arg0 & 0x01))
+                        If (And (Arg0, 0x01))
                         {
                             Notify (\_SB.BAT0, Arg1)
                         }
 
-                        If ((Arg0 & 0x02))
+                        If (And (Arg0, 0x02))
                         {
                             Notify (\_SB.BAT1, Arg1)
                         }
@@ -10538,18 +10538,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (PRIT, 0, NotSerialized)
                     {
-                        Local0 = GACS ()
-                        PWRS = Local0
+                        Store (GACS (), Local0)
+                        Store (Local0, PWRS) /* \PWRS */
                         \_SB.PCI0.LPCB.EC0.SMCP (Local0)
-                        If ((\_SB.PCI0.HDEF.ASTI == 0x00))
+                        If (LEqual (\_SB.PCI0.HDEF.ASTI, 0x00))
                         {
                             SAST (\_SB.PCI0.HDEF.ASTA)
                         }
 
-                        Local0 = \_SB.HST1.GHID ()
-                        If ((GBAP () & 0x01))
+                        Store (\_SB.HST1.GHID (), Local0)
+                        If (And (GBAP (), 0x01))
                         {
-                            BT0P = 0x1F
+                            Store (0x1F, BT0P) /* \_SB_.BT0P */
                         }
 
                         \_SB.PCI0.ACEL.ITAL ()
@@ -10559,11 +10559,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (GTST, 0, Serialized)
                     {
-                        Local0 = 0x02
+                        Store (0x02, Local0)
                         Acquire (ECMX, 0xFFFF)
                         If (ECRG)
                         {
-                            Local0 = OCPS /* \_SB_.PCI0.LPCB.EC0_.OCPS */
+                            Store (OCPS, Local0)
                         }
 
                         Release (ECMX)
@@ -10572,24 +10572,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (ETSI, 3, Serialized)
                     {
-                        If ((Arg2 != 0x00))
+                        If (LNotEqual (Arg2, 0x00))
                         {
-                            OTRT = 0x00
+                            Store (0x00, OTRT) /* \_SB_.PCI0.LPCB.EC0_.OTRT */
                         }
 
-                        If (((Arg1 != OTRT) || (Arg0 != OTEN)))
+                        If (LOr (LNotEqual (Arg1, OTRT), LNotEqual (Arg0, OTEN)))
                         {
                             Acquire (ECMX, 0xFFFF)
                             If (ECRG)
                             {
-                                If ((Arg1 != OTRT))
+                                If (LNotEqual (Arg1, OTRT))
                                 {
-                                    OCPR = Arg1
-                                    OTRT = Arg1
+                                    Store (Arg1, OCPR) /* \_SB_.PCI0.LPCB.EC0_.OCPR */
+                                    Store (Arg1, OTRT) /* \_SB_.PCI0.LPCB.EC0_.OTRT */
                                 }
 
-                                OCPE = Arg0
-                                OTEN = Arg0
+                                Store (Arg0, OCPE) /* \_SB_.PCI0.LPCB.EC0_.OCPE */
+                                Store (Arg0, OTEN) /* \_SB_.PCI0.LPCB.EC0_.OTEN */
                             }
 
                             Release (ECMX)
@@ -10598,55 +10598,55 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (SMCP, 1, Serialized)
                     {
-                        Local0 = 0x00
-                        Local1 = DCCP /* \_SB_.PCI0.LPCB.EC0_.DCCP */
-                        If ((Local1 == 0x00))
+                        Store (0x00, Local0)
+                        Store (DCCP, Local1)
+                        If (LEqual (Local1, 0x00))
                         {
-                            Local1 = 0x01
+                            Store (0x01, Local1)
                             If (CondRefOf (\_PR.CPPC, Local7))
                             {
-                                If ((\_PR.CPPC > 0x00))
+                                If (LGreater (\_PR.CPPC, 0x00))
                                 {
-                                    Local1 = \_PR.CPPC /* External reference */
+                                    Store (\_PR.CPPC, Local1)
                                 }
                             }
                         }
 
                         Acquire (OTMT, 0xFFFF)
-                        If ((Arg0 == 0x00))
+                        If (LEqual (Arg0, 0x00))
                         {
-                            If ((TBOD && \_SB.PCI0.LPCB.EC0.TBOS))
+                            If (LAnd (TBOD, \_SB.PCI0.LPCB.EC0.TBOS))
                             {
-                                MXCP = Local0
-                                Local2 = Local1
+                                Store (Local0, MXCP) /* \_SB_.PCI0.LPCB.EC0_.MXCP */
+                                Store (Local1, Local2)
                             }
                             Else
                             {
-                                MXCP = Local1
-                                Local2 = Local0
+                                Store (Local1, MXCP) /* \_SB_.PCI0.LPCB.EC0_.MXCP */
+                                Store (Local0, Local2)
                             }
                         }
                         Else
                         {
-                            MXCP = Local0
-                            Local2 = Local1
+                            Store (Local0, MXCP) /* \_SB_.PCI0.LPCB.EC0_.MXCP */
+                            Store (Local1, Local2)
                         }
 
-                        If ((LRPC == Local2))
+                        If (LEqual (LRPC, Local2))
                         {
-                            LRPC = MXCP /* \_SB_.PCI0.LPCB.EC0_.MXCP */
+                            Store (MXCP, LRPC) /* \_SB_.PCI0.LPCB.EC0_.LRPC */
                         }
 
                         Release (OTMT)
                         RPPC (0x01)
-                        If ((DCCP == 0x00))
+                        If (LEqual (DCCP, 0x00))
                         {
-                            DCCP = Local1
+                            Store (Local1, DCCP) /* \_SB_.PCI0.LPCB.EC0_.DCCP */
                             If (CondRefOf (\_PR.CPU0._PPC, Local5))
                             {
-                                If ((\_PR.CPPC != \_PR.CPU0._PPC))
+                                If (LNotEqual (\_PR.CPPC, \_PR.CPU0._PPC))
                                 {
-                                    \_PR.CPPC = \_PR.CPU0._PPC /* External reference */
+                                    Store (\_PR.CPU0._PPC, \_PR.CPPC) /* External reference */
                                 }
                             }
                         }
@@ -10656,66 +10656,66 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (RPPC, 1, Serialized)
                     {
-                        Local1 = 0x00
+                        Store (0x00, Local1)
                         If (CondRefOf (\_PR.CPU0._PSS, Local2))
                         {
-                            Local0 = \_PR.CPU0._PSS /* External reference */
-                            Local1 = SizeOf (Local0)
+                            Store (\_PR.CPU0._PSS, Local0)
+                            Store (SizeOf (Local0), Local1)
                         }
 
-                        Local3 = 0x00
-                        If ((Local1 > 0x00))
+                        Store (0x00, Local3)
+                        If (LGreater (Local1, 0x00))
                         {
-                            Local1 -= 0x01
+                            Subtract (Local1, 0x01, Local1)
                         }
                         Else
                         {
-                            Local3 = 0x03
+                            Store (0x03, Local3)
                         }
 
                         Acquire (OTMT, 0xFFFF)
                         If (OTSI)
                         {
-                            Local0 = OTLL /* \_SB_.PCI0.LPCB.EC0_.OTLL */
-                            OTSI = 0x00
-                            If ((Local0 == 0x00))
+                            Store (OTLL, Local0)
+                            Store (0x00, OTSI) /* \_SB_.PCI0.LPCB.EC0_.OTSI */
+                            If (LEqual (Local0, 0x00))
                             {
-                                If ((LRPC < Local1))
+                                If (LLess (LRPC, Local1))
                                 {
-                                    LRPC += 0x01
+                                    Add (LRPC, 0x01, LRPC) /* \_SB_.PCI0.LPCB.EC0_.LRPC */
                                 }
                             }
-                            ElseIf ((Local0 == 0x02))
+                            ElseIf (LEqual (Local0, 0x02))
                             {
-                                If ((LRPC > MXCP))
+                                If (LGreater (LRPC, MXCP))
                                 {
-                                    LRPC -= 0x01
+                                    Subtract (LRPC, 0x01, LRPC) /* \_SB_.PCI0.LPCB.EC0_.LRPC */
                                 }
                             }
-                            ElseIf ((Local0 == 0x03))
+                            ElseIf (LEqual (Local0, 0x03))
                             {
-                                LRPC = Local1
+                                Store (Local1, LRPC) /* \_SB_.PCI0.LPCB.EC0_.LRPC */
                             }
                         }
 
-                        If ((LRPC < Local1))
+                        If (LLess (LRPC, Local1))
                         {
-                            Local3 |= 0x01
+                            Or (Local3, 0x01, Local3)
                         }
 
-                        If ((LRPC > MXCP))
+                        If (LGreater (LRPC, MXCP))
                         {
-                            Local3 |= 0x02
+                            Or (Local3, 0x02, Local3)
                         }
 
                         ETSI (Local3, 0x14, Arg0)
-                        Local4 = 0x00
+                        Store (0x00, Local4)
                         If (CondRefOf (\_PR.CPU0._PPC, Local5))
                         {
-                            If ((LRPC != \_PR.CPU0._PPC))
+                            If (LNotEqual (LRPC, \_PR.CPU0._PPC))
                             {
-                                \_PR.CPU0._PPC = LRPC /* \_SB_.PCI0.LPCB.EC0_.LRPC */
-                                Local4 = 0x01
+                                Store (LRPC, \_PR.CPU0._PPC) /* External reference */
+                                Store (0x01, Local4)
                             }
                         }
 
@@ -10725,44 +10725,44 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (PPNT, 0, Serialized)
                     {
-                        If ((TCNT > 0x01))
+                        If (LGreater (TCNT, 0x01))
                         {
-                            If ((PDC0 & 0x08))
+                            If (And (PDC0, 0x08))
                             {
                                 Notify (\_PR.CPU0, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC1 & 0x08))
+                            If (And (PDC1, 0x08))
                             {
                                 Notify (\_PR.CPU1, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC2 & 0x08))
+                            If (And (PDC2, 0x08))
                             {
                                 Notify (\_PR.CPU2, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC3 & 0x08))
+                            If (And (PDC3, 0x08))
                             {
                                 Notify (\_PR.CPU3, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC4 & 0x08))
+                            If (And (PDC4, 0x08))
                             {
                                 Notify (\_PR.CPU4, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC5 & 0x08))
+                            If (And (PDC5, 0x08))
                             {
                                 Notify (\_PR.CPU5, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC6 & 0x08))
+                            If (And (PDC6, 0x08))
                             {
                                 Notify (\_PR.CPU6, 0x80) // Performance Capability Change
                             }
 
-                            If ((PDC7 & 0x08))
+                            If (And (PDC7, 0x08))
                             {
                                 Notify (\_PR.CPU7, 0x80) // Performance Capability Change
                             }
@@ -10833,7 +10833,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                     Method (_STA, 0, NotSerialized)  // _STA: Status
                     {
-                        If ((OSYS >= 0x07D1))
+                        If (LGreaterEqual (OSYS, 0x07D1))
                         {
                             If (HPAE)
                             {
@@ -10853,19 +10853,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         If (HPAE)
                         {
                             CreateDWordField (BUF0, \_SB.PCI0.LPCB.HPET._Y1F._BAS, HPT0)  // _BAS: Base Address
-                            If ((HPAS == 0x01))
+                            If (LEqual (HPAS, 0x01))
                             {
-                                HPT0 = 0xFED01000
+                                Store (0xFED01000, HPT0) /* \_SB_.PCI0.LPCB.HPET._CRS.HPT0 */
                             }
 
-                            If ((HPAS == 0x02))
+                            If (LEqual (HPAS, 0x02))
                             {
-                                HPT0 = 0xFED02000
+                                Store (0xFED02000, HPT0) /* \_SB_.PCI0.LPCB.HPET._CRS.HPT0 */
                             }
 
-                            If ((HPAS == 0x03))
+                            If (LEqual (HPAS, 0x03))
                             {
-                                HPT0 = 0xFED03000
+                                Store (0xFED03000, HPT0) /* \_SB_.PCI0.LPCB.HPET._CRS.HPT0 */
                             }
                         }
 
@@ -11111,7 +11111,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                     Method (_STA, 0, NotSerialized)  // _STA: Status
                     {
-                        If (((CDID & 0xF000) == 0x8000))
+                        If (LEqual (And (CDID, 0xF000), 0x8000))
                         {
                             Return (0x0F)
                         }
@@ -11217,9 +11217,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (_INI, 0, NotSerialized)  // _INI: Initialize
                     {
                         ECM ()
-                        If ((CR0D != 0x7A))
+                        If (LNotEqual (CR0D, 0x7A))
                         {
-                            SDFG = 0x00
+                            Store (0x00, SDFG) /* \SDFG */
                         }
 
                         DCM ()
@@ -11228,36 +11228,36 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (ECM, 0, NotSerialized)
                     {
                         Acquire (SIOM, 0xFFFF)
-                        SIOI = 0x55
+                        Store (0x55, SIOI) /* \_SB_.PCI0.LPCB.SIO_.SIOI */
                     }
 
                     Method (DCM, 0, NotSerialized)
                     {
-                        SIOI = 0xAA
+                        Store (0xAA, SIOI) /* \_SB_.PCI0.LPCB.SIO_.SIOI */
                         Release (SIOM)
                     }
 
                     Method (GETS, 1, NotSerialized)
                     {
                         ECM ()
-                        Local0 = 0x00
-                        If ((Arg0 == 0x01))
+                        Store (0x00, Local0)
+                        If (LEqual (Arg0, 0x01))
                         {
-                            Local0 = PPBS /* \_SB_.PCI0.LPCB.SIO_.PPBS */
+                            Store (PPBS, Local0)
                         }
-                        ElseIf ((Arg0 == 0x02))
+                        ElseIf (LEqual (Arg0, 0x02))
                         {
-                            Local0 = S1BS /* \_SB_.PCI0.LPCB.SIO_.S1BS */
+                            Store (S1BS, Local0)
                         }
-                        ElseIf ((Arg0 == 0x03))
+                        ElseIf (LEqual (Arg0, 0x03))
                         {
-                            Local0 = S2BS /* \_SB_.PCI0.LPCB.SIO_.S2BS */
+                            Store (S2BS, Local0)
                         }
 
-                        Local1 = 0x00
-                        If ((Local0 & 0xC0))
+                        Store (0x00, Local1)
+                        If (And (Local0, 0xC0))
                         {
-                            Local1 = (Local0 << 0x02)
+                            ShiftLeft (Local0, 0x02, Local1)
                         }
 
                         DCM ()
@@ -11274,45 +11274,45 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00
                         })
                         ECM ()
-                        Local0 = 0x00
-                        Local1 = 0x00
-                        Local2 = 0x00
-                        Local3 = 0x00
-                        If ((Arg0 == 0x01))
+                        Store (0x00, Local0)
+                        Store (0x00, Local1)
+                        Store (0x00, Local2)
+                        Store (0x00, Local3)
+                        If (LEqual (Arg0, 0x01))
                         {
-                            Local0 = PPBS /* \_SB_.PCI0.LPCB.SIO_.PPBS */
-                            Local2 = PPIQ /* \_SB_.PCI0.LPCB.SIO_.PPIQ */
-                            Local3 = PPDM /* \_SB_.PCI0.LPCB.SIO_.PPDM */
+                            Store (PPBS, Local0)
+                            Store (PPIQ, Local2)
+                            Store (PPDM, Local3)
                         }
-                        ElseIf ((Arg0 == 0x02))
+                        ElseIf (LEqual (Arg0, 0x02))
                         {
-                            Local0 = S1BS /* \_SB_.PCI0.LPCB.SIO_.S1BS */
-                            Local2 = S1IQ /* \_SB_.PCI0.LPCB.SIO_.S1IQ */
+                            Store (S1BS, Local0)
+                            Store (S1IQ, Local2)
                         }
-                        ElseIf ((Arg0 == 0x03))
+                        ElseIf (LEqual (Arg0, 0x03))
                         {
-                            Local0 = S2BS /* \_SB_.PCI0.LPCB.SIO_.S2BS */
-                            Local1 = FRBS /* \_SB_.PCI0.LPCB.SIO_.FRBS */
-                            Local2 = S2IQ /* \_SB_.PCI0.LPCB.SIO_.S2IQ */
-                            Local3 = FRDM /* \_SB_.PCI0.LPCB.SIO_.FRDM */
-                        }
-
-                        GRES [0x00] = (Local0 << 0x02)
-                        GRES [0x01] = (Local1 << 0x03)
-                        Local4 = 0x00
-                        If ((Local2 > 0x00))
-                        {
-                            Local4 = (0x01 << Local2)
+                            Store (S2BS, Local0)
+                            Store (FRBS, Local1)
+                            Store (S2IQ, Local2)
+                            Store (FRDM, Local3)
                         }
 
-                        GRES [0x02] = Local4
-                        Local4 = 0x00
-                        If (((Local3 > 0x00) && (Local3 < 0x04)))
+                        ShiftLeft (Local0, 0x02, Index (GRES, 0x00))
+                        ShiftLeft (Local1, 0x03, Index (GRES, 0x01))
+                        Store (0x00, Local4)
+                        If (LGreater (Local2, 0x00))
                         {
-                            Local4 = (0x01 << Local3)
+                            ShiftLeft (0x01, Local2, Local4)
                         }
 
-                        GRES [0x03] = Local4
+                        Store (Local4, Index (GRES, 0x02))
+                        Store (0x00, Local4)
+                        If (LAnd (LGreater (Local3, 0x00), LLess (Local3, 0x04)))
+                        {
+                            ShiftLeft (0x01, Local3, Local4)
+                        }
+
+                        Store (Local4, Index (GRES, 0x03))
                         DCM ()
                         Return (GRES) /* \_SB_.PCI0.LPCB.SIO_.GETR.GRES */
                     }
@@ -11320,44 +11320,44 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (SETR, 5, NotSerialized)
                     {
                         ECM ()
-                        Local0 = (Arg1 >> 0x02)
+                        ShiftRight (Arg1, 0x02, Local0)
                         FindSetRightBit (Arg3, Local1)
-                        If (((Local1 > 0x01) && (Local1 < 0x11)))
+                        If (LAnd (LGreater (Local1, 0x01), LLess (Local1, 0x11)))
                         {
-                            Local1--
+                            Decrement (Local1)
                         }
                         Else
                         {
-                            Local1 = 0x00
+                            Store (0x00, Local1)
                         }
 
                         FindSetRightBit (Arg4, Local2)
-                        If (((Local2 > 0x01) && (Local2 < 0x05)))
+                        If (LAnd (LGreater (Local2, 0x01), LLess (Local2, 0x05)))
                         {
-                            Local2--
+                            Decrement (Local2)
                         }
                         Else
                         {
-                            Local2 = 0x0F
+                            Store (0x0F, Local2)
                         }
 
-                        If ((Arg0 == 0x01))
+                        If (LEqual (Arg0, 0x01))
                         {
-                            PPBS = Local0
-                            PPIQ = Local1
-                            PPDM = Local2
+                            Store (Local0, PPBS) /* \_SB_.PCI0.LPCB.SIO_.PPBS */
+                            Store (Local1, PPIQ) /* \_SB_.PCI0.LPCB.SIO_.PPIQ */
+                            Store (Local2, PPDM) /* \_SB_.PCI0.LPCB.SIO_.PPDM */
                         }
-                        ElseIf ((Arg0 == 0x02))
+                        ElseIf (LEqual (Arg0, 0x02))
                         {
-                            S1BS = (Local0 & 0xFE)
-                            S1IQ = Local1
+                            And (Local0, 0xFE, S1BS) /* \_SB_.PCI0.LPCB.SIO_.S1BS */
+                            Store (Local1, S1IQ) /* \_SB_.PCI0.LPCB.SIO_.S1IQ */
                         }
-                        ElseIf ((Arg0 == 0x03))
+                        ElseIf (LEqual (Arg0, 0x03))
                         {
-                            S2BS = (Local0 & 0xFE)
-                            FRBS = (Arg2 >> 0x03)
-                            S2IQ = Local1
-                            FRDM = Local2
+                            And (Local0, 0xFE, S2BS) /* \_SB_.PCI0.LPCB.SIO_.S2BS */
+                            ShiftRight (Arg2, 0x03, FRBS) /* \_SB_.PCI0.LPCB.SIO_.FRBS */
+                            Store (Local1, S2IQ) /* \_SB_.PCI0.LPCB.SIO_.S2IQ */
+                            Store (Local2, FRDM) /* \_SB_.PCI0.LPCB.SIO_.FRDM */
                         }
 
                         DCM ()
@@ -11366,24 +11366,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (GLPM, 0, NotSerialized)
                     {
                         ECM ()
-                        Local0 = PPM /* \_SB_.PCI0.LPCB.SIO_.PPM_ */
-                        Local1 = PPXM /* \_SB_.PCI0.LPCB.SIO_.PPXM */
+                        Store (PPM, Local0)
+                        Store (PPXM, Local1)
                         DCM ()
                         If (Local0)
                         {
-                            Local2 = 0x00
+                            Store (0x00, Local2)
                         }
                         Else
                         {
-                            Local2 = 0x03
-                            If ((Local1 == 0x00))
+                            Store (0x03, Local2)
+                            If (LEqual (Local1, 0x00))
                             {
-                                Local2 = 0x01
+                                Store (0x01, Local2)
                             }
 
-                            If ((Local1 == 0x01))
+                            If (LEqual (Local1, 0x01))
                             {
-                                Local2 = 0x02
+                                Store (0x02, Local2)
                             }
                         }
 
@@ -11393,17 +11393,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (DPWS, 1, Serialized)
                     {
                         ECM ()
-                        If ((Arg0 == 0x01))
+                        If (LEqual (Arg0, 0x01))
                         {
-                            Local0 = PPPW /* \_SB_.PCI0.LPCB.SIO_.PPPW */
+                            Store (PPPW, Local0)
                         }
-                        ElseIf ((Arg0 == 0x02))
+                        ElseIf (LEqual (Arg0, 0x02))
                         {
-                            Local0 = S1PW /* \_SB_.PCI0.LPCB.SIO_.S1PW */
+                            Store (S1PW, Local0)
                         }
-                        ElseIf ((Arg0 == 0x03))
+                        ElseIf (LEqual (Arg0, 0x03))
                         {
-                            Local0 = S2PW /* \_SB_.PCI0.LPCB.SIO_.S2PW */
+                            Store (S2PW, Local0)
                         }
 
                         DCM ()
@@ -11413,17 +11413,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (DPW, 2, Serialized)
                     {
                         ECM ()
-                        If ((Arg0 == 0x01))
+                        If (LEqual (Arg0, 0x01))
                         {
-                            PPPW = Arg1
+                            Store (Arg1, PPPW) /* \_SB_.PCI0.LPCB.SIO_.PPPW */
                         }
-                        ElseIf ((Arg0 == 0x02))
+                        ElseIf (LEqual (Arg0, 0x02))
                         {
-                            S1PW = Arg1
+                            Store (Arg1, S1PW) /* \_SB_.PCI0.LPCB.SIO_.S1PW */
                         }
-                        ElseIf ((Arg0 == 0x03))
+                        ElseIf (LEqual (Arg0, 0x03))
                         {
-                            S2PW = Arg1
+                            Store (Arg1, S2PW) /* \_SB_.PCI0.LPCB.SIO_.S2PW */
                         }
 
                         DCM ()
@@ -11431,25 +11431,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (GDPA, 0, Serialized)
                     {
-                        Local0 = GETS (0x02)
+                        Store (GETS (0x02), Local0)
                         Return (Local0)
                     }
 
                     Alias (GDPA, \_SB.GDPA)
                     Method (SODS, 2, Serialized)
                     {
-                        Local1 = (~SDFG & Arg1)
-                        If ((LEGF || Local1))
+                        And (Not (SDFG), Arg1, Local1)
+                        If (LOr (LEGF, Local1))
                         {
-                            Local0 = 0x00
+                            Store (0x00, Local0)
                         }
                         Else
                         {
-                            Local1 = GETS (Arg0)
-                            Local0 = 0x0D
+                            Store (GETS (Arg0), Local1)
+                            Store (0x0D, Local0)
                             If (Local1)
                             {
-                                Local0 = 0x0F
+                                Store (0x0F, Local0)
                             }
                         }
 
@@ -11460,12 +11460,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     {
                         If (GETS (Arg0))
                         {
-                            Local0 = GETR (Arg0)
-                            Local1 = DerefOf (Local0 [0x01])
-                            Local2 = DerefOf (Local0 [0x02])
-                            Local3 = DerefOf (Local0 [0x03])
-                            Local4 = DerefOf (Local0 [0x00])
-                            Local3 |= (Local4 << 0x08)
+                            Store (GETR (Arg0), Local0)
+                            Store (DerefOf (Index (Local0, 0x01)), Local1)
+                            Store (DerefOf (Index (Local0, 0x02)), Local2)
+                            Store (DerefOf (Index (Local0, 0x03)), Local3)
+                            Store (DerefOf (Index (Local0, 0x00)), Local4)
+                            Or (ShiftLeft (Local4, 0x08), Local3, Local3)
                             \_SB.PCI0.LPCB.CFG (Arg0, 0x00, Local1, Local2, Local3)
                             SETR (Arg0, 0x00, 0x00, 0x00, 0x00)
                         }
@@ -11488,20 +11488,20 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                             CreateWordField (CMRS, \_SB.PCI0.LPCB.SIO.HCOM._CRS._Y20._MIN, MIN1)  // _MIN: Minimum Base Address
                             CreateWordField (CMRS, \_SB.PCI0.LPCB.SIO.HCOM._CRS._Y20._MAX, MAX1)  // _MAX: Maximum Base Address
-                            Local1 = GETR (0x02)
-                            MIN1 = DerefOf (Local1 [0x00])
-                            MAX1 = MIN1 /* \_SB_.PCI0.LPCB.SIO_.HCOM._CRS.MIN1 */
+                            Store (GETR (0x02), Local1)
+                            Store (DerefOf (Index (Local1, 0x00)), MIN1) /* \_SB_.PCI0.LPCB.SIO_.HCOM._CRS.MIN1 */
+                            Store (MIN1, MAX1) /* \_SB_.PCI0.LPCB.SIO_.HCOM._CRS.MAX1 */
                             Return (CMRS) /* \_SB_.PCI0.LPCB.SIO_.HCOM._CRS.CMRS */
                         }
 
                         Method (_STA, 0, NotSerialized)  // _STA: Status
                         {
-                            Local0 = 0x00
+                            Store (0x00, Local0)
                             If (LEGF)
                             {
                                 If (GETS (0x02))
                                 {
-                                    Local0 = 0x0F
+                                    Store (0x0F, Local0)
                                 }
                             }
 
@@ -11570,16 +11570,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_STA, 0, NotSerialized)  // _STA: Status
                         {
-                            Local0 = 0x00
-                            If ((\_SB.DCKD () || ICPT))
+                            Store (0x00, Local0)
+                            If (LOr (\_SB.DCKD (), ICPT))
                             {
-                                If (!RCOD)
+                                If (LNot (RCOD))
                                 {
-                                    Local0 = SODS (0x02, 0x02)
+                                    Store (SODS (0x02, 0x02), Local0)
                                 }
                                 Else
                                 {
-                                    Local0 = 0x0D
+                                    Store (0x0D, Local0)
                                 }
                             }
 
@@ -11603,7 +11603,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 SETR (0x02, MIN1, 0x00, IRQ0, 0x00)
                             }
 
-                            RCOD = 0x00
+                            Store (0x00, RCOD) /* \_SB_.PCI0.LPCB.SIO_.COM1.RCOD */
                         }
 
                         Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
@@ -11624,25 +11624,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             CreateWordField (CRES, \_SB.PCI0.LPCB.SIO.COM1._CRS._Y22._INT, IRQ0)  // _INT: Interrupts
                             If (RCOD)
                             {
-                                Local0 = 0x00
+                                Store (0x00, Local0)
                             }
                             Else
                             {
-                                Local0 = SODS (0x02, 0x02)
+                                Store (SODS (0x02, 0x02), Local0)
                             }
 
-                            If ((Local0 == 0x00))
+                            If (LEqual (Local0, 0x00))
                             {
-                                MIN1 = 0x00
-                                MAX1 = 0x00
-                                IRQ0 = 0x00
+                                Store (0x00, MIN1) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.MIN1 */
+                                Store (0x00, MAX1) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.MAX1 */
+                                Store (0x00, IRQ0) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.IRQ0 */
                                 Return (CRES) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.CRES */
                             }
 
-                            Local1 = GETR (0x02)
-                            MIN1 = DerefOf (Local1 [0x00])
-                            MAX1 = MIN1 /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.MIN1 */
-                            IRQ0 = DerefOf (Local1 [0x02])
+                            Store (GETR (0x02), Local1)
+                            Store (DerefOf (Index (Local1, 0x00)), MIN1) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.MIN1 */
+                            Store (MIN1, MAX1) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.MAX1 */
+                            Store (DerefOf (Index (Local1, 0x02)), IRQ0) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.IRQ0 */
                             Return (CRES) /* \_SB_.PCI0.LPCB.SIO_.COM1._CRS.CRES */
                         }
 
@@ -11675,11 +11675,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             If (GTM ())
                             {
-                                Local0 = 0x0104D041
+                                Store (0x0104D041, Local0)
                             }
                             Else
                             {
-                                Local0 = 0x0004D041
+                                Store (0x0004D041, Local0)
                             }
 
                             Return (Local0)
@@ -11688,13 +11688,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Name (LPM, 0xFF)
                         Method (GTM, 0, Serialized)
                         {
-                            If ((LPM == 0xFF))
+                            If (LEqual (LPM, 0xFF))
                             {
-                                Local0 = GLPM ()
-                                LPM = 0x00
-                                If ((Local0 > 0x01))
+                                Store (GLPM (), Local0)
+                                Store (0x00, LPM) /* \_SB_.PCI0.LPCB.SIO_.LPT0.LPM_ */
+                                If (LGreater (Local0, 0x01))
                                 {
-                                    LPM = 0x01
+                                    Store (0x01, LPM) /* \_SB_.PCI0.LPCB.SIO_.LPT0.LPM_ */
                                 }
                             }
 
@@ -11886,11 +11886,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             If (RLPD)
                             {
-                                Local0 = 0x0D
+                                Store (0x0D, Local0)
                             }
                             Else
                             {
-                                Local0 = SODS (0x01, 0x04)
+                                Store (SODS (0x01, 0x04), Local0)
                             }
 
                             Return (Local0)
@@ -11915,7 +11915,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 SETR (0x01, MIN1, MIN2, IRQ0, DMA0)
                             }
 
-                            RLPD = 0x00
+                            Store (0x00, RLPD) /* \_SB_.PCI0.LPCB.SIO_.LPT0.RLPD */
                         }
 
                         Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
@@ -11949,43 +11949,43 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             CreateWordField (CRES, \_SB.PCI0.LPCB.SIO.LPT0._CRS._Y26._DMA, DMA0)  // _DMA: Direct Memory Access
                             If (RLPD)
                             {
-                                Local0 = 0x00
+                                Store (0x00, Local0)
                             }
                             Else
                             {
-                                Local0 = SODS (0x01, 0x04)
+                                Store (SODS (0x01, 0x04), Local0)
                             }
 
-                            If ((Local0 == 0x00))
+                            If (LEqual (Local0, 0x00))
                             {
-                                MIN1 = 0x00
-                                MAX1 = 0x00
-                                MIN2 = 0x00
-                                MAX2 = 0x00
-                                IRQ0 = 0x00
-                                DMA0 = 0x00
+                                Store (0x00, MIN1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN1 */
+                                Store (0x00, MAX1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MAX1 */
+                                Store (0x00, MIN2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN2 */
+                                Store (0x00, MAX2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MAX2 */
+                                Store (0x00, IRQ0) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.IRQ0 */
+                                Store (0x00, DMA0) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.DMA0 */
                                 Return (CRES) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.CRES */
                             }
 
-                            Local1 = GETR (0x01)
-                            MIN1 = DerefOf (Local1 [0x00])
-                            MAX1 = MIN1 /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN1 */
-                            If ((MIN1 == 0x0278))
+                            Store (GETR (0x01), Local1)
+                            Store (DerefOf (Index (Local1, 0x00)), MIN1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN1 */
+                            Store (MIN1, MAX1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MAX1 */
+                            If (LEqual (MIN1, 0x0278))
                             {
-                                LEN1 = 0x08
-                                LEN2 = 0x03
+                                Store (0x08, LEN1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.LEN1 */
+                                Store (0x03, LEN2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.LEN2 */
                             }
 
-                            If ((MIN1 == 0x03BC))
+                            If (LEqual (MIN1, 0x03BC))
                             {
-                                LEN1 = 0x04
-                                LEN2 = 0x03
+                                Store (0x04, LEN1) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.LEN1 */
+                                Store (0x03, LEN2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.LEN2 */
                             }
 
-                            MIN2 = (MIN1 + 0x0400)
-                            MAX2 = MIN2 /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN2 */
-                            IRQ0 = DerefOf (Local1 [0x02])
-                            DMA0 = DerefOf (Local1 [0x03])
+                            Add (MIN1, 0x0400, MIN2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MIN2 */
+                            Store (MIN2, MAX2) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.MAX2 */
+                            Store (DerefOf (Index (Local1, 0x02)), IRQ0) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.IRQ0 */
+                            Store (DerefOf (Index (Local1, 0x03)), DMA0) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.DMA0 */
                             Return (CRES) /* \_SB_.PCI0.LPCB.SIO_.LPT0._CRS.CRES */
                         }
 
@@ -12175,14 +12175,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x00)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = Arg0
-                    HCOM = Arg1
-                    HCON = 0x48
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Arg0, TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (0x48, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (0x01)
                     }
 
@@ -12196,13 +12196,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0xFFFF)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = (Arg0 | 0x01)
-                    HCON = 0x44
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Or (Arg0, 0x01), TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (0x44, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (DAT0) /* \_SB_.PCI0.SBUS.DAT0 */
                     }
 
@@ -12216,15 +12216,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x00)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = Arg0
-                    HCOM = Arg1
-                    DAT0 = Arg2
-                    HCON = 0x48
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Arg0, TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (Arg2, DAT0) /* \_SB_.PCI0.SBUS.DAT0 */
+                    Store (0x48, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (0x01)
                     }
 
@@ -12238,14 +12238,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0xFFFF)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = (Arg0 | 0x01)
-                    HCOM = Arg1
-                    HCON = 0x48
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Or (Arg0, 0x01), TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (0x48, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (DAT0) /* \_SB_.PCI0.SBUS.DAT0 */
                     }
 
@@ -12259,16 +12259,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x00)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = Arg0
-                    HCOM = Arg1
-                    DAT1 = (Arg2 & 0xFF)
-                    DAT0 = ((Arg2 >> 0x08) & 0xFF)
-                    HCON = 0x4C
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Arg0, TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    And (Arg2, 0xFF, DAT1) /* \_SB_.PCI0.SBUS.DAT1 */
+                    And (ShiftRight (Arg2, 0x08), 0xFF, DAT0) /* \_SB_.PCI0.SBUS.DAT0 */
+                    Store (0x4C, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (0x01)
                     }
 
@@ -12282,15 +12282,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0xFFFF)
                     }
 
-                    I2CE = 0x00
-                    HSTS = 0xBF
-                    TXSA = (Arg0 | 0x01)
-                    HCOM = Arg1
-                    HCON = 0x4C
+                    Store (0x00, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Or (Arg0, 0x01), TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (0x4C, HCON) /* \_SB_.PCI0.SBUS.HCON */
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
-                        Return (((DAT0 << 0x08) | DAT1))
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                        Return (Or (ShiftLeft (DAT0, 0x08), DAT1))
                     }
 
                     Return (0xFFFFFFFF)
@@ -12303,40 +12303,40 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x00)
                     }
 
-                    I2CE = Arg3
-                    HSTS = 0xBF
-                    TXSA = Arg0
-                    HCOM = Arg1
-                    DAT0 = SizeOf (Arg2)
-                    Local1 = 0x00
-                    HBDR = DerefOf (Arg2 [0x00])
-                    HCON = 0x54
-                    While ((SizeOf (Arg2) > Local1))
+                    Store (Arg3, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Arg0, TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (SizeOf (Arg2), DAT0) /* \_SB_.PCI0.SBUS.DAT0 */
+                    Store (0x00, Local1)
+                    Store (DerefOf (Index (Arg2, 0x00)), HBDR) /* \_SB_.PCI0.SBUS.HBDR */
+                    Store (0x54, HCON) /* \_SB_.PCI0.SBUS.HCON */
+                    While (LGreater (SizeOf (Arg2), Local1))
                     {
-                        Local0 = 0x0FA0
-                        While ((!(HSTS & 0x80) && Local0))
+                        Store (0x0FA0, Local0)
+                        While (LAnd (LNot (And (HSTS, 0x80)), Local0))
                         {
-                            Local0--
+                            Decrement (Local0)
                             Stall (0x32)
                         }
 
-                        If (!Local0)
+                        If (LNot (Local0))
                         {
                             KILL ()
                             Return (0x00)
                         }
 
-                        HSTS = 0x80
-                        Local1++
-                        If ((SizeOf (Arg2) > Local1))
+                        Store (0x80, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                        Increment (Local1)
+                        If (LGreater (SizeOf (Arg2), Local1))
                         {
-                            HBDR = DerefOf (Arg2 [Local1])
+                            Store (DerefOf (Index (Arg2, Local1)), HBDR) /* \_SB_.PCI0.SBUS.HBDR */
                         }
                     }
 
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (0x01)
                     }
 
@@ -12351,50 +12351,50 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         Return (0x00)
                     }
 
-                    I2CE = Arg2
-                    HSTS = 0xBF
-                    TXSA = (Arg0 | 0x01)
-                    HCOM = Arg1
-                    HCON = 0x54
-                    Local0 = 0x0FA0
-                    While ((!(HSTS & 0x80) && Local0))
+                    Store (Arg2, I2CE) /* \_SB_.PCI0.SBUS.I2CE */
+                    Store (0xBF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (Or (Arg0, 0x01), TXSA) /* \_SB_.PCI0.SBUS.TXSA */
+                    Store (Arg1, HCOM) /* \_SB_.PCI0.SBUS.HCOM */
+                    Store (0x54, HCON) /* \_SB_.PCI0.SBUS.HCON */
+                    Store (0x0FA0, Local0)
+                    While (LAnd (LNot (And (HSTS, 0x80)), Local0))
                     {
-                        Local0--
+                        Decrement (Local0)
                         Stall (0x32)
                     }
 
-                    If (!Local0)
+                    If (LNot (Local0))
                     {
                         KILL ()
                         Return (0x00)
                     }
 
-                    TBUF [0x00] = DAT0 /* \_SB_.PCI0.SBUS.DAT0 */
-                    HSTS = 0x80
-                    Local1 = 0x01
-                    While ((Local1 < DerefOf (TBUF [0x00])))
+                    Store (DAT0, Index (TBUF, 0x00))
+                    Store (0x80, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                    Store (0x01, Local1)
+                    While (LLess (Local1, DerefOf (Index (TBUF, 0x00))))
                     {
-                        Local0 = 0x0FA0
-                        While ((!(HSTS & 0x80) && Local0))
+                        Store (0x0FA0, Local0)
+                        While (LAnd (LNot (And (HSTS, 0x80)), Local0))
                         {
-                            Local0--
+                            Decrement (Local0)
                             Stall (0x32)
                         }
 
-                        If (!Local0)
+                        If (LNot (Local0))
                         {
                             KILL ()
                             Return (0x00)
                         }
 
-                        TBUF [Local1] = HBDR /* \_SB_.PCI0.SBUS.HBDR */
-                        HSTS = 0x80
-                        Local1++
+                        Store (HBDR, Index (TBUF, Local1))
+                        Store (0x80, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
+                        Increment (Local1)
                     }
 
                     If (COMP ())
                     {
-                        HSTS |= 0xFF
+                        Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                         Return (TBUF) /* \_SB_.PCI0.SBUS.SBLR.TBUF */
                     }
 
@@ -12403,32 +12403,32 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (STRT, 0, Serialized)
                 {
-                    Local0 = 0xC8
+                    Store (0xC8, Local0)
                     While (Local0)
                     {
-                        If ((HSTS & 0x40))
+                        If (And (HSTS, 0x40))
                         {
-                            Local0--
+                            Decrement (Local0)
                             Sleep (0x01)
-                            If ((Local0 == 0x00))
+                            If (LEqual (Local0, 0x00))
                             {
                                 Return (0x01)
                             }
                         }
                         Else
                         {
-                            Local0 = 0x00
+                            Store (0x00, Local0)
                         }
                     }
 
-                    Local0 = 0x0FA0
+                    Store (0x0FA0, Local0)
                     While (Local0)
                     {
-                        If ((HSTS & 0x01))
+                        If (And (HSTS, 0x01))
                         {
-                            Local0--
+                            Decrement (Local0)
                             Stall (0x32)
-                            If ((Local0 == 0x00))
+                            If (LEqual (Local0, 0x00))
                             {
                                 KILL ()
                             }
@@ -12444,18 +12444,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (COMP, 0, Serialized)
                 {
-                    Local0 = 0x0FA0
+                    Store (0x0FA0, Local0)
                     While (Local0)
                     {
-                        If ((HSTS & 0x02))
+                        If (And (HSTS, 0x02))
                         {
                             Return (0x01)
                         }
                         Else
                         {
-                            Local0--
+                            Decrement (Local0)
                             Stall (0x32)
-                            If ((Local0 == 0x00))
+                            If (LEqual (Local0, 0x00))
                             {
                                 KILL ()
                             }
@@ -12467,8 +12467,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (KILL, 0, Serialized)
                 {
-                    HCON |= 0x02
-                    HSTS |= 0xFF
+                    Or (HCON, 0x02, HCON) /* \_SB_.PCI0.SBUS.HCON */
+                    Or (HSTS, 0xFF, HSTS) /* \_SB_.PCI0.SBUS.HSTS */
                 }
             }
 
@@ -12501,10 +12501,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR1 /* \LTR1 */
-                    LMSL = PML1 /* \_SB_.PCI0.PML1 */
-                    LNSL = PNL1 /* \_SB_.PCI0.PNL1 */
-                    OBFF = OBF1 /* \OBF1 */
+                    Store (LTR1, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML1, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL1, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF1, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -12574,13 +12574,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP01.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP01.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP01.HPSX */
                             }
                         }
                     }
@@ -12594,10 +12594,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP01.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP01.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -12607,29 +12607,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP01.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP01.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP01.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP01.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP01.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP01.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP01.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP01.PMSX */
                         }
                     }
                 }
@@ -12643,7 +12643,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -12658,17 +12658,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP01._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP01._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP01._DSM.FUN4 */
                                     }
                                 }
 
@@ -12676,7 +12676,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -12698,28 +12698,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP01.LTRV */
                                     }
                                     Else
@@ -12826,10 +12826,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR2 /* \LTR2 */
-                    LMSL = PML2 /* \_SB_.PCI0.PML2 */
-                    LNSL = PNL2 /* \_SB_.PCI0.PNL2 */
-                    OBFF = OBF2 /* \OBF2 */
+                    Store (LTR2, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML2, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL2, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF2, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -12899,13 +12899,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP02.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP02.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP02.HPSX */
                             }
                         }
                     }
@@ -12919,10 +12919,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP02.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP02.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -12932,29 +12932,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP02.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP02.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP02.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP02.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP02.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP02.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP02.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP02.PMSX */
                         }
                     }
                 }
@@ -12968,7 +12968,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -12983,17 +12983,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP02._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP02._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP02._DSM.FUN4 */
                                     }
                                 }
 
@@ -13001,7 +13001,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -13023,28 +13023,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP02.LTRV */
                                     }
                                     Else
@@ -13151,10 +13151,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR3 /* \LTR3 */
-                    LMSL = PML3 /* \_SB_.PCI0.PML3 */
-                    LNSL = PNL3 /* \_SB_.PCI0.PNL3 */
-                    OBFF = OBF3 /* \OBF3 */
+                    Store (LTR3, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML3, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL3, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF3, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -13224,13 +13224,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP03.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP03.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP03.HPSX */
                             }
                         }
                     }
@@ -13244,10 +13244,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP03.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP03.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -13257,29 +13257,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP03.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP03.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP03.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP03.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP03.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP03.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP03.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP03.PMSX */
                         }
                     }
                 }
@@ -13293,7 +13293,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -13308,17 +13308,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP03._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP03._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP03._DSM.FUN4 */
                                     }
                                 }
 
@@ -13326,7 +13326,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -13348,28 +13348,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP03.LTRV */
                                     }
                                     Else
@@ -13476,10 +13476,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR4 /* \LTR4 */
-                    LMSL = PML4 /* \_SB_.PCI0.PML4 */
-                    LNSL = PNL4 /* \_SB_.PCI0.PNL4 */
-                    OBFF = OBF4 /* \OBF4 */
+                    Store (LTR4, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML4, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL4, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF4, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -13549,13 +13549,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP04.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP04.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP04.HPSX */
                             }
                         }
                     }
@@ -13569,10 +13569,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP04.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP04.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -13582,29 +13582,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP04.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP04.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP04.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP04.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP04.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP04.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP04.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP04.PMSX */
                         }
                     }
                 }
@@ -13618,7 +13618,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -13633,17 +13633,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP04._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP04._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP04._DSM.FUN4 */
                                     }
                                 }
 
@@ -13651,7 +13651,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -13673,28 +13673,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP04.LTRV */
                                     }
                                     Else
@@ -13833,11 +13833,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                         Method (_RST, 0, NotSerialized)  // _RST: Device Reset
                         {
-                            If ((DCAP & 0x10000000))
+                            If (And (DCAP, 0x10000000))
                             {
-                                Local0 = DCTR /* \_SB_.PCI0.RP04.WNIC.DCTR */
-                                Local0 |= 0x8000
-                                DCTR = Local0
+                                Store (DCTR, Local0)
+                                Or (Local0, 0x8000, Local0)
+                                Store (Local0, DCTR) /* \_SB_.PCI0.RP04.WNIC.DCTR */
                             }
                         }
                     }
@@ -13858,10 +13858,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR5 /* \LTR5 */
-                    LMSL = PML5 /* \_SB_.PCI0.PML5 */
-                    LNSL = PNL5 /* \_SB_.PCI0.PNL5 */
-                    OBFF = OBF5 /* \OBF5 */
+                    Store (LTR5, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML5, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL5, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF5, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -13931,13 +13931,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP05.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP05.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP05.HPSX */
                             }
                         }
                     }
@@ -13951,10 +13951,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP05.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP05.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -13964,29 +13964,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP05.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP05.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP05.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP05.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP05.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP05.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP05.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP05.PMSX */
                         }
                     }
                 }
@@ -14000,7 +14000,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -14015,17 +14015,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP05._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP05._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP05._DSM.FUN4 */
                                     }
                                 }
 
@@ -14033,7 +14033,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -14055,28 +14055,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP05.LTRV */
                                     }
                                     Else
@@ -14110,10 +14110,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR6 /* \LTR6 */
-                    LMSL = PML6 /* \_SB_.PCI0.PML6 */
-                    LNSL = PNL6 /* \_SB_.PCI0.PNL6 */
-                    OBFF = OBF6 /* \OBF6 */
+                    Store (LTR6, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML6, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL6, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF6, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -14183,13 +14183,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP06.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP06.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP06.HPSX */
                             }
                         }
                     }
@@ -14203,10 +14203,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP06.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP06.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -14216,29 +14216,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP06.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP06.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP06.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP06.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP06.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP06.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP06.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP06.PMSX */
                         }
                     }
                 }
@@ -14252,7 +14252,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -14267,17 +14267,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP06._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP06._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP06._DSM.FUN4 */
                                     }
                                 }
 
@@ -14285,7 +14285,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -14307,28 +14307,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP06.LTRV */
                                     }
                                     Else
@@ -14349,7 +14349,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_PRT, 0, NotSerialized)  // _PRT: PCI Routing Table
                 {
-                    If ((PCHS == 0x01))
+                    If (LEqual (PCHS, 0x01))
                     {
                         Return (^^RP02._PRT ())
                     }
@@ -14374,10 +14374,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR7 /* \LTR7 */
-                    LMSL = PML7 /* \_SB_.PCI0.PML7 */
-                    LNSL = PNL7 /* \_SB_.PCI0.PNL7 */
-                    OBFF = OBF7 /* \OBF7 */
+                    Store (LTR7, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML7, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL7, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF7, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -14447,13 +14447,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP07.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP07.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP07.HPSX */
                             }
                         }
                     }
@@ -14467,10 +14467,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP07.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP07.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -14480,29 +14480,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP07.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP07.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP07.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP07.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP07.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP07.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP07.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP07.PMSX */
                         }
                     }
                 }
@@ -14516,7 +14516,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -14531,17 +14531,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP07._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP07._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP07._DSM.FUN4 */
                                     }
                                 }
 
@@ -14549,7 +14549,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -14571,28 +14571,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP07.LTRV */
                                     }
                                     Else
@@ -14631,10 +14631,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (_INI, 0, NotSerialized)  // _INI: Initialize
                 {
-                    LTRE = LTR8 /* \LTR8 */
-                    LMSL = PML8 /* \_SB_.PCI0.PML8 */
-                    LNSL = PNL8 /* \_SB_.PCI0.PNL8 */
-                    OBFF = OBF8 /* \OBF8 */
+                    Store (LTR8, LTRE) /* \_SB_.PCI0.LTRE */
+                    Store (PML8, LMSL) /* \_SB_.PCI0.LMSL */
+                    Store (PNL8, LNSL) /* \_SB_.PCI0.LNSL */
+                    Store (OBF8, OBFF) /* \_SB_.PCI0.OBFF */
                 }
 
                 OperationRegion (PXCS, PCI_Config, 0x00, 0x0380)
@@ -14704,13 +14704,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             Sleep (0x64)
                             If (PDCX)
                             {
-                                PDCX = 0x01
-                                HPSX = 0x01
+                                Store (0x01, PDCX) /* \_SB_.PCI0.RP08.PDCX */
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP08.HPSX */
                                 Notify (^, 0x00) // Bus Check
                             }
                             Else
                             {
-                                HPSX = 0x01
+                                Store (0x01, HPSX) /* \_SB_.PCI0.RP08.HPSX */
                             }
                         }
                     }
@@ -14724,10 +14724,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             While (PSPX)
                             {
-                                PSPX = 0x01
+                                Store (0x01, PSPX) /* \_SB_.PCI0.RP08.PSPX */
                             }
 
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP08.PMSX */
                             Notify (^, 0x02) // Device Wake
                         }
                     }
@@ -14737,29 +14737,29 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        HPCE = Arg0
+                        Store (Arg0, HPCE) /* \_SB_.PCI0.RP08.HPCE */
                         If (Arg0)
                         {
-                            Local6 = (SCTL & 0xFFC0)
+                            And (SCTL, 0xFFC0, Local6)
                             If (SI)
                             {
-                                Local6 |= 0x01
+                                Or (Local6, 0x01, Local6)
                             }
 
-                            SCTL = Local6
-                            SSTS = 0x3F
+                            Store (Local6, SCTL) /* \_SB_.PCI0.RP08.SCTL */
+                            Store (0x3F, SSTS) /* \_SB_.PCI0.RP08.SSTS */
                         }
                         Else
                         {
-                            ABPX = 0x01
-                            PDCX = 0x01
-                            HPSX = 0x01
+                            Store (0x01, ABPX) /* \_SB_.PCI0.RP08.ABPX */
+                            Store (0x01, PDCX) /* \_SB_.PCI0.RP08.PDCX */
+                            Store (0x01, HPSX) /* \_SB_.PCI0.RP08.HPSX */
                         }
 
-                        PMCE = Arg1
-                        If ((Arg1 == 0x00))
+                        Store (Arg1, PMCE) /* \_SB_.PCI0.RP08.PMCE */
+                        If (LEqual (Arg1, 0x00))
                         {
-                            PMSX = 0x01
+                            Store (0x01, PMSX) /* \_SB_.PCI0.RP08.PMSX */
                         }
                     }
                 }
@@ -14773,7 +14773,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
                 {
-                    If ((Arg0 == ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
+                    If (LEqual (Arg0, ToUUID ("e5c937d0-3553-4d7a-9117-ea4d19c3434d") /* Device Labeling Interface */))
                     {
                         Switch (ToInteger (Arg2))
                         {
@@ -14788,17 +14788,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                                 CreateBitField (OPTS, 0x06, FUN6)
                                 CreateBitField (OPTS, 0x08, FUN8)
                                 CreateBitField (OPTS, 0x09, FUN9)
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
-                                    FUN0 = 0x01
+                                    Store (0x01, FUN0) /* \_SB_.PCI0.RP08._DSM.FUN0 */
                                     If (LTRE)
                                     {
-                                        FUN6 = 0x01
+                                        Store (0x01, FUN6) /* \_SB_.PCI0.RP08._DSM.FUN6 */
                                     }
 
                                     If (OBFF)
                                     {
-                                        FUN4 = 0x01
+                                        Store (0x01, FUN4) /* \_SB_.PCI0.RP08._DSM.FUN4 */
                                     }
                                 }
 
@@ -14806,7 +14806,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x04)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (OBFF)
                                     {
@@ -14828,28 +14828,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                             Case (0x06)
                             {
-                                If ((Arg1 >= 0x02))
+                                If (LGreaterEqual (Arg1, 0x02))
                                 {
                                     If (LTRE)
                                     {
-                                        If (((LMSL == 0x00) || (LNSL == 0x00)))
+                                        If (LOr (LEqual (LMSL, 0x00), LEqual (LNSL, 0x00)))
                                         {
-                                            If ((PCHS == 0x01))
+                                            If (LEqual (PCHS, 0x01))
                                             {
-                                                LMSL = 0x0846
-                                                LNSL = 0x0846
+                                                Store (0x0846, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x0846, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
-                                            ElseIf ((PCHS == 0x02))
+                                            ElseIf (LEqual (PCHS, 0x02))
                                             {
-                                                LMSL = 0x1003
-                                                LNSL = 0x1003
+                                                Store (0x1003, LMSL) /* \_SB_.PCI0.LMSL */
+                                                Store (0x1003, LNSL) /* \_SB_.PCI0.LNSL */
                                             }
                                         }
 
-                                        LTRV [0x00] = ((LMSL >> 0x0A) & 0x07)
-                                        LTRV [0x01] = (LMSL & 0x03FF)
-                                        LTRV [0x02] = ((LNSL >> 0x0A) & 0x07)
-                                        LTRV [0x03] = (LNSL & 0x03FF)
+                                        Store (And (ShiftRight (LMSL, 0x0A), 0x07), Index (LTRV, 0x00))
+                                        Store (And (LMSL, 0x03FF), Index (LTRV, 0x01))
+                                        Store (And (ShiftRight (LNSL, 0x0A), 0x07), Index (LTRV, 0x02))
+                                        Store (And (LNSL, 0x03FF), Index (LTRV, 0x03))
                                         Return (LTRV) /* \_SB_.PCI0.RP08.LTRV */
                                     }
                                     Else
@@ -14876,10 +14876,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (POSC, 2, Serialized)
             {
-                If ((Arg1 || ((Arg0 & 0x01) || (Arg0 & 0x04))))
+                If (LOr (Arg1, LOr (And (Arg0, 0x01), And (Arg0, 0x04))))
                 {
-                    Local4 = ((Arg0 & 0x01) ^ 0x01)
-                    Local5 = (((Arg0 >> 0x02) & 0x01) ^ 0x01)
+                    XOr (And (Arg0, 0x01), 0x01, Local4)
+                    XOr (And (ShiftRight (Arg0, 0x02), 0x01), 0x01, Local5)
                     \_SB.PCI0.RP01.OSC (Local4, Local5)
                     \_SB.PCI0.RP02.OSC (Local4, Local5)
                     \_SB.PCI0.RP03.OSC (Local4, Local5)
@@ -14888,7 +14888,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     \_SB.PCI0.RP06.OSC (Local4, Local5)
                     \_SB.PCI0.RP07.OSC (Local4, Local5)
                     \_SB.PCI0.RP08.OSC (Local4, Local5)
-                    \_SB.PCI0.LPCB.BPEE = Local5
+                    Store (Local5, \_SB.PCI0.LPCB.BPEE)
                 }
             }
 
@@ -14906,15 +14906,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 Name (DCSC, 0xFF)
                 Method (GDCC, 1, Serialized)
                 {
-                    If ((Arg0 && (DCSC == 0xFF)))
+                    If (LAnd (Arg0, LEqual (DCSC, 0xFF)))
                     {
-                        Local0 = (0x01 | (0x02 | 0x04))
+                        Store (Or (0x01, Or (0x02, 0x04)), Local0)
                         If (\_SB.DCKD ())
                         {
-                            Local0 |= 0x08
+                            Or (Local0, 0x08, Local0)
                         }
 
-                        DCSC = Local0
+                        Store (Local0, DCSC) /* \_SB_.PCI0.RP05.DGFX.DCSC */
                     }
 
                     Return (DCSC) /* \_SB_.PCI0.RP05.DGFX.DCSC */
@@ -14926,13 +14926,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (RDSS, 1, Serialized)
                 {
-                    If ((Arg0 == 0x01))
+                    If (LEqual (Arg0, 0x01))
                     {
-                        \_SB.PCI0.LPCB.EC0.TENA = 0x03
+                        Store (0x03, \_SB.PCI0.LPCB.EC0.TENA)
                     }
                     Else
                     {
-                        \_SB.PCI0.LPCB.EC0.TENA = 0x01
+                        Store (0x01, \_SB.PCI0.LPCB.EC0.TENA)
                     }
                 }
             }
@@ -14970,18 +14970,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GUPT, 1, NotSerialized)
             {
-                Local2 = (Arg0 & 0x0F)
-                Local1 = 0x06
-                If ((Arg0 == 0x001D0003))
+                And (Arg0, 0x0F, Local2)
+                Store (0x06, Local1)
+                If (LEqual (Arg0, 0x001D0003))
                 {
-                    Local0 = 0x0A
+                    Store (0x0A, Local0)
                     Return (Local0)
                 }
 
-                Local0 = (Local2 << 0x01)
-                If (((Arg0 & 0x001A0000) == 0x001A0000))
+                ShiftLeft (Local2, 0x01, Local0)
+                If (LEqual (And (Arg0, 0x001A0000), 0x001A0000))
                 {
-                    Local0 += Local1
+                    Add (Local0, Local1, Local0)
                 }
 
                 Return (Local0)
@@ -14989,9 +14989,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (UPSW, 1, Serialized)
             {
-                Local0 = 0x01
-                Local1 = (0x3C13 >> Arg0)
-                Local0 = (Local1 & 0x01)
+                Store (0x01, Local0)
+                ShiftRight (0x3C13, Arg0, Local1)
+                And (Local1, 0x01, Local0)
                 Return (Local0)
             }
 
@@ -15002,7 +15002,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Stall (0x01)
                 }
 
-                SSMP = 0xF3
+                Store (0xF3, SSMP) /* \SSMP */
                 Stall (0x32)
                 While (APMS)
                 {
@@ -15016,24 +15016,24 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (DSMI, 0, NotSerialized)
             {
                 Acquire (SMIM, 0xFFFF)
-                If ((SMID == 0x00))
+                If (LEqual (SMID, 0x00))
                 {
-                    GSIE = 0x00
-                    EOS = 0x00
+                    Store (0x00, GSIE) /* \GSIE */
+                    Store (0x00, EOS) /* \EOS_ */
                 }
 
-                SMID++
+                Increment (SMID)
                 Release (SMIM)
             }
 
             Method (ESMI, 0, NotSerialized)
             {
                 Acquire (SMIM, 0xFFFF)
-                SMID--
-                If ((SMID == 0x00))
+                Decrement (SMID)
+                If (LEqual (SMID, 0x00))
                 {
-                    EOS = 0x01
-                    GSIE = 0x01
+                    Store (0x01, EOS) /* \EOS_ */
+                    Store (0x01, GSIE) /* \GSIE */
                 }
 
                 Release (SMIM)
@@ -15048,68 +15048,68 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 CreateDWordField (Arg3, 0x00, CDW1)
                 CreateDWordField (Arg3, 0x04, CDW2)
                 CreateDWordField (Arg3, 0x08, CDW3)
-                If ((PMAL != 0x01))
+                If (LNotEqual (PMAL, 0x01))
                 {
-                    PMAL = 0x01
+                    Store (0x01, PMAL) /* \_SB_.PCI0.PMAL */
                 }
 
                 If (\_SB.PCI0.XHC.CUID (Arg0))
                 {
                     Return (\_SB.PCI0.XHC.POSC (Arg1, Arg2, Arg3))
                 }
-                ElseIf ((OSYS >= 0x07DC))
+                ElseIf (LGreaterEqual (OSYS, 0x07DC))
                 {
-                    If ((XCNT == 0x00))
+                    If (LEqual (XCNT, 0x00))
                     {
                         \_SB.PCI0.XHC.XSEL ()
-                        XCNT++
+                        Increment (XCNT)
                     }
                 }
 
-                Local1 = Arg0
-                If ((\SRCP (Local1, PUID) == 0x01))
+                Store (Arg0, Local1)
+                If (LEqual (\SRCP (Local1, PUID), 0x01))
                 {
-                    Local2 = CDW2 /* \_SB_.PCI0._OSC.CDW2 */
-                    Local3 = CDW3 /* \_SB_.PCI0._OSC.CDW3 */
-                    If (((Local2 & 0x16) != 0x16))
+                    Store (CDW2, Local2)
+                    Store (CDW3, Local3)
+                    If (LNotEqual (And (Local2, 0x16), 0x16))
                     {
-                        Local3 &= 0x1E
+                        And (Local3, 0x1E, Local3)
                     }
 
-                    Local3 &= 0x1D
-                    If (!(CDW1 & 0x01))
+                    And (Local3, 0x1D, Local3)
+                    If (LNot (And (CDW1, 0x01)))
                     {
                         POSC (Local3, 0x01)
-                        If ((Local3 & 0x10)){}
+                        If (And (Local3, 0x10)){}
                     }
 
-                    If ((Arg1 != One))
+                    If (LNotEqual (Arg1, One))
                     {
-                        CDW1 |= 0x08
+                        Or (CDW1, 0x08, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
                     }
 
-                    If ((CDW3 != Local3))
+                    If (LNotEqual (CDW3, Local3))
                     {
-                        CDW1 |= 0x10
+                        Or (CDW1, 0x10, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
                     }
 
-                    CDW3 = Local3
-                    OSCC = Local3
+                    Store (Local3, CDW3) /* \_SB_.PCI0._OSC.CDW3 */
+                    Store (Local3, OSCC) /* \OSCC */
                     Return (Arg3)
                 }
                 Else
                 {
-                    CDW1 |= 0x04
+                    Or (CDW1, 0x04, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
                     Return (Arg3)
                 }
             }
 
             Method (ICST, 1, NotSerialized)
             {
-                Local0 = 0x0F
-                If ((Arg0 == 0x01))
+                Store (0x0F, Local0)
+                If (LEqual (Arg0, 0x01))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
 
                 Return (Local0)
@@ -15176,14 +15176,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     Method (_ON, 0, NotSerialized)  // _ON_: Power On
                     {
-                        ASTA = 0x01
-                        ASTI = \_SB.PCI0.LPCB.EC0.SAST (0x01)
+                        Store (0x01, ASTA) /* \_SB_.PCI0.HDEF.ASTA */
+                        Store (\_SB.PCI0.LPCB.EC0.SAST (0x01), ASTI) /* \_SB_.PCI0.HDEF.ASTI */
                     }
 
                     Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
                     {
-                        ASTA = 0x00
-                        ASTI = \_SB.PCI0.LPCB.EC0.SAST (0x00)
+                        Store (0x00, ASTA) /* \_SB_.PCI0.HDEF.ASTA */
+                        Store (\_SB.PCI0.LPCB.EC0.SAST (0x00), ASTI) /* \_SB_.PCI0.HDEF.ASTI */
                     }
                 }
 
@@ -15239,18 +15239,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (\_SB.PCI0.LPCB.SMAB, 3, Serialized)
                 {
-                    If (((Arg0 & 0x01) == 0x00))
+                    If (LEqual (And (Arg0, 0x01), 0x00))
                     {
-                        Local0 = 0x01
-                        Local1 = \_SB.PCI0.SBUS.SWRB (Arg0, Arg1, Arg2)
+                        Store (0x01, Local0)
+                        Store (\_SB.PCI0.SBUS.SWRB (Arg0, Arg1, Arg2), Local1)
                         If (Local1)
                         {
-                            Local0 = 0x00
+                            Store (0x00, Local0)
                         }
                     }
                     Else
                     {
-                        Local0 = \_SB.PCI0.SBUS.SRDB (Arg0, Arg1)
+                        Store (\_SB.PCI0.SBUS.SRDB (Arg0, Arg1), Local0)
                     }
 
                     Return (Local0)
@@ -15258,11 +15258,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (DCS, 3, NotSerialized)
                 {
-                    Local1 = 0x00
-                    Local0 = Match (Arg0, MEQ, Arg1, MTR, 0x00, 0x00)
-                    If ((Local0 != Ones))
+                    Store (0x00, Local1)
+                    Store (Match (Arg0, MEQ, Arg1, MTR, 0x00, 0x00), Local0)
+                    If (LNotEqual (Local0, Ones))
                     {
-                        Local1 = (Local0 << Arg2)
+                        ShiftLeft (Local0, Arg2, Local1)
                     }
 
                     Return (Local1)
@@ -15270,60 +15270,60 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (DPD, 2, Serialized)
                 {
-                    If ((Arg0 == 0x00))
+                    If (LEqual (Arg0, 0x00))
                     {
-                        FDLE = 0x00
+                        Store (0x00, FDLE) /* \_SB_.PCI0.LPCB.FDLE */
                     }
-                    ElseIf ((Arg0 == 0x01))
+                    ElseIf (LEqual (Arg0, 0x01))
                     {
-                        LLPE = 0x00
+                        Store (0x00, LLPE) /* \_SB_.PCI0.LPCB.LLPE */
                     }
-                    ElseIf ((Arg0 == 0x02))
+                    ElseIf (LEqual (Arg0, 0x02))
                     {
-                        CALE = 0x00
+                        Store (0x00, CALE) /* \_SB_.PCI0.LPCB.CALE */
                     }
-                    ElseIf ((Arg0 == 0x03))
+                    ElseIf (LEqual (Arg0, 0x03))
                     {
-                        CBLE = 0x00
-                        G2DC &= ~0x01
+                        Store (0x00, CBLE) /* \_SB_.PCI0.LPCB.CBLE */
+                        And (G2DC, Not (0x01), G2DC) /* \_SB_.PCI0.LPCB.G2DC */
                     }
                 }
 
                 Method (EPD, 3, Serialized)
                 {
-                    If ((Arg0 == 0x00))
+                    If (LEqual (Arg0, 0x00))
                     {
-                        Local0 = 0x00
-                        If ((Arg1 == 0x0370))
+                        Store (0x00, Local0)
+                        If (LEqual (Arg1, 0x0370))
                         {
-                            Local0 = 0x01
+                            Store (0x01, Local0)
                         }
 
-                        FDDC = Local0
-                        FDLE = 0x01
+                        Store (Local0, FDDC) /* \_SB_.PCI0.LPCB.FDDC */
+                        Store (0x01, FDLE) /* \_SB_.PCI0.LPCB.FDLE */
                     }
-                    ElseIf ((Arg0 == 0x01))
+                    ElseIf (LEqual (Arg0, 0x01))
                     {
-                        LPDC = DCS (LPD, Arg1, 0x00)
-                        LLPE = 0x01
+                        Store (DCS (LPD, Arg1, 0x00), LPDC) /* \_SB_.PCI0.LPCB.LPDC */
+                        Store (0x01, LLPE) /* \_SB_.PCI0.LPCB.LLPE */
                     }
-                    ElseIf ((Arg0 == 0x02))
+                    ElseIf (LEqual (Arg0, 0x02))
                     {
-                        CMAD = DCS (CDC, Arg1, 0x00)
-                        CALE = 0x01
+                        Store (DCS (CDC, Arg1, 0x00), CMAD) /* \_SB_.PCI0.LPCB.CMAD */
+                        Store (0x01, CALE) /* \_SB_.PCI0.LPCB.CALE */
                     }
-                    ElseIf ((Arg0 == 0x03))
+                    ElseIf (LEqual (Arg0, 0x03))
                     {
-                        CMBD = DCS (CDC, Arg1, 0x00)
-                        CBLE = 0x01
-                        G2MK = 0x0C
-                        G2DC = (Arg2 | 0x01)
+                        Store (DCS (CDC, Arg1, 0x00), CMBD) /* \_SB_.PCI0.LPCB.CMBD */
+                        Store (0x01, CBLE) /* \_SB_.PCI0.LPCB.CBLE */
+                        Store (0x0C, G2MK) /* \_SB_.PCI0.LPCB.G2MK */
+                        Or (Arg2, 0x01, G2DC) /* \_SB_.PCI0.LPCB.G2DC */
                     }
                 }
 
                 Method (CFG, 5, Serialized)
                 {
-                    If ((Arg1 == 0x00))
+                    If (LEqual (Arg1, 0x00))
                     {
                         ^DPD (Arg0, Arg2)
                     }
@@ -15353,19 +15353,19 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 })
                 Method (_STA, 0, NotSerialized)  // _STA: Status
                 {
-                    If ((DEPT == 0xFF))
+                    If (LEqual (DEPT, 0xFF))
                     {
-                        Local0 = 0x0F
-                        Local1 = ALRD (0x20)
-                        If ((Local1 & 0xFF00))
+                        Store (0x0F, Local0)
+                        Store (ALRD (0x20), Local1)
+                        If (And (Local1, 0xFF00))
                         {
-                            If ((Local1 != 0xECAB))
+                            If (LNotEqual (Local1, 0xECAB))
                             {
-                                Local0 = 0x00
+                                Store (0x00, Local0)
                             }
                         }
 
-                        DEPT = Local0
+                        Store (Local0, DEPT) /* \_SB_.PCI0.ACEL.DEPT */
                     }
 
                     Return (DEPT) /* \_SB_.PCI0.ACEL.DEPT */
@@ -15383,7 +15383,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         ALWR (0x36, 0x13)
                         ALWR (0x37, 0x01)
                         ALWR (0x34, 0x0A)
-                        CTST = 0xFF
+                        Store (0xFF, CTST) /* \_SB_.PCI0.ACEL.CTST */
                         AJAL ()
                     }
                 }
@@ -15392,18 +15392,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     If (_STA ())
                     {
-                        Local0 = \_SB.PCI0.LPCB.EC0.GACS ()
-                        If (((\_SB.LID._LID () == 0x00) && (Local0 == 0x00)))
+                        Store (\_SB.PCI0.LPCB.EC0.GACS (), Local0)
+                        If (LAnd (LEqual (\_SB.LID._LID (), 0x00), LEqual (Local0, 0x00)))
                         {
-                            If ((CTST != 0x01))
+                            If (LNotEqual (CTST, 0x01))
                             {
-                                CTST = 0x01
+                                Store (0x01, CTST) /* \_SB_.PCI0.ACEL.CTST */
                                 ALWR (0x22, 0x60)
                             }
                         }
-                        ElseIf ((CTST != 0x00))
+                        ElseIf (LNotEqual (CTST, 0x00))
                         {
-                            CTST = 0x00
+                            Store (0x00, CTST) /* \_SB_.PCI0.ACEL.CTST */
                             ALWR (0x22, 0x40)
                         }
                     }
@@ -15411,25 +15411,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (CLRI, 0, Serialized)
                 {
-                    Local2 = 0x00
-                    If ((\_SB.PCI0.LPCB.EC0.GACS () == 0x00))
+                    Store (0x00, Local2)
+                    If (LEqual (\_SB.PCI0.LPCB.EC0.GACS (), 0x00))
                     {
-                        Local0 = 0x04
-                        Local1 = 0x04
-                        If ((\_SB.BAT0._STA () == 0x1F))
+                        Store (0x04, Local0)
+                        Store (0x04, Local1)
+                        If (LEqual (\_SB.BAT0._STA (), 0x1F))
                         {
-                            Local0 = DerefOf (DerefOf (NBST [0x00]) [0x00])
+                            Store (DerefOf (Index (DerefOf (Index (NBST, 0x00)), 0x00)), Local0)
                         }
 
-                        If ((\_SB.BAT1._STA () == 0x1F))
+                        If (LEqual (\_SB.BAT1._STA (), 0x1F))
                         {
-                            Local1 = DerefOf (DerefOf (NBST [0x01]) [0x00])
+                            Store (DerefOf (Index (DerefOf (Index (NBST, 0x01)), 0x00)), Local1)
                         }
 
-                        Local0 &= Local1
-                        If ((Local0 & 0x04))
+                        And (Local0, Local1, Local0)
+                        If (And (Local0, 0x04))
                         {
-                            Local2 = 0x01
+                            Store (0x01, Local2)
                         }
                     }
 
@@ -15438,13 +15438,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (ALRD, 1, Serialized)
                 {
-                    Local0 = \_SB.PCI0.LPCB.EC0.ECAB (0x00, 0x01, Arg0, 0x00)
+                    Store (\_SB.PCI0.LPCB.EC0.ECAB (0x00, 0x01, Arg0, 0x00), Local0)
                     Return (Local0)
                 }
 
                 Method (ALWR, 2, Serialized)
                 {
-                    Local0 = \_SB.PCI0.LPCB.EC0.ECAB (0x00, 0x00, Arg0, Arg1)
+                    Store (\_SB.PCI0.LPCB.EC0.ECAB (0x00, 0x00, Arg0, Arg1), Local0)
                     Return (Local0)
                 }
 
@@ -15455,8 +15455,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (ADSN, 0, Serialized)
                 {
-                    Local0 = HDDS /* \HDDS */
-                    Local0 = 0x00
+                    Store (HDDS, Local0)
+                    Store (0x00, Local0)
                     Return (Local0)
                 }
             }
@@ -15806,14 +15806,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 Method (_PRW, 0, Serialized)  // _PRW: Power Resources for Wake
                 {
-                    Local0 = Package (0x02)
+                    Store (Package (0x02)
                         {
                             0x69, 
                             0x05
-                        }
+                        }, Local0)
                     If (WOLD)
                     {
-                        Local0 [0x01] = 0x00
+                        Store (0x00, Index (Local0, 0x01))
                     }
 
                     Return (Local0)
@@ -15827,9 +15827,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (GADD, 0, Serialized)
                 {
-                    Local0 = BUSN /* \_SB_.PCI0.RP03.BUSN */
-                    Local0 <<= 0x14
-                    Local1 = (0xE0000000 + Local0)
+                    Store (BUSN, Local0)
+                    ShiftLeft (Local0, 0x14, Local0)
+                    Add (0xE0000000, Local0, Local1)
                     Return (Local1)
                 }
 
@@ -15844,7 +15844,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Method (EJ0, 0, NotSerialized)
                     {
                         Sleep (0x0A)
-                        GLEP = 0x00
+                        Store (0x00, GLEP) /* \_SB_.PCI0.GLEP */
                     }
 
                     Method (_PLD, 0, Serialized)  // _PLD: Physical Location of Device
@@ -15869,7 +15869,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 Method (HNLP, 1, Serialized)
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
             }
         }
@@ -15940,8 +15940,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Name (BT0P, 0x0F)
         Method (BTIF, 1, Serialized)
         {
-            Local0 = \_SB.PCI0.LPCB.EC0.BTIF (Arg0)
-            If ((Local0 == 0xFF))
+            Store (\_SB.PCI0.LPCB.EC0.BTIF (Arg0), Local0)
+            If (LEqual (Local0, 0xFF))
             {
                 Return (Package (0x0D)
                 {
@@ -15962,21 +15962,21 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             }
             Else
             {
-                Return (DerefOf (NBTI [Arg0]))
+                Return (DerefOf (Index (NBTI, Arg0)))
             }
         }
 
         Name (NFBS, 0x01)
         Method (BTST, 1, Serialized)
         {
-            Local1 = NFBS /* \_SB_.NFBS */
+            Store (NFBS, Local1)
             If (NFBS)
             {
-                NFBS = 0x00
+                Store (0x00, NFBS) /* \_SB_.NFBS */
             }
 
-            Local0 = \_SB.PCI0.LPCB.EC0.BTST (Arg0, Local1)
-            Return (DerefOf (NBST [Arg0]))
+            Store (\_SB.PCI0.LPCB.EC0.BTST (Arg0, Local1), Local0)
+            Return (DerefOf (Index (NBST, Arg0)))
         }
 
         Device (BAT0)
@@ -15984,7 +15984,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (_HID, EisaId ("PNP0C0A") /* Control Method Battery */)  // _HID: Hardware ID
             Method (_UID, 0, NotSerialized)  // _UID: Unique ID
             {
-                If (((OSYS == 0x07DC) || (OSYS == 0x07DF)))
+                If (LOr (LEqual (OSYS, 0x07DC), LEqual (OSYS, 0x07DF)))
                 {
                     Return (0x02)
                 }
@@ -15996,20 +15996,20 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                Local0 = \_SB.PCI0.LPCB.EC0.BSTA (0x01)
-                If ((BT0P ^ Local0))
+                Store (\_SB.PCI0.LPCB.EC0.BSTA (0x01), Local0)
+                If (XOr (BT0P, Local0))
                 {
-                    BT0P = Local0
-                    Local1 = Local0
-                    If ((Local1 != 0x1F))
+                    Store (Local0, BT0P) /* \_SB_.BT0P */
+                    Store (Local0, Local1)
+                    If (LNotEqual (Local1, 0x1F))
                     {
-                        Local1 = 0x00
+                        Store (0x00, Local1)
                     }
 
-                    If ((\_SB.GLVR (0x3B) == 0x01))
+                    If (LEqual (\_SB.GLVR (0x3B), 0x01))
                     {
                         \_SB.SSMI (0xEA3A, 0x00, Local1, 0x00, 0x00)
-                        Local1 = ECX /* \ECX_ */
+                        Store (ECX, Local1)
                         \_GPE.HWWP (0x01)
                         \_SB.PCI0.LPCB.EC0.HWWP (Local1)
                     }
@@ -16041,7 +16041,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (_HID, EisaId ("PNP0C0A") /* Control Method Battery */)  // _HID: Hardware ID
             Method (_UID, 0, NotSerialized)  // _UID: Unique ID
             {
-                If (((OSYS == 0x07DC) || (OSYS == 0x07DF)))
+                If (LOr (LEqual (OSYS, 0x07DC), LEqual (OSYS, 0x07DF)))
                 {
                     Return (0x01)
                 }
@@ -16053,7 +16053,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (((PRDT == 0x50) || (PRDT == 0x53)))
+                If (LOr (LEqual (PRDT, 0x50), LEqual (PRDT, 0x53)))
                 {
                     Return (0x00)
                 }
@@ -16086,10 +16086,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             })
             Method (_PSR, 0, NotSerialized)  // _PSR: Power Source
             {
-                Local0 = \_SB.PCI0.LPCB.EC0.GACS ()
-                PWRS = Local0
-                Local1 = \_SB.PCI0.LPCB.EC0.GPID ()
-                If ((Local0 ^ ACST))
+                Store (\_SB.PCI0.LPCB.EC0.GACS (), Local0)
+                Store (Local0, PWRS) /* \PWRS */
+                Store (\_SB.PCI0.LPCB.EC0.GPID (), Local1)
+                If (XOr (Local0, ACST))
                 {
                     \_GPE.HNLP (0x00)
                     \_SB.PCI0.ACEL.AJAL ()
@@ -16097,13 +16097,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     \_SB.PCI0.LPCB.EC0.SMCP (Local0)
                 }
 
-                If (((Local0 && !ACST) || (Local1 && !SMAR)))
+                If (LOr (LAnd (Local0, LNot (ACST)), LAnd (Local1, LNot (SMAR))))
                 {
                     \_SB.WMID.WGWE (0x03, 0x00)
                 }
 
-                ACST = Local0
-                SMAR = Local1
+                Store (Local0, ACST) /* \_SB_.ACST */
+                Store (Local1, SMAR) /* \_SB_.SMAR */
                 Return (Local0)
             }
         }
@@ -16118,7 +16118,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (_HID, EisaId ("PNP0C0D") /* Lid Device */)  // _HID: Hardware ID
             Method (_LID, 0, NotSerialized)  // _LID: Lid Status
             {
-                Local0 = \_SB.PCI0.LPCB.EC0.CLID
+                Store (\_SB.PCI0.LPCB.EC0.CLID, Local0)
                 Return (Local0)
             }
         }
@@ -16138,23 +16138,23 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 If (Arg1)
                 {
-                    WKEN = 0x00
+                    Store (0x00, WKEN) /* \_SB_.PCI0.RP02.WKEN */
                 }
-                ElseIf ((Arg0 && Arg2))
+                ElseIf (LAnd (Arg0, Arg2))
                 {
-                    WKEN = 0x01
+                    Store (0x01, WKEN) /* \_SB_.PCI0.RP02.WKEN */
                 }
                 Else
                 {
-                    WKEN = 0x00
+                    Store (0x00, WKEN) /* \_SB_.PCI0.RP02.WKEN */
                 }
 
-                If ((D3FG == 0x00))
+                If (LEqual (D3FG, 0x00))
                 {
-                    Local0 = BUSN /* \_SB_.PCI0.RP02.BUSN */
-                    Local0 <<= 0x14
-                    Local1 = (0xE0000000 + Local0)
-                    Local0 = (Local1 + 0x0814)
+                    Store (BUSN, Local0)
+                    ShiftLeft (Local0, 0x14, Local0)
+                    Add (0xE0000000, Local0, Local1)
+                    Add (Local1, 0x0814, Local0)
                     OperationRegion (RDD3, SystemMemory, Local0, 0x03)
                     Field (RDD3, AnyAcc, NoLock, Preserve)
                     {
@@ -16163,9 +16163,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         D3RD,   8
                     }
 
-                    If ((D3RD == 0x01))
+                    If (LEqual (D3RD, 0x01))
                     {
-                        D3FG = 0x01
+                        Store (0x01, D3FG) /* \_SB_.PCI0.RP02.D3FG */
                     }
                 }
             }
@@ -16174,7 +16174,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 Method (_STA, 0, NotSerialized)  // _STA: Status
                 {
-                    If ((\_SB.GLVR (0x39) == 0x00))
+                    If (LEqual (\_SB.GLVR (0x39), 0x00))
                     {
                         Return (0x01)
                     }
@@ -16188,48 +16188,48 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     \_SB.GLVW (0x39, 0x00)
                     Sleep (0x64)
-                    \_SB.GLVW (0x12, ~0x00)
-                    \_SB.PCI0.RP02.L23R = 0x01
+                    \_SB.GLVW (0x12, Not (0x00))
+                    Store (0x01, \_SB.PCI0.RP02.L23R)
                     Sleep (0x01)
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                     While (\_SB.PCI0.RP02.L23R)
                     {
-                        If ((Local0 > 0x04))
+                        If (LGreater (Local0, 0x04))
                         {
                             Break
                         }
 
                         Sleep (0x01)
-                        Local0++
+                        Increment (Local0)
                     }
 
-                    \_SB.PCI0.RP02.LEDM = 0x00
+                    Store (0x00, \_SB.PCI0.RP02.LEDM)
                 }
 
                 Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
                 {
-                    If ((D3FG == 0x01))
+                    If (LEqual (D3FG, 0x01))
                     {
-                        \_SB.PCI0.RP02.L23E = 0x01
+                        Store (0x01, \_SB.PCI0.RP02.L23E)
                         Sleep (0x01)
-                        Local0 = 0x00
+                        Store (0x00, Local0)
                         While (\_SB.PCI0.RP02.L23E)
                         {
-                            If ((Local0 > 0x04))
+                            If (LGreater (Local0, 0x04))
                             {
                                 Break
                             }
 
                             Sleep (0x01)
-                            Local0++
+                            Increment (Local0)
                         }
 
-                        \_SB.PCI0.RP02.LEDM = 0x01
-                        \_SB.PCI0.RP02.LDIS = 0x01
-                        \_SB.PCI0.RP02.LDIS = 0x00
+                        Store (0x01, \_SB.PCI0.RP02.LEDM)
+                        Store (0x01, \_SB.PCI0.RP02.LDIS)
+                        Store (0x00, \_SB.PCI0.RP02.LDIS)
                         Sleep (0x0A)
                         \_SB.GLVW (0x12, 0x00)
-                        \_SB.GLVW (0x39, ~0x00)
+                        \_SB.GLVW (0x39, Not (0x00))
                         Sleep (0x0A)
                         If (\_SB.PCI0.RP02.WKEN)
                         {
@@ -16269,18 +16269,18 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (HS1S, 0xFF)
             Method (_STA, 0, Serialized)  // _STA: Status
             {
-                If ((HS1S == 0xFF))
+                If (LEqual (HS1S, 0xFF))
                 {
-                    Local0 = 0x00
-                    If ((\WCOS () >= 0x06))
+                    Store (0x00, Local0)
+                    If (LGreaterEqual (\WCOS (), 0x06))
                     {
                         If (ISUD ())
                         {
-                            Local0 = 0x0F
+                            Store (0x0F, Local0)
                         }
                     }
 
-                    HS1S = Local0
+                    Store (Local0, HS1S) /* \_SB_.HST1.HS1S */
                 }
 
                 Return (HS1S) /* \_SB_.HST1.HS1S */
@@ -23697,537 +23697,537 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 0x00, 
                 0x00
             })
-            Name (ZOBF, Buffer ((0x1000 + 0x10)){})
+            Name (ZOBF, Buffer (Add (0x1000, 0x10)){})
             Method (WHCM, 2, Serialized)
             {
                 CreateDWordField (Arg1, 0x00, SNIN)
                 CreateDWordField (Arg1, 0x04, COMD)
                 CreateDWordField (Arg1, 0x08, CMTP)
                 CreateDWordField (Arg1, 0x0C, DASI)
-                If ((Arg0 == 0x01))
+                If (LEqual (Arg0, 0x01))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
 
-                If ((Arg0 == 0x02))
+                If (LEqual (Arg0, 0x02))
                 {
-                    Local0 = 0x04
+                    Store (0x04, Local0)
                 }
 
-                If ((Arg0 == 0x03))
+                If (LEqual (Arg0, 0x03))
                 {
-                    Local0 = 0x80
+                    Store (0x80, Local0)
                 }
 
-                If ((Arg0 == 0x04))
+                If (LEqual (Arg0, 0x04))
                 {
-                    Local0 = 0x0400
+                    Store (0x0400, Local0)
                 }
 
-                If ((Arg0 == 0x05))
+                If (LEqual (Arg0, 0x05))
                 {
-                    Local0 = 0x1000
+                    Store (0x1000, Local0)
                 }
 
-                Local1 = Buffer ((0x08 + Local0)){}
+                Store (Buffer (Add (0x08, Local0)){}, Local1)
                 CreateDWordField (Local1, 0x00, SNOU)
                 CreateDWordField (Local1, 0x04, RTCD)
-                SNOU = 0x4C494146
-                Local5 = DASI /* \_SB_.WMID.WHCM.DASI */
-                If ((DASI > 0x2000))
+                Store (0x4C494146, SNOU) /* \_SB_.WMID.WHCM.SNOU */
+                Store (DASI, Local5)
+                If (LGreater (DASI, 0x2000))
                 {
-                    RTCD = 0x05
+                    Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     Return (Local1)
                 }
 
-                Local5 = DASI /* \_SB_.WMID.WHCM.DASI */
-                CreateField (Arg1, 0x00, ((Local5 + 0x10) * 0x08), DAIN)
-                ASMB = DAIN /* \_SB_.WMID.WHCM.DAIN */
-                RTCD = 0x02
-                If ((SNIN == 0x55434553))
+                Store (DASI, Local5)
+                CreateField (Arg1, 0x00, Multiply (Add (Local5, 0x10), 0x08), DAIN)
+                Store (DAIN, ASMB) /* \ASMB */
+                Store (0x02, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                If (LEqual (SNIN, 0x55434553))
                 {
-                    RTCD = 0x03
-                    If ((COMD == 0x01))
+                    Store (0x03, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                    If (LEqual (COMD, 0x01))
                     {
-                        RTCD = 0x04
-                        If ((CMTP == 0x01))
+                        Store (0x04, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                        If (LEqual (CMTP, 0x01))
                         {
-                            Local2 = ^WGDD ()
-                            RTCD = 0x00
+                            Store (^WGDD (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x02))
+                        If (LEqual (CMTP, 0x02))
                         {
-                            Local2 = ^WGHP ()
-                            RTCD = 0x00
+                            Store (^WGHP (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x03))
+                        If (LEqual (CMTP, 0x03))
                         {
-                            Local2 = ^WALS ()
-                            RTCD = 0x00
+                            Store (^WALS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x04))
+                        If (LEqual (CMTP, 0x04))
                         {
-                            Local2 = ^WGDS ()
-                            RTCD = 0x00
+                            Store (^WGDS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x07))
+                        If (LEqual (CMTP, 0x07))
                         {
                             If (DASI)
                             {
-                                Local3 = DerefOf (Arg1 [0x10])
-                                Local2 = WGBI (Local3)
-                                RTCD = 0x00
+                                Store (DerefOf (Index (Arg1, 0x10)), Local3)
+                                Store (WGBI (Local3), Local2)
+                                Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                             Else
                             {
-                                RTCD = 0x05
+                                Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                         }
 
-                        If ((CMTP == 0x08))
+                        If (LEqual (CMTP, 0x08))
                         {
-                            Debug = "Bezel button table"
-                            Local2 = ^WGBN ()
-                            RTCD = 0x00
+                            Store ("Bezel button table", Debug)
+                            Store (^WGBN (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x0D))
+                        If (LEqual (CMTP, 0x0D))
                         {
-                            Debug = "Feature Report"
-                            Local2 = ^GFRT ()
-                            RTCD = 0x00
+                            Store ("Feature Report", Debug)
+                            Store (^GFRT (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x09))
+                        If (LEqual (CMTP, 0x09))
                         {
-                            Debug = "Hotkey Scancode"
-                            Local2 = ^GHKS ()
-                            RTCD = 0x00
+                            Store ("Hotkey Scancode", Debug)
+                            Store (^GHKS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x0A))
+                        If (LEqual (CMTP, 0x0A))
                         {
-                            Debug = "Hotkey Function"
-                            Local2 = ^GHKF ()
-                            RTCD = 0x00
+                            Store ("Hotkey Function", Debug)
+                            Store (^GHKF (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x0C))
+                        If (LEqual (CMTP, 0x0C))
                         {
-                            Debug = "Bezel button"
-                            Local2 = ^WGBV ()
-                            Debug = Local2
-                            RTCD = 0x00
+                            Store ("Bezel button", Debug)
+                            Store (^WGBV (), Local2)
+                            Store (Local2, Debug)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x0F))
+                        If (LEqual (CMTP, 0x0F))
                         {
-                            Local2 = ^GSAS ()
-                            RTCD = 0x00
+                            Store (^GSAS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x10))
+                        If (LEqual (CMTP, 0x10))
                         {
-                            Local2 = ^GSRV ()
-                            RTCD = 0x00
+                            Store (^GSRV (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x11))
+                        If (LEqual (CMTP, 0x11))
                         {
-                            Local2 = ^GVPR ()
-                            RTCD = 0x00
+                            Store (^GVPR (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x12))
+                        If (LEqual (CMTP, 0x12))
                         {
-                            Local2 = ^GBRS ()
-                            RTCD = 0x00
+                            Store (^GBRS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x14))
+                        If (LEqual (CMTP, 0x14))
                         {
-                            Local2 = ^GWPT ()
-                            RTCD = 0x00
+                            Store (^GWPT (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x18))
+                        If (LEqual (CMTP, 0x18))
                         {
-                            Debug = "Get system configuration"
-                            Local2 = ^GDBT ()
-                            RTCD = 0x00
+                            Store ("Get system configuration", Debug)
+                            Store (^GDBT (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x1B))
+                        If (LEqual (CMTP, 0x1B))
                         {
-                            If ((\_SB.WLBU._STA () != 0x0F))
+                            If (LNotEqual (\_SB.WLBU._STA (), 0x0F))
                             {
-                                Local2 = ^WGWS ()
-                                RTCD = 0x00
+                                Store (^WGWS (), Local2)
+                                Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                         }
 
-                        If ((CMTP == 0x1D))
+                        If (LEqual (CMTP, 0x1D))
                         {
-                            Debug = "Get Diags mode"
-                            Local2 = ^GDMD ()
-                            RTCD = 0x00
+                            Store ("Get Diags mode", Debug)
+                            Store (^GDMD (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x1E))
+                        If (LEqual (CMTP, 0x1E))
                         {
-                            Debug = "Get BIOS Update status"
-                            Local2 = ^GBUS ()
-                            RTCD = 0x00
+                            Store ("Get BIOS Update status", Debug)
+                            Store (^GBUS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x28))
+                        If (LEqual (CMTP, 0x28))
                         {
-                            Debug = "Get thermal status"
-                            If ((DASI != 0x04))
+                            Store ("Get thermal status", Debug)
+                            If (LNotEqual (DASI, 0x04))
                             {
-                                RTCD = 0x05
+                                Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                             Else
                             {
-                                CreateField (Arg1, 0x80, (DASI * 0x08), GTSD)
-                                Local2 = ^GTMS (GTSD)
-                                RTCD = 0x00
+                                CreateField (Arg1, 0x80, Multiply (DASI, 0x08), GTSD)
+                                Store (^GTMS (GTSD), Local2)
+                                Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                         }
 
-                        If ((CMTP == 0x2B))
+                        If (LEqual (CMTP, 0x2B))
                         {
-                            Debug = "Get Battery control"
-                            Local2 = ^WGBC ()
-                            RTCD = 0x00
+                            Store ("Get Battery control", Debug)
+                            Store (^WGBC (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x20))
+                        If (LEqual (CMTP, 0x20))
                         {
-                            Local2 = ^GBTT ()
-                            RTCD = 0x00
+                            Store (^GBTT (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x21))
+                        If (LEqual (CMTP, 0x21))
                         {
-                            If ((DASI < DerefOf (WCDS [(CMTP - 0x01)])))
+                            If (LLess (DASI, DerefOf (Index (WCDS, Subtract (CMTP, 0x01)))))
                             {
-                                RTCD = 0x05
+                                Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
-                            ElseIf ((\WCOS () >= 0x06))
+                            ElseIf (LGreaterEqual (\WCOS (), 0x06))
                             {
-                                RTCD = 0x04
+                                Store (0x04, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                             Else
                             {
                                 CreateDWordField (Arg1, 0x10, BTYP)
-                                Local2 = ^GBTL (BTYP)
-                                RTCD = 0x00
+                                Store (^GBTL (BTYP), Local2)
+                                Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                         }
 
-                        If ((CMTP == 0x22))
+                        If (LEqual (CMTP, 0x22))
                         {
-                            Debug = "Quick Button Policy"
-                            Local2 = ^GQBP ()
-                            RTCD = 0x00
+                            Store ("Quick Button Policy", Debug)
+                            Store (^GQBP (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x23))
+                        If (LEqual (CMTP, 0x23))
                         {
-                            Local2 = ^GPIN ()
-                            RTCD = 0x00
+                            Store (^GPIN (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x29))
+                        If (LEqual (CMTP, 0x29))
                         {
-                            Local2 = ^GFCC ()
-                            RTCD = 0x00
+                            Store (^GFCC (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x2A))
+                        If (LEqual (CMTP, 0x2A))
                         {
-                            Local2 = ^GPES ()
-                            RTCD = 0x00
+                            Store (^GPES (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x2E))
+                        If (LEqual (CMTP, 0x2E))
                         {
-                            Local2 = ^GLID ()
-                            RTCD = 0x00
+                            Store (^GLID (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x30))
+                        If (LEqual (CMTP, 0x30))
                         {
-                            Local2 = ^GEID ()
-                            RTCD = 0x00
+                            Store (^GEID (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x33))
+                        If (LEqual (CMTP, 0x33))
                         {
-                            Local2 = ^GDES ()
-                            RTCD = 0x00
+                            Store (^GDES (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x34))
+                        If (LEqual (CMTP, 0x34))
                         {
-                            Local2 = ^GBLC ()
-                            RTCD = 0x00
+                            Store (^GBLC (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x36))
+                        If (LEqual (CMTP, 0x36))
                         {
-                            Local2 = ^GPST ()
-                            RTCD = 0x00
+                            Store (^GPST (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x37))
+                        If (LEqual (CMTP, 0x37))
                         {
-                            Local2 = ^GBCT ()
-                            RTCD = 0x00
+                            Store (^GBCT (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x38))
+                        If (LEqual (CMTP, 0x38))
                         {
-                            Local2 = ^GPSH ()
-                            RTCD = 0x00
+                            Store (^GPSH (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
                     }
 
-                    If ((COMD == 0x02))
+                    If (LEqual (COMD, 0x02))
                     {
-                        RTCD = 0x04
-                        If (((CMTP > 0x00) && (CMTP <= 0x39)))
+                        Store (0x04, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                        If (LAnd (LGreater (CMTP, 0x00), LLessEqual (CMTP, 0x39)))
                         {
-                            If ((DASI < DerefOf (WCDS [(CMTP - 0x01)])))
+                            If (LLess (DASI, DerefOf (Index (WCDS, Subtract (CMTP, 0x01)))))
                             {
-                                RTCD = 0x05
+                                Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                             }
                             Else
                             {
                                 CreateDWordField (Arg1, 0x10, DDWD)
-                                If ((CMTP == 0x01))
+                                If (LEqual (CMTP, 0x01))
                                 {
-                                    Debug = "set display switch"
-                                    Local2 = ^WSDD (DDWD)
-                                    RTCD = 0x00
+                                    Store ("set display switch", Debug)
+                                    Store (^WSDD (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x02))
+                                If (LEqual (CMTP, 0x02))
                                 {
-                                    Local2 = ^WITH (DDWD)
-                                    RTCD = 0x00
+                                    Store (^WITH (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x03))
+                                If (LEqual (CMTP, 0x03))
                                 {
-                                    Local2 = ^WSAL (DDWD)
-                                    RTCD = 0x00
+                                    Store (^WSAL (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x06))
+                                If (LEqual (CMTP, 0x06))
                                 {
-                                    Debug = "write Brightness"
-                                    Local2 = ^SBBC (DDWD)
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store ("write Brightness", Debug)
+                                    Store (^SBBC (DDWD), Local2)
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x09))
+                                If (LEqual (CMTP, 0x09))
                                 {
-                                    Debug = "Hotkey Scancode"
-                                    Local2 = ^SHKS (DDWD)
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store ("Hotkey Scancode", Debug)
+                                    Store (^SHKS (DDWD), Local2)
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x0A))
+                                If (LEqual (CMTP, 0x0A))
                                 {
-                                    Debug = "Hotkey Function"
-                                    Local2 = ^SHKF (DDWD)
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store ("Hotkey Function", Debug)
+                                    Store (^SHKF (DDWD), Local2)
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x10))
+                                If (LEqual (CMTP, 0x10))
                                 {
-                                    Debug = "Set Service ID"
-                                    Local2 = ^SSRV (DDWD)
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store ("Set Service ID", Debug)
+                                    Store (^SSRV (DDWD), Local2)
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x14))
+                                If (LEqual (CMTP, 0x14))
                                 {
-                                    Local2 = ^SWPT (DDWD)
-                                    RTCD = 0x00
+                                    Store (^SWPT (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x18))
+                                If (LEqual (CMTP, 0x18))
                                 {
-                                    Debug = "Set System configuration"
-                                    Local2 = ^SDBT (DDWD)
-                                    Local3 = (DDWD ^ DTCD) /* \DTCD */
-                                    If ((Local3 & 0x1800))
+                                    Store ("Set System configuration", Debug)
+                                    Store (^SDBT (DDWD), Local2)
+                                    XOr (DDWD, DTCD, Local3)
+                                    If (And (Local3, 0x1800))
                                     {
                                         \_SB.PCI0.LPCB.EC0.PWUP (0x01, 0x00)
                                         Notify (\_SB.AC, 0x80) // Status Change
-                                        DTCD = DDWD /* \_SB_.WMID.WHCM.DDWD */
+                                        Store (DDWD, DTCD) /* \DTCD */
                                     }
 
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x1B))
+                                If (LEqual (CMTP, 0x1B))
                                 {
-                                    If ((\_SB.WLBU._STA () != 0x0F))
+                                    If (LNotEqual (\_SB.WLBU._STA (), 0x0F))
                                     {
-                                        Local2 = ^WSWS (DDWD)
-                                        RTCD = 0x00
+                                        Store (^WSWS (DDWD), Local2)
+                                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                         WGWE (0x05, 0x00)
                                     }
                                 }
 
-                                If ((CMTP == 0x1D))
+                                If (LEqual (CMTP, 0x1D))
                                 {
-                                    Debug = "Get Diags mode"
-                                    Local2 = ^SDMD (DDWD)
-                                    Debug = Local2
-                                    RTCD = 0x00
+                                    Store ("Get Diags mode", Debug)
+                                    Store (^SDMD (DDWD), Local2)
+                                    Store (Local2, Debug)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x1E))
+                                If (LEqual (CMTP, 0x1E))
                                 {
-                                    Debug = "Get BIOS Update status"
-                                    Local2 = ^SBUS (DDWD)
-                                    RTCD = 0x00
+                                    Store ("Get BIOS Update status", Debug)
+                                    Store (^SBUS (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x28))
+                                If (LEqual (CMTP, 0x28))
                                 {
-                                    Debug = "Set thermal status"
-                                    CreateField (Arg1, 0x80, (DASI * 0x08), STSD)
-                                    Local2 = ^STMM (STSD)
-                                    RTCD = 0x00
+                                    Store ("Set thermal status", Debug)
+                                    CreateField (Arg1, 0x80, Multiply (DASI, 0x08), STSD)
+                                    Store (^STMM (STSD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x2B))
+                                If (LEqual (CMTP, 0x2B))
                                 {
-                                    Debug = "Get Battery control"
-                                    Local2 = ^WSBC (CMTP, DASI, DAIN)
-                                    RTCD = 0x00
+                                    Store ("Get Battery control", Debug)
+                                    Store (^WSBC (CMTP, DASI, DAIN), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x21))
+                                If (LEqual (CMTP, 0x21))
                                 {
-                                    If ((\WCOS () >= 0x06))
+                                    If (LGreaterEqual (\WCOS (), 0x06))
                                     {
-                                        RTCD = 0x04
+                                        Store (0x04, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                     }
                                     Else
                                     {
-                                        Local2 = ^SBRT ((DDWD & 0xFF), ((DDWD >> 0x08) & 
-                                            0xFFFF))
-                                        If ((Local2 != Ones))
+                                        Store (^SBRT (And (DDWD, 0xFF), And (ShiftRight (DDWD, 0x08), 0xFFFF
+                                            )), Local2)
+                                        If (LNotEqual (Local2, Ones))
                                         {
-                                            BRID = Local2
+                                            Store (Local2, BRID) /* \BRID */
                                             \_SB.SSMI (0xEA74, 0x08, Local2, 0x00, 0x00)
                                             \_SB.WBRT ()
-                                            Local2 = Package (0x02)
+                                            Store (Package (0x02)
                                                 {
                                                     0x00, 
                                                     0x00
-                                                }
+                                                }, Local2)
                                         }
                                         Else
                                         {
-                                            Local2 = Package (0x02)
+                                            Store (Package (0x02)
                                                 {
                                                     0x06, 
                                                     0x00
-                                                }
+                                                }, Local2)
                                         }
 
-                                        RTCD = 0x00
+                                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                     }
                                 }
 
-                                If ((CMTP == 0x22))
+                                If (LEqual (CMTP, 0x22))
                                 {
-                                    Debug = "Set Quick Button Policy"
-                                    Local2 = ^SQBP (DDWD)
-                                    RTCD = 0x00
+                                    Store ("Set Quick Button Policy", Debug)
+                                    Store (^SQBP (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x23))
+                                If (LEqual (CMTP, 0x23))
                                 {
-                                    Local2 = ^SPIN (DDWD)
-                                    RTCD = 0x00
+                                    Store (^SPIN (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x29))
+                                If (LEqual (CMTP, 0x29))
                                 {
-                                    Local2 = ^SFCC (DDWD)
-                                    RTCD = 0x00
+                                    Store (^SFCC (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x2A))
+                                If (LEqual (CMTP, 0x2A))
                                 {
-                                    Local2 = ^SPES (DDWD)
-                                    RTCD = 0x00
+                                    Store (^SPES (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x34))
+                                If (LEqual (CMTP, 0x34))
                                 {
-                                    Local2 = ^SBLC (DDWD)
-                                    RTCD = 0x00
+                                    Store (^SBLC (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
 
-                                If ((CMTP == 0x36))
+                                If (LEqual (CMTP, 0x36))
                                 {
-                                    Local2 = ^SPST (DDWD)
-                                    RTCD = 0x00
-                                    If ((DerefOf (Local2 [0x00]) == 0x00))
+                                    Store (^SPST (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                                    If (LEqual (DerefOf (Index (Local2, 0x00)), 0x00))
                                     {
-                                        If ((PSCF == 0x01))
+                                        If (LEqual (PSCF, 0x01))
                                         {
                                             \_SB.WMID.WGWE (0x0F, 0x02)
                                         }
                                     }
                                 }
 
-                                If ((CMTP == 0x37))
+                                If (LEqual (CMTP, 0x37))
                                 {
-                                    Local2 = ^SBCP (DDWD)
-                                    RTCD = 0x00
-                                    If ((DerefOf (Local2 [0x00]) == 0x00))
+                                    Store (^SBCP (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                                    If (LEqual (DerefOf (Index (Local2, 0x00)), 0x00))
                                     {
-                                        If ((PSCF == 0x01))
+                                        If (LEqual (PSCF, 0x01))
                                         {
                                             \_SB.WMID.WGWE (0x10, 0x02)
                                         }
 
-                                        If ((BCSC == 0x01))
+                                        If (LEqual (BCSC, 0x01))
                                         {
                                             \_SB.WMID.WGWE (0x10, 0x00)
                                         }
 
-                                        BCSC = 0x00
+                                        Store (0x00, BCSC) /* \BCSC */
                                     }
                                 }
 
-                                If ((CMTP == 0x38))
+                                If (LEqual (CMTP, 0x38))
                                 {
-                                    Local2 = ^SPSH (DDWD)
-                                    RTCD = 0x00
-                                    If ((DerefOf (Local2 [0x00]) == 0x00))
+                                    Store (^SPSH (DDWD), Local2)
+                                    Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                                    If (LEqual (DerefOf (Index (Local2, 0x00)), 0x00))
                                     {
-                                        If ((PSCF == 0x01))
+                                        If (LEqual (PSCF, 0x01))
                                         {
                                             \_SB.WMID.WGWE (0x0F, 0x04)
                                         }
@@ -24237,207 +24237,207 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         }
                     }
 
-                    If ((COMD == 0x03))
+                    If (LEqual (COMD, 0x03))
                     {
-                        Local2 = \_SB.HODM (CMTP, DASI, DAIN)
-                        RTCD = 0x00
+                        Store (\_SB.HODM (CMTP, DASI, DAIN), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
 
-                    If ((COMD == 0x00020000))
+                    If (LEqual (COMD, 0x00020000))
                     {
                         \_SB.SSMI (0xEA75, COMD, CMTP, 0x574D4953, 0x00)
-                        Local2 = WFDA ()
-                        RTCD = 0x00
+                        Store (WFDA (), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
 
-                    If ((COMD == 0x00020001))
+                    If (LEqual (COMD, 0x00020001))
                     {
                         \_SB.SSMI (0xEA75, COMD, CMTP, 0x574D4953, 0x00)
-                        If ((EDX == 0x5A5A))
+                        If (LEqual (EDX, 0x5A5A))
                         {
-                            While ((EDX == 0x5A5A))
+                            While (LEqual (EDX, 0x5A5A))
                             {
                                 \_SB.SSMI (0xEA75, COMD, 0x10, 0x574D4953, 0x00)
                                 Sleep (0x19)
                             }
 
-                            ECX = 0x00
-                            EDX = 0x574D4953
+                            Store (0x00, ECX) /* \ECX_ */
+                            Store (0x574D4953, EDX) /* \EDX_ */
                         }
 
-                        Local2 = WFDA ()
-                        RTCD = 0x00
+                        Store (WFDA (), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
 
-                    If ((COMD == 0x00020002))
+                    If (LEqual (COMD, 0x00020002))
                     {
                         \_SB.SSMI (0xEA75, COMD, CMTP, 0x574D4953, 0x00)
-                        Local2 = WFDA ()
-                        RTCD = 0x00
+                        Store (WFDA (), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
 
-                    If ((COMD == 0x00020004))
+                    If (LEqual (COMD, 0x00020004))
                     {
                         \_SB.SSMI (0xEA75, COMD, CMTP, 0x574D4953, 0x00)
-                        Local2 = WFDA ()
-                        RTCD = 0x00
+                        Store (WFDA (), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
 
-                    If ((COMD == 0x00020006))
+                    If (LEqual (COMD, 0x00020006))
                     {
-                        If ((CMTP == 0x00))
+                        If (LEqual (CMTP, 0x00))
                         {
                             CreateByteField (Arg1, 0x10, FCIP)
                             Switch (FCIP)
                             {
                                 Case (0x07)
                                 {
-                                    Local6 = 0x07
+                                    Store (0x07, Local6)
                                 }
                                 Case (0x08)
                                 {
-                                    Local6 = 0x11
+                                    Store (0x11, Local6)
                                 }
                                 Case (0x0A)
                                 {
-                                    Local6 = 0x02
+                                    Store (0x02, Local6)
                                 }
                                 Default
                                 {
-                                    Local6 = 0x01
+                                    Store (0x01, Local6)
                                 }
 
                             }
 
-                            Local2 = ^FSEC (Arg1, Local6, FCIP)
-                            RTCD = 0x00
+                            Store (^FSEC (Arg1, Local6, FCIP), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x01))
+                        If (LEqual (CMTP, 0x01))
                         {
                             CreateByteField (Arg1, 0x10, TMP1)
-                            Local2 = ^FGIF (TMP1)
-                            RTCD = 0x00
+                            Store (^FGIF (TMP1), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x02))
+                        If (LEqual (CMTP, 0x02))
                         {
                             CreateByteField (Arg1, 0x10, TMP2)
-                            Local2 = ^FGAE (TMP2)
-                            RTCD = 0x00
+                            Store (^FGAE (TMP2), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x03))
+                        If (LEqual (CMTP, 0x03))
                         {
                             CreateByteField (Arg1, 0x10, TMP0)
-                            Local2 = ^FGAU (TMP0)
-                            RTCD = 0x00
+                            Store (^FGAU (TMP0), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x04))
+                        If (LEqual (CMTP, 0x04))
                         {
-                            Local2 = ^FGFS ()
-                            RTCD = 0x00
+                            Store (^FGFS (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x05))
+                        If (LEqual (CMTP, 0x05))
                         {
-                            Local2 = ^FBPS (Arg1)
-                            RTCD = 0x00
+                            Store (^FBPS (Arg1), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
 
-                        If ((CMTP == 0x06))
+                        If (LEqual (CMTP, 0x06))
                         {
-                            Local2 = ^FGLW ()
-                            RTCD = 0x00
+                            Store (^FGLW (), Local2)
+                            Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
                     }
 
-                    If ((COMD == 0x00020007))
+                    If (LEqual (COMD, 0x00020007))
                     {
                         \_SB.SSMI (0xEA75, COMD, CMTP, 0x574D4953, 0x00)
-                        Local2 = WFDA ()
-                        RTCD = 0x00
+                        Store (WFDA (), Local2)
+                        Store (0x00, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                     }
                 }
 
-                If ((RTCD == 0x00))
+                If (LEqual (RTCD, 0x00))
                 {
-                    RTCD = DerefOf (Local2 [0x00])
-                    If ((RTCD == 0x00))
+                    Store (DerefOf (Index (Local2, 0x00)), RTCD) /* \_SB_.WMID.WHCM.RTCD */
+                    If (LEqual (RTCD, 0x00))
                     {
-                        Local3 = DerefOf (Local2 [0x01])
-                        If ((Local3 <= Local0))
+                        Store (DerefOf (Index (Local2, 0x01)), Local3)
+                        If (LLessEqual (Local3, Local0))
                         {
-                            Local5 = 0x00
-                            While ((Local5 < Local3))
+                            Store (0x00, Local5)
+                            While (LLess (Local5, Local3))
                             {
-                                Local1 [(Local5 + 0x08)] = DerefOf (DerefOf (
-                                    Local2 [0x02]) [Local5])
-                                Local5++
+                                Store (DerefOf (Index (DerefOf (Index (Local2, 0x02)), Local5)), Index (Local1, 
+                                    Add (Local5, 0x08)))
+                                Increment (Local5)
                             }
 
-                            If ((COMD == 0x00020000))
+                            If (LEqual (COMD, 0x00020000))
                             {
                                 If (EDX)
                                 {
-                                    Debug = "Encrypted Data Out"
-                                    RTCD |= (Local3 << 0x10) /* \_SB_.WMID.WHCM.RTCD */
+                                    Store ("Encrypted Data Out", Debug)
+                                    Or (ShiftLeft (Local3, 0x10), RTCD, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                                 }
                                 Else
                                 {
-                                    Debug = "No Encrypted Data Out"
+                                    Store ("No Encrypted Data Out", Debug)
                                 }
                             }
 
-                            SNOU = 0x53534150
+                            Store (0x53534150, SNOU) /* \_SB_.WMID.WHCM.SNOU */
                         }
                         Else
                         {
-                            RTCD = 0x05
+                            Store (0x05, RTCD) /* \_SB_.WMID.WHCM.RTCD */
                         }
                     }
                 }
 
-                ASMB = ZOBF /* \_SB_.WMID.ZOBF */
+                Store (ZOBF, ASMB) /* \ASMB */
                 Return (Local1)
             }
 
             Method (WFDA, 0, NotSerialized)
             {
-                If (((ECX == 0x00) || (EBX != 0x00)))
+                If (LOr (LEqual (ECX, 0x00), LNotEqual (EBX, 0x00)))
                 {
-                    Local0 = Package (0x02)
+                    Store (Package (0x02)
                         {
                             0x00, 
                             0x00
-                        }
+                        }, Local0)
                 }
                 Else
                 {
-                    Local1 = ECX /* \ECX_ */
-                    Local0 = Package (0x03)
+                    Store (ECX, Local1)
+                    Store (Package (0x03)
                         {
                             0x00, 
                             0x00, 
                             Buffer (Local1){}
-                        }
-                    Debug = ECX /* \ECX_ */
+                        }, Local0)
+                    Store (ECX, Debug)
                 }
 
-                Local0 [0x00] = EBX /* \EBX_ */
-                If ((EBX == 0x00))
+                Store (EBX, Index (Local0, 0x00))
+                If (LEqual (EBX, 0x00))
                 {
-                    Local0 [0x01] = ECX /* \ECX_ */
-                    If ((ECX != 0x00))
+                    Store (ECX, Index (Local0, 0x01))
+                    If (LNotEqual (ECX, 0x00))
                     {
-                        Local1 = ASMB /* \ASMB */
-                        Local2 = 0x00
-                        While ((Local2 < ECX))
+                        Store (ASMB, Local1)
+                        Store (0x00, Local2)
+                        While (LLess (Local2, ECX))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = DerefOf (Local1 [
-                                Local2])
-                            Local2++
+                            Store (DerefOf (Index (Local1, Local2)), Index (DerefOf (Index (Local0, 0x02)), 
+                                Local2))
+                            Increment (Local2)
                         }
                     }
                 }
@@ -24447,15 +24447,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGWE, 2, NotSerialized)
             {
-                If ((\_SB.WMID.WEI1 == 0x00))
+                If (LEqual (\_SB.WMID.WEI1, 0x00))
                 {
-                    \_SB.WMID.WEI1 = Arg0
-                    \_SB.WMID.WED1 = Arg1
+                    Store (Arg0, \_SB.WMID.WEI1)
+                    Store (Arg1, \_SB.WMID.WED1)
                 }
                 Else
                 {
-                    \_SB.WMID.WEI2 = Arg0
-                    \_SB.WMID.WED2 = Arg1
+                    Store (Arg0, \_SB.WMID.WEI2)
+                    Store (Arg1, \_SB.WMID.WED2)
                 }
 
                 Notify (\_SB.WMID, 0x80) // Status Change
@@ -24463,108 +24463,108 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GBTT, 0, NotSerialized)
             {
-                Local1 = BCL ()
-                Local5 = ((BRCT * 0x04) + 0x0C)
-                Local0 = Buffer (Local5){}
-                Local0 [0x00] = 0x03
-                Local0 [0x01] = PNLF /* \PNLF */
-                Local0 [0x02] = 0x00
-                Local0 [0x03] = BRCT /* \BRCT */
-                Local2 = 0x00
-                Local3 = 0x04
-                While ((Local2 < BRCT))
+                Store (BCL (), Local1)
+                Store (Add (Multiply (BRCT, 0x04), 0x0C), Local5)
+                Store (Buffer (Local5){}, Local0)
+                Store (0x03, Index (Local0, 0x00))
+                Store (PNLF, Index (Local0, 0x01))
+                Store (0x00, Index (Local0, 0x02))
+                Store (BRCT, Index (Local0, 0x03))
+                Store (0x00, Local2)
+                Store (0x04, Local3)
+                While (LLess (Local2, BRCT))
                 {
-                    Local0 [Local3] = DerefOf (Local1 [(Local2 + 0x02)]
-                        )
-                    Local0 [(Local3 + 0x01)] = 0x00
-                    Local2++
-                    Local3 += 0x02
+                    Store (DerefOf (Index (Local1, Add (Local2, 0x02))), Index (Local0, Local3
+                        ))
+                    Store (0x00, Index (Local0, Add (Local3, 0x01)))
+                    Increment (Local2)
+                    Add (Local3, 0x02, Local3)
                 }
 
-                Local0 [Local3] = 0x01
-                Local3++
-                Local0 [Local3] = BRCT /* \BRCT */
-                Local3++
-                Local2 = 0x00
-                While ((Local2 < (BRCT * 0x02)))
+                Store (0x01, Index (Local0, Local3))
+                Increment (Local3)
+                Store (BRCT, Index (Local0, Local3))
+                Increment (Local3)
+                Store (0x00, Local2)
+                While (LLess (Local2, Multiply (BRCT, 0x02)))
                 {
-                    Local0 [Local3] = DerefOf (DerefOf (NITS [BCLI]) [
-                        Local2])
-                    Local2++
-                    Local3++
+                    Store (DerefOf (Index (DerefOf (Index (NITS, BCLI)), Local2)), Index (Local0, 
+                        Local3))
+                    Increment (Local2)
+                    Increment (Local3)
                 }
 
-                Local0 [Local3] = 0x02
-                Local3++
-                Local0 [Local3] = 0x02
-                Local3++
-                Local2 = BPWG /* \BPWG */
-                Local0 [Local3] = (Local2 & 0xFF)
-                Local3++
-                Local0 [Local3] = ((Local2 >> 0x08) & 0xFF)
-                Local3++
-                Local2 = BPWO /* \BPWO */
-                Local0 [Local3] = (Local2 & 0xFF)
-                Local3++
-                Local0 [Local3] = ((Local2 >> 0x08) & 0xFF)
-                Local3++
-                Local2 = Package (0x03){}
-                Local2 [0x00] = 0x00
-                Local2 [0x01] = Local5
-                Local2 [0x02] = Local0
+                Store (0x02, Index (Local0, Local3))
+                Increment (Local3)
+                Store (0x02, Index (Local0, Local3))
+                Increment (Local3)
+                Store (BPWG, Local2)
+                Store (And (Local2, 0xFF), Index (Local0, Local3))
+                Increment (Local3)
+                Store (And (ShiftRight (Local2, 0x08), 0xFF), Index (Local0, Local3))
+                Increment (Local3)
+                Store (BPWO, Local2)
+                Store (And (Local2, 0xFF), Index (Local0, Local3))
+                Increment (Local3)
+                Store (And (ShiftRight (Local2, 0x08), 0xFF), Index (Local0, Local3))
+                Increment (Local3)
+                Store (Package (0x03){}, Local2)
+                Store (0x00, Index (Local2, 0x00))
+                Store (Local5, Index (Local2, 0x01))
+                Store (Local0, Index (Local2, 0x02))
                 Return (Local2)
             }
 
             Method (GBTL, 1, NotSerialized)
             {
-                Local0 = 0x00
-                Local1 = BCL ()
-                If ((Arg0 == 0x00))
+                Store (0x00, Local0)
+                Store (BCL (), Local1)
+                If (LEqual (Arg0, 0x00))
                 {
-                    Local2 = DerefOf (Local1 [(BRID + 0x02)])
+                    Store (DerefOf (Index (Local1, Add (BRID, 0x02))), Local2)
                 }
-                ElseIf ((Arg0 == 0x01))
+                ElseIf (LEqual (Arg0, 0x01))
                 {
-                    Local2 = BRID /* \BRID */
+                    Store (BRID, Local2)
                 }
-                ElseIf ((Arg0 == 0x02))
+                ElseIf (LEqual (Arg0, 0x02))
                 {
-                    Local4 = (BRID << 0x01)
-                    Local2 = DerefOf (DerefOf (NITS [BCLI]) [Local4])
-                    Local3 = DerefOf (DerefOf (NITS [BCLI]) [(Local4 + 0x01
-                        )])
-                    Local2 = ((Local3 << 0x08) | Local2)
+                    ShiftLeft (BRID, 0x01, Local4)
+                    Store (DerefOf (Index (DerefOf (Index (NITS, BCLI)), Local4)), Local2)
+                    Store (DerefOf (Index (DerefOf (Index (NITS, BCLI)), Add (Local4, 0x01)
+                        )), Local3)
+                    Store (Or (ShiftLeft (Local3, 0x08), Local2), Local2)
                 }
-                ElseIf ((Arg0 == 0x03))
+                ElseIf (LEqual (Arg0, 0x03))
                 {
-                    Local1 = BRLV /* \BRLV */
-                    Local3 = BRID /* \BRID */
-                    If ((BCLI == 0x00))
+                    Store (BRLV, Local1)
+                    Store (BRID, Local3)
+                    If (LEqual (BCLI, 0x00))
                     {
-                        Local2 = BMAP /* \BMAP */
-                        Local3 = DerefOf (Local2 [BRID])
+                        Store (BMAP, Local2)
+                        Store (DerefOf (Index (Local2, BRID)), Local3)
                     }
 
-                    Local2 = DerefOf (Local1 [Local3])
+                    Store (DerefOf (Index (Local1, Local3)), Local2)
                 }
                 Else
                 {
-                    Local0 = 0x06
+                    Store (0x06, Local0)
                 }
 
-                Local1 = Package (0x03){}
-                Local1 [0x00] = Local0
-                If ((Local0 == 0x00))
+                Store (Package (0x03){}, Local1)
+                Store (Local0, Index (Local1, 0x00))
+                If (LEqual (Local0, 0x00))
                 {
-                    Local1 [0x01] = 0x04
-                    Local3 = Buffer (0x04){}
-                    Local3 [0x00] = (Local2 & 0xFF)
-                    Local3 [0x01] = ((Local2 >> 0x08) & 0xFF)
-                    Local1 [0x02] = Local3
+                    Store (0x04, Index (Local1, 0x01))
+                    Store (Buffer (0x04){}, Local3)
+                    Store (And (Local2, 0xFF), Index (Local3, 0x00))
+                    Store (And (ShiftRight (Local2, 0x08), 0xFF), Index (Local3, 0x01))
+                    Store (Local3, Index (Local1, 0x02))
                 }
                 Else
                 {
-                    Local1 [0x01] = 0x00
+                    Store (0x00, Index (Local1, 0x01))
                 }
 
                 Return (Local1)
@@ -24572,58 +24572,58 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (SBRT, 2, NotSerialized)
             {
-                Local0 = BCL ()
-                Local1 = Ones
-                If ((Arg0 == 0x00))
+                Store (BCL (), Local0)
+                Store (Ones, Local1)
+                If (LEqual (Arg0, 0x00))
                 {
-                    Local1 = Match (Local0, MEQ, Arg1, MTR, 0x00, 0x02)
-                    If ((Local1 != Ones))
+                    Store (Match (Local0, MEQ, Arg1, MTR, 0x00, 0x02), Local1)
+                    If (LNotEqual (Local1, Ones))
                     {
-                        Local1 -= 0x02
+                        Subtract (Local1, 0x02, Local1)
                     }
                 }
-                ElseIf ((Arg0 == 0x01))
+                ElseIf (LEqual (Arg0, 0x01))
                 {
-                    If ((Arg1 < BRCT))
+                    If (LLess (Arg1, BRCT))
                     {
-                        Local1 = Arg1
+                        Store (Arg1, Local1)
                     }
                 }
-                ElseIf ((Arg0 == 0x02))
+                ElseIf (LEqual (Arg0, 0x02))
                 {
-                    Local2 = DerefOf (NITS [BCLI])
-                    Local3 = 0x00
-                    While ((Local3 < BRCT))
+                    Store (DerefOf (Index (NITS, BCLI)), Local2)
+                    Store (0x00, Local3)
+                    While (LLess (Local3, BRCT))
                     {
-                        If ((DerefOf (Local2 [(Local3 * 0x02)]) == Arg1))
+                        If (LEqual (DerefOf (Index (Local2, Multiply (Local3, 0x02))), Arg1))
                         {
-                            Local1 = Local3
-                            Local3 = 0xFF
+                            Store (Local3, Local1)
+                            Store (0xFF, Local3)
                         }
 
-                        Local3++
+                        Increment (Local3)
                     }
                 }
-                ElseIf ((Arg0 == 0x03))
+                ElseIf (LEqual (Arg0, 0x03))
                 {
-                    Local2 = BRLV /* \BRLV */
-                    Local3 = BMAP /* \BMAP */
-                    Local4 = 0x00
-                    While ((Local4 < BRCT))
+                    Store (BRLV, Local2)
+                    Store (BMAP, Local3)
+                    Store (0x00, Local4)
+                    While (LLess (Local4, BRCT))
                     {
-                        Local5 = Local4
-                        If ((BCLI == 0x00))
+                        Store (Local4, Local5)
+                        If (LEqual (BCLI, 0x00))
                         {
-                            Local5 = DerefOf (Local3 [Local4])
+                            Store (DerefOf (Index (Local3, Local4)), Local5)
                         }
 
-                        If ((DerefOf (Local2 [Local5]) == Arg1))
+                        If (LEqual (DerefOf (Index (Local2, Local5)), Arg1))
                         {
-                            Local1 = Local4
-                            Local4 = 0xFF
+                            Store (Local4, Local1)
+                            Store (0xFF, Local4)
                         }
 
-                        Local4++
+                        Increment (Local4)
                     }
                 }
 
@@ -24632,20 +24632,20 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GEID, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x0400){}
-                    }
-                Local0 [0x01] = 0x0400
-                Local1 = EDID /* \EDID */
-                Local2 = 0x00
-                While ((Local2 < 0x0100))
+                    }, Local0)
+                Store (0x0400, Index (Local0, 0x01))
+                Store (EDID, Local1)
+                Store (0x00, Local2)
+                While (LLess (Local2, 0x0100))
                 {
-                    DerefOf (Local0 [0x02]) [Local2] = DerefOf (Local1 [
-                        Local2])
-                    Local2++
+                    Store (DerefOf (Index (Local1, Local2)), Index (DerefOf (Index (Local0, 0x02)), 
+                        Local2))
+                    Increment (Local2)
                 }
 
                 Return (Local0)
@@ -24671,41 +24671,41 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             {
                 IWMP ()
                 \_SB.SSMI (0xEA7B, 0x00, 0x01, Arg0, 0x00)
-                If ((STAT == 0x80))
+                If (LEqual (STAT, 0x80))
                 {
-                    DerefOf (BISE [Arg0]) [0x04] = 0x00
+                    Store (0x00, Index (DerefOf (Index (BISE, Arg0)), 0x04))
                 }
 
-                Local5 = DerefOf (BISE [Arg0])
-                Local0 = DerefOf (Local5 [0x00])
-                If ((((\_SB.PCI0.HBID == 0x8086) && (\_SB.PCI0.GFX0.GVID == 0xFFFF)) || (\_SB.PCI0.HBID != 
+                Store (DerefOf (Index (BISE, Arg0)), Local5)
+                Store (DerefOf (Index (Local5, 0x00)), Local0)
+                If (LOr (LAnd (LEqual (\_SB.PCI0.HBID, 0x8086), LEqual (\_SB.PCI0.GFX0.GVID, 0xFFFF)), LNotEqual (\_SB.PCI0.HBID, 
                     0x8086)))
                 {
-                    If ((\SRCP (Local0, "UMA Video Memory Size") || \SRCP (Local0, "UMA Video Memory Size Policy")))
+                    If (LOr (\SRCP (Local0, "UMA Video Memory Size"), \SRCP (Local0, "UMA Video Memory Size Policy")))
                     {
-                        DerefOf (BISE [Arg0]) [0x00] = NULL /* \_SB_.WMID.NULL */
+                        Store (NULL, Index (DerefOf (Index (BISE, Arg0)), 0x00))
                     }
                 }
 
-                If ((\SRCP (Local0, "Hybrid Graphics") || \SRCP (Local0, "Hybrid Graphics Security Level")))
+                If (LOr (\SRCP (Local0, "Hybrid Graphics"), \SRCP (Local0, "Hybrid Graphics Security Level")))
                 {
-                    If ((SGSP == 0x00))
+                    If (LEqual (SGSP, 0x00))
                     {
-                        DerefOf (BISE [Arg0]) [0x00] = NULL /* \_SB_.WMID.NULL */
+                        Store (NULL, Index (DerefOf (Index (BISE, Arg0)), 0x00))
                     }
                 }
 
                 If (\SRCP (Local0, "Hybrid Graphics Enhanced Display Feature"))
                 {
-                    If ((SGSP == 0x00))
+                    If (LEqual (SGSP, 0x00))
                     {
-                        DerefOf (BISE [Arg0]) [0x00] = NULL /* \_SB_.WMID.NULL */
+                        Store (NULL, Index (DerefOf (Index (BISE, Arg0)), 0x00))
                     }
                 }
 
                 If (\SRCP (Local0, "HP Touchpoint Manager Always On Remote Management Activation"))
                 {
-                    If ((BECP == 0x00))
+                    If (LEqual (BECP, 0x00))
                     {
                         Return (DEEN) /* \_SB_.WMID.DEEN */
                     }
@@ -24713,7 +24713,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 If (\SRCP (Local0, "HP Touchpoint Manager Always On Remote Management Commands"))
                 {
-                    If ((BECP == 0x00))
+                    If (LEqual (BECP, 0x00))
                     {
                         Return (DEEN) /* \_SB_.WMID.DEEN */
                     }
@@ -24721,78 +24721,78 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                 If (\SRCP (Local0, "HP Touchpoint Manager Always On Remote Management Status"))
                 {
-                    If ((BECP == 0x00))
+                    If (LEqual (BECP, 0x00))
                     {
                         Return (DEEN) /* \_SB_.WMID.DEEN */
                     }
                 }
 
-                If ((FMOD == 0x00))
+                If (LEqual (FMOD, 0x00))
                 {
-                    If ((\SRCP (Local0, "Virtualization Technology (VTx)") || \SRCP (Local0, "Virtualization Technology for Directed I/O (VTd)")))
+                    If (LOr (\SRCP (Local0, "Virtualization Technology (VTx)"), \SRCP (Local0, "Virtualization Technology for Directed I/O (VTd)")))
                     {
-                        DerefOf (BISE [Arg0]) [0x05] = 0x01
-                        DerefOf (BISE [Arg0]) [0x08] = "SELECT * FROM HP_BIOSPassword WHERE Name=\'Setup Password\' AND IsSet=1"
+                        Store (0x01, Index (DerefOf (Index (BISE, Arg0)), 0x05))
+                        Store ("SELECT * FROM HP_BIOSPassword WHERE Name=\'Setup Password\' AND IsSet=1", Index (DerefOf (Index (BISE, Arg0)), 0x08))
                     }
 
                     If (\SRCP (Local0, "Manufacturing Programming Mode"))
                     {
-                        DerefOf (BISE [Arg0]) [0x03] = 0x01
+                        Store (0x01, Index (DerefOf (Index (BISE, Arg0)), 0x03))
                     }
                 }
 
-                Local6 = EVAL /* \EVAL */
-                DerefOf (BISE [Arg0]) [0x0B] = ((Local6 & 
-                    0xF0) >> 0x04)
-                Local6 = (Local6 & 0x0F)
-                Local4 = SizeOf (Local5)
-                Local2 = DerefOf (Local5 [0x0D])
-                If ((Local2 > 0x00))
+                Store (EVAL, Local6)
+                Store (ShiftRight (And (Local6, 0xF0), 0x04), Index (DerefOf (Index (BISE, 
+                    Arg0)), 0x0B))
+                Store (And (Local6, 0x0F), Local6)
+                Store (SizeOf (Local5), Local4)
+                Store (DerefOf (Index (Local5, 0x0D)), Local2)
+                If (LGreater (Local2, 0x00))
                 {
-                    Local2 += 0x0E
-                    If ((Local2 < Local4))
+                    Add (0x0E, Local2, Local2)
+                    If (LLess (Local2, Local4))
                     {
-                        Local4 = Local2
+                        Store (Local2, Local4)
                     }
 
                     If (\SRCP (Local0, "Parallel port mode"))
                     {
-                        If ((Local6 == 0x04))
+                        If (LEqual (Local6, 0x04))
                         {
-                            Local6 = 0x03
+                            Store (0x03, Local6)
                         }
                     }
 
-                    If (\SRCP (DerefOf (Local5 [0x0E]), CHGE))
+                    If (\SRCP (DerefOf (Index (Local5, 0x0E)), CHGE))
                     {
                         Switch (Local6)
                         {
                             Case (0x02)
                             {
-                                Local6 = 0x00
+                                Store (0x00, Local6)
                             }
                             Case (0x03)
                             {
-                                Local6 = 0x02
+                                Store (0x02, Local6)
                             }
                             Case (0x00)
                             {
-                                Local7 = DerefOf (Local5 [0x0C])
+                                Store (DerefOf (Index (Local5, 0x0C)), Local7)
                                 Name (ST99, Buffer (SizeOf (Local7)){})
-                                ST99 = Local7
-                                Switch (DerefOf (ST99 [0x00]))
+                                Store (Local7, ST99) /* \_SB_.WMID.WQBC.ST99 */
+                                Switch (DerefOf (Index (ST99, 0x00)))
                                 {
                                     Case (0x48)
                                     {
-                                        Local6 = 0x02
+                                        Store (0x02, Local6)
                                     }
                                     Case (0x56)
                                     {
-                                        Local6 = 0x01
+                                        Store (0x01, Local6)
                                     }
                                     Default
                                     {
-                                        Local6 = 0x00
+                                        Store (0x00, Local6)
                                     }
 
                                 }
@@ -24801,824 +24801,824 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         }
                     }
 
-                    Local6 += 0x0E
-                    If ((Local6 >= Local4))
+                    Add (0x0E, Local6, Local6)
+                    If (LGreaterEqual (Local6, Local4))
                     {
-                        Local6 = (Local4 - 0x01)
+                        Subtract (Local4, 0x01, Local6)
                     }
 
-                    Local7 = DerefOf (DerefOf (BISE [Arg0]) [Local6])
-                    DerefOf (BISE [Arg0]) [0x0C] = Local7
-                    Local1 = " "
-                    Local2 = 0x0E
-                    While ((Local2 < Local6))
+                    Store (DerefOf (Index (DerefOf (Index (BISE, Arg0)), Local6)), Local7)
+                    Store (Local7, Index (DerefOf (Index (BISE, Arg0)), 0x0C))
+                    Store (" ", Local1)
+                    Store (0x0E, Local2)
+                    While (LLess (Local2, Local6))
                     {
-                        Local3 = DerefOf (Local5 [Local2])
+                        Store (DerefOf (Index (Local5, Local2)), Local3)
                         Concatenate (Local1, Local3, Local7)
                         Concatenate (Local7, ", ", Local1)
-                        Local2++
+                        Increment (Local2)
                     }
 
                     Concatenate (Local1, "*", Local7)
-                    While ((Local2 < Local4))
+                    While (LLess (Local2, Local4))
                     {
-                        Local3 = DerefOf (Local5 [Local2])
+                        Store (DerefOf (Index (Local5, Local2)), Local3)
                         If (\SRCP (Local3, " "))
                         {
                             Break
                         }
                         Else
                         {
-                            If ((Local2 != Local6))
+                            If (LNotEqual (Local2, Local6))
                             {
                                 Concatenate (Local7, ", ", Local1)
                             }
                             Else
                             {
-                                Local1 = Local7
+                                Store (Local7, Local1)
                             }
 
                             Concatenate (Local1, Local3, Local7)
                         }
 
-                        Local2++
+                        Increment (Local2)
                     }
 
-                    DerefOf (BISE [Arg0]) [0x01] = Local7
+                    Store (Local7, Index (DerefOf (Index (BISE, Arg0)), 0x01))
                 }
 
                 If (\SRCP (Local0, "Battery Ship Mode"))
                 {
-                    If ((FMOD == 0x00))
+                    If (LEqual (FMOD, 0x00))
                     {
                         Return (DEEN) /* \_SB_.WMID.DEEN */
                     }
                 }
 
-                Return (DerefOf (BISE [Arg0]))
+                Return (DerefOf (Index (BISE, Arg0)))
             }
 
             Method (WQBD, 1, NotSerialized)
             {
-                Local0 = 0x00
-                Local1 = 0x00
-                Local2 = 0x00
-                Local4 = 0x00
-                Local5 = 0x00
-                Local6 = 0x00
-                Local7 = 0x00
+                Store (0x00, Local0)
+                Store (0x00, Local1)
+                Store (0x00, Local2)
+                Store (0x00, Local4)
+                Store (0x00, Local5)
+                Store (0x00, Local6)
+                Store (0x00, Local7)
                 \_SB.SSMI (0xEA7B, 0x00, 0x02, Arg0, 0x00)
-                If ((FMOD == 0x00))
+                If (LEqual (FMOD, 0x00))
                 {
-                    Local4 = 0x01
-                    While ((Local4 && (Local2 < SizeOf (MPMS))))
+                    Store (0x01, Local4)
+                    While (LAnd (Local4, LLess (Local2, SizeOf (MPMS))))
                     {
-                        Local3 = DerefOf (DerefOf (BSSS [Arg0]) [0x00])
-                        If (\SRCM (Local3, DerefOf (MPMS [Local2]), SizeOf (Local3)))
+                        Store (DerefOf (Index (DerefOf (Index (BSSS, Arg0)), 0x00)), Local3)
+                        If (\SRCM (Local3, DerefOf (Index (MPMS, Local2)), SizeOf (Local3)))
                         {
-                            DerefOf (BSSS [Arg0]) [0x03] = 0x01
-                            Local4 = 0x00
+                            Store (0x01, Index (DerefOf (Index (BSSS, Arg0)), 0x03))
+                            Store (0x00, Local4)
                         }
 
-                        Local2++
+                        Increment (Local2)
                     }
 
-                    Local4 = 0x00
+                    Store (0x00, Local4)
                 }
 
-                If ((Arg0 == 0x00))
+                If (LEqual (Arg0, 0x00))
                 {
-                    WTB2 = ASTG /* \ASTG */
+                    Store (ASTG, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0100, CAST)
-                    BF2S = CAST /* \_SB_.WMID.WQBD.CAST */
-                    DerefOf (BSSS [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
+                    Store (CAST, BF2S) /* \_SB_.BF2S */
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSSS, 
+                        Arg0)), 0x0B))
                 }
 
-                If ((Arg0 == 0x01))
+                If (LEqual (Arg0, 0x01))
                 {
-                    WTB2 = OWNT /* \OWNT */
+                    Store (OWNT, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, COWT)
-                    BF2S = COWT /* \_SB_.WMID.WQBD.COWT */
-                    DerefOf (BSSS [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
+                    Store (COWT, BF2S) /* \_SB_.BF2S */
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSSS, 
+                        Arg0)), 0x0B))
                 }
 
-                If ((Arg0 == 0x02))
+                If (LEqual (Arg0, 0x02))
                 {
-                    WTB2 = LFND /* \LFND */
+                    Store (LFND, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0510, WLFD)
-                    BF2S = WLFD /* \_SB_.WMID.WQBD.WLFD */
-                    Local6 = EVAL /* \EVAL */
-                    DerefOf (BSSS [Arg0]) [0x0B] = Local6
+                    Store (WLFD, BF2S) /* \_SB_.BF2S */
+                    Store (EVAL, Local6)
+                    Store (Local6, Index (DerefOf (Index (BSSS, Arg0)), 0x0B))
                 }
 
-                If ((Arg0 == 0x03))
+                If (LEqual (Arg0, 0x03))
                 {
-                    WTB2 = ATIM /* \ATIM */
+                    Store (ATIM, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x28, WATM)
-                    BF2S = WATM /* \_SB_.WMID.WQBD.WATM */
+                    Store (WATM, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x04))
+                If (LEqual (Arg0, 0x04))
                 {
-                    WTB2 = PCID /* \PCID */
+                    Store (PCID, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0200, WPCD)
-                    BF2S = WPCD /* \_SB_.WMID.WQBD.WPCD */
+                    Store (WPCD, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x05))
+                If (LEqual (Arg0, 0x05))
                 {
-                    WTB2 = CURL /* \CURL */
+                    Store (CURL, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0410, WURL)
-                    BF2S = WURL /* \_SB_.WMID.WQBD.WURL */
+                    Store (WURL, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x06))
+                If (LEqual (Arg0, 0x06))
                 {
-                    WTB2 = PCVR /* \PCVR */
+                    Store (PCVR, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x28, PCIV)
-                    BF2S = PCIV /* \_SB_.WMID.WQBD.PCIV */
+                    Store (PCIV, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x07))
+                If (LEqual (Arg0, 0x07))
                 {
-                    WTB2 = PROD /* \PROD */
+                    Store (PROD, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CRPD)
-                    BF2S = CRPD /* \_SB_.WMID.WQBD.CRPD */
+                    Store (CRPD, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x08))
+                If (LEqual (Arg0, 0x08))
                 {
-                    WTB2 = MODL /* \MODL */
+                    Store (MODL, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CMOD)
-                    BF2S = CMOD /* \_SB_.WMID.WQBD.CMOD */
+                    Store (CMOD, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x09))
+                If (LEqual (Arg0, 0x09))
                 {
-                    WTB2 = PTYP /* \PTYP */
+                    Store (PTYP, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CCPU)
-                    BF2S = CCPU /* \_SB_.WMID.WQBD.CCPU */
+                    Store (CCPU, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0A))
+                If (LEqual (Arg0, 0x0A))
                 {
-                    WTB2 = PFRQ /* \PFRQ */
+                    Store (PFRQ, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x50, CFRQ)
-                    BF2S = CFRQ /* \_SB_.WMID.WQBD.CFRQ */
+                    Store (CFRQ, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0B))
+                If (LEqual (Arg0, 0x0B))
                 {
-                    WTB2 = MEMS /* \_SB_.WMID.WQBD.MEMS */
+                    Store (MEMS, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, MEMS)
-                    BF2S = MEMS /* \_SB_.WMID.WQBD.MEMS */
+                    Store (MEMS, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0C))
+                If (LEqual (Arg0, 0x0C))
                 {
-                    WTB2 = DATE /* \DATE */
+                    Store (DATE, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CDAT)
-                    BF2S = CDAT /* \_SB_.WMID.WQBD.CDAT */
+                    Store (CDAT, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0D))
+                If (LEqual (Arg0, 0x0D))
                 {
-                    WTB2 = FAMI /* \FAMI */
+                    Store (FAMI, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CFAM)
-                    BF2S = CFAM /* \_SB_.WMID.WQBD.CFAM */
+                    Store (CFAM, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0E))
+                If (LEqual (Arg0, 0x0E))
                 {
-                    WTB2 = SERL /* \SERL */
+                    Store (SERL, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CSER)
-                    BF2S = CSER /* \_SB_.WMID.WQBD.CSER */
+                    Store (CSER, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x0F))
+                If (LEqual (Arg0, 0x0F))
                 {
-                    WTB2 = VREV /* \VREV */
+                    Store (VREV, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CREV)
-                    BF2S = CREV /* \_SB_.WMID.WQBD.CREV */
+                    Store (CREV, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x10))
+                If (LEqual (Arg0, 0x10))
                 {
-                    WTB2 = VRE2 /* \VRE2 */
+                    Store (VRE2, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CRE2)
-                    BF2S = CRE2 /* \_SB_.WMID.WQBD.CRE2 */
+                    Store (CRE2, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x11))
+                If (LEqual (Arg0, 0x11))
                 {
-                    WTB2 = KBCD /* \KBCD */
+                    Store (KBCD, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, CKBC)
-                    BF2S = CKBC /* \_SB_.WMID.WQBD.CKBC */
+                    Store (CKBC, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x12))
+                If (LEqual (Arg0, 0x12))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = HDDS /* \HDDS */
+                        Store (HDDS, WTB2) /* \_SB_.WTB2 */
                         CreateField (WTB2, 0x00, 0xA8, WHDD)
-                        BF2S = WHDD /* \_SB_.WMID.WQBD.WHDD */
+                        Store (WHDD, BF2S) /* \_SB_.BF2S */
                     }
                 }
 
-                If ((Arg0 == 0x13))
+                If (LEqual (Arg0, 0x13))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = HDDM /* \HDDM */
+                        Store (HDDM, WTB2) /* \_SB_.WTB2 */
                         CreateField (WTB2, 0x00, 0x0148, WHDM)
-                        BF2S = WHDM /* \_SB_.WMID.WQBD.WHDM */
+                        Store (WHDM, BF2S) /* \_SB_.BF2S */
                     }
                 }
 
-                If ((Arg0 == 0x14))
+                If (LEqual (Arg0, 0x14))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = CDAT /* \_SB_.WMID.WQBD.CDAT */
+                        Store (CDAT, WTB2) /* \_SB_.WTB2 */
                         CreateField (WTB2, 0x00, 0x88, WCDT)
-                        BF2S = WCDT /* \_SB_.WMID.WQBD.WCDT */
+                        Store (WCDT, BF2S) /* \_SB_.BF2S */
                     }
                 }
 
-                If ((Arg0 == 0x15))
+                If (LEqual (Arg0, 0x15))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = CSTS /* \CSTS */
+                        Store (CSTS, WTB2) /* \_SB_.WTB2 */
                         CreateByteField (WTB2, 0x00, WCST)
-                        Local5 = WCST /* \_SB_.WMID.WQBD.WCST */
-                        If ((Local5 == 0x00))
+                        Store (WCST, Local5)
+                        If (LEqual (Local5, 0x00))
                         {
-                            Local0 = 0x00
-                            WTB4 = DerefOf (DSTS [Local0])
-                            BF2S = WTB4 /* \_SB_.WTB4 */
+                            Store (0x00, Local0)
+                            Store (DerefOf (Index (DSTS, Local0)), WTB4) /* \_SB_.WTB4 */
+                            Store (WTB4, BF2S) /* \_SB_.BF2S */
                         }
 
-                        If ((Local5 == 0xFF))
+                        If (LEqual (Local5, 0xFF))
                         {
-                            Local0 = 0x01
-                            WTB4 = DerefOf (DSTS [Local0])
-                            BF2S = WTB4 /* \_SB_.WTB4 */
+                            Store (0x01, Local0)
+                            Store (DerefOf (Index (DSTS, Local0)), WTB4) /* \_SB_.WTB4 */
+                            Store (WTB4, BF2S) /* \_SB_.BF2S */
                         }
 
-                        If ((Local5 == 0xFE))
+                        If (LEqual (Local5, 0xFE))
                         {
-                            Local0 = 0x02
-                            WTB4 = DerefOf (DSTS [Local0])
-                            BF2S = WTB4 /* \_SB_.WTB4 */
+                            Store (0x02, Local0)
+                            Store (DerefOf (Index (DSTS, Local0)), WTB4) /* \_SB_.WTB4 */
+                            Store (WTB4, BF2S) /* \_SB_.BF2S */
                         }
 
-                        If ((Local5 == 0xFD))
+                        If (LEqual (Local5, 0xFD))
                         {
-                            Local0 = 0x03
-                            WTB4 = DerefOf (DSTS [Local0])
-                            BF2S = WTB4 /* \_SB_.WTB4 */
+                            Store (0x03, Local0)
+                            Store (DerefOf (Index (DSTS, Local0)), WTB4) /* \_SB_.WTB4 */
+                            Store (WTB4, BF2S) /* \_SB_.BF2S */
                         }
                     }
                 }
 
-                If ((Arg0 == 0x16))
+                If (LEqual (Arg0, 0x16))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = CYCL /* \CYCL */
+                        Store (CYCL, WTB2) /* \_SB_.WTB2 */
                         CreateByteField (WTB2, 0x00, WCYC)
                         ToBCD (WCYC, Local1)
-                        Local2 = 0x01
-                        If ((WCYC <= 0x09))
+                        Store (0x01, Local2)
+                        If (LLessEqual (WCYC, 0x09))
                         {
-                            Local2 = 0x01
+                            Store (0x01, Local2)
                         }
 
-                        If ((WCYC >= 0x0A))
+                        If (LGreaterEqual (WCYC, 0x0A))
                         {
-                            Local2 = 0x02
+                            Store (0x02, Local2)
                         }
 
-                        If ((WCYC >= 0x64))
+                        If (LGreaterEqual (WCYC, 0x64))
                         {
-                            Local2 = 0x03
+                            Store (0x03, Local2)
                         }
 
-                        If ((WCYC >= 0x03E8))
+                        If (LGreaterEqual (WCYC, 0x03E8))
                         {
-                            Local2 = 0x04
+                            Store (0x04, Local2)
                         }
 
-                        If ((WCYC >= 0x2710))
+                        If (LGreaterEqual (WCYC, 0x2710))
                         {
-                            Local2 = 0x05
+                            Store (0x05, Local2)
                         }
 
-                        Local3 = \ISTR (Local1, Local2)
-                        BF2S = Local3
+                        Store (\ISTR (Local1, Local2), Local3)
+                        Store (Local3, BF2S) /* \_SB_.BF2S */
                     }
                 }
 
-                If ((Arg0 == 0x17))
+                If (LEqual (Arg0, 0x17))
                 {
-                    WTB2 = SVID /* \SVID */
+                    Store (SVID, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x50, CSID)
-                    BF2S = CSID /* \_SB_.WMID.WQBD.CSID */
+                    Store (CSID, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x18))
+                If (LEqual (Arg0, 0x18))
                 {
-                    WTB2 = SKUN /* \SKUN */
+                    Store (SKUN, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x80, CSKU)
-                    BF2S = CSKU /* \_SB_.WMID.WQBD.CSKU */
+                    Store (CSKU, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x19))
+                If (LEqual (Arg0, 0x19))
                 {
-                    WTB2 = SSID /* \SSID */
+                    Store (SSID, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x20, WSID)
-                    BF2S = WSID /* \_SB_.WMID.WQBD.WSID */
+                    Store (WSID, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1A))
+                If (LEqual (Arg0, 0x1A))
                 {
-                    WTB2 = PBSN /* \PBSN */
+                    Store (PBSN, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x90, WPSN)
-                    BF2S = WPSN /* \_SB_.WMID.WQBD.WPSN */
+                    Store (WPSN, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1B))
+                If (LEqual (Arg0, 0x1B))
                 {
-                    WTB2 = SBSN /* \SBSN */
+                    Store (SBSN, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x90, WSSN)
-                    BF2S = WSSN /* \_SB_.WMID.WQBD.WSSN */
+                    Store (WSSN, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1C))
+                If (LEqual (Arg0, 0x1C))
                 {
-                    WTB2 = BTFC /* \BTFC */
+                    Store (BTFC, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0xA0, WBTF)
-                    BF2S = WBTF /* \_SB_.WMID.WQBD.WBTF */
+                    Store (WBTF, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1D))
+                If (LEqual (Arg0, 0x1D))
                 {
-                    WTB2 = WLFC /* \WLFC */
+                    Store (WLFC, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0xA0, WWLF)
-                    BF2S = WWLF /* \_SB_.WMID.WQBD.WWLF */
+                    Store (WWLF, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1E))
+                If (LEqual (Arg0, 0x1E))
                 {
-                    WTB2 = WWFC /* \WWFC */
+                    Store (WWFC, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0xA0, WWWF)
-                    BF2S = WWWF /* \_SB_.WMID.WQBD.WWWF */
+                    Store (WWWF, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x1F))
+                If (LEqual (Arg0, 0x1F))
                 {
-                    WTB2 = GPFC /* \GPFC */
+                    Store (GPFC, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0xA0, WGPF)
-                    BF2S = WGPF /* \_SB_.WMID.WQBD.WGPF */
+                    Store (WGPF, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x20))
+                If (LEqual (Arg0, 0x20))
                 {
-                    WTB2 = UUID /* \UUID */
+                    Store (UUID, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0100, WUUI)
-                    BF2S = WUUI /* \_SB_.WMID.WQBD.WUUI */
+                    Store (WUUI, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x21))
+                If (LEqual (Arg0, 0x21))
                 {
-                    WTB2 = SBCT /* \SBCT */
+                    Store (SBCT, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x78, WBCT)
-                    BF2S = WBCT /* \_SB_.WMID.WQBD.WBCT */
+                    Store (WBCT, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x22))
+                If (LEqual (Arg0, 0x22))
                 {
-                    WTB2 = MSDM /* \MSDM */
+                    Store (MSDM, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0310, WOA3)
-                    BF2S = WOA3 /* \_SB_.WMID.WQBD.WOA3 */
+                    Store (WOA3, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x23))
+                If (LEqual (Arg0, 0x23))
                 {
-                    WTB2 = CPRV /* \CPRV */
+                    Store (CPRV, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x78, WCRV)
-                    BF2S = WCRV /* \_SB_.WMID.WQBD.WCRV */
+                    Store (WCRV, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x24))
+                If (LEqual (Arg0, 0x24))
                 {
-                    WTB2 = PLFN /* \PLFN */
+                    Store (PLFN, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0140, WPRF)
-                    BF2S = WPRF /* \_SB_.WMID.WQBD.WPRF */
+                    Store (WPRF, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x25))
+                If (LEqual (Arg0, 0x25))
                 {
-                    If ((STAT == 0x80))
+                    If (LEqual (STAT, 0x80))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
-                        BF2S = NOIN /* \_SB_.NOIN */
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
+                        Store (NOIN, BF2S) /* \_SB_.BF2S */
                     }
                     Else
                     {
-                        WTB2 = SNMD /* \SNMD */
+                        Store (SNMD, WTB2) /* \_SB_.WTB2 */
                         CreateByteField (WTB2, 0x00, WSNM)
-                        Local5 = WSNM /* \_SB_.WMID.WQBD.WSNM */
-                        WTB4 = DerefOf (DSMD [Local5])
-                        BF2S = WTB4 /* \_SB_.WTB4 */
+                        Store (WSNM, Local5)
+                        Store (DerefOf (Index (DSMD, Local5)), WTB4) /* \_SB_.WTB4 */
+                        Store (WTB4, BF2S) /* \_SB_.BF2S */
                     }
                 }
 
-                If ((Arg0 == 0x26))
+                If (LEqual (Arg0, 0x26))
                 {
-                    WTB2 = HVER /* \HVER */
+                    Store (HVER, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0100, WHVV)
-                    BF2S = WHVV /* \_SB_.WMID.WQBD.WHVV */
+                    Store (WHVV, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x27))
+                If (LEqual (Arg0, 0x27))
                 {
-                    WTB2 = HVCH /* \HVCH */
+                    Store (HVCH, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0200, WHVC)
-                    BF2S = WHVC /* \_SB_.WMID.WQBD.WHVC */
+                    Store (WHVC, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x28))
+                If (LEqual (Arg0, 0x28))
                 {
-                    WTB2 = MMS1 /* \MMS1 */
+                    Store (MMS1, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, WMS1)
-                    BF2S = WMS1 /* \_SB_.WMID.WQBD.WMS1 */
+                    Store (WMS1, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x29))
+                If (LEqual (Arg0, 0x29))
                 {
-                    If ((NMMS < 0x02))
+                    If (LLess (NMMS, 0x02))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
 
-                    WTB2 = MMS2 /* \MMS2 */
+                    Store (MMS2, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, WMS2)
-                    BF2S = WMS2 /* \_SB_.WMID.WQBD.WMS2 */
+                    Store (WMS2, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2A))
+                If (LEqual (Arg0, 0x2A))
                 {
-                    If ((NMMS < 0x03))
+                    If (LLess (NMMS, 0x03))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
 
-                    WTB2 = MMS3 /* \MMS3 */
+                    Store (MMS3, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, WMS3)
-                    BF2S = WMS3 /* \_SB_.WMID.WQBD.WMS3 */
+                    Store (WMS3, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2B))
+                If (LEqual (Arg0, 0x2B))
                 {
-                    If ((NMMS < 0x04))
+                    If (LLess (NMMS, 0x04))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
 
-                    WTB2 = MMS4 /* \MMS4 */
+                    Store (MMS4, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0280, WMS4)
-                    BF2S = WMS4 /* \_SB_.WMID.WQBD.WMS4 */
+                    Store (WMS4, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2C))
+                If (LEqual (Arg0, 0x2C))
                 {
-                    WTB2 = CUBT /* \CUBT */
+                    Store (CUBT, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x01E0, CCBT)
-                    BF2S = CCBT /* \_SB_.WMID.WQBD.CCBT */
+                    Store (CCBT, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2D))
+                If (LEqual (Arg0, 0x2D))
                 {
-                    WTB2 = FBID /* \FBID */
+                    Store (FBID, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0C80, WPFB)
-                    BF2S = WPFB /* \_SB_.WMID.WQBD.WPFB */
+                    Store (WPFB, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2E))
+                If (LEqual (Arg0, 0x2E))
                 {
-                    WTB2 = BIDD /* \BIDD */
+                    Store (BIDD, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0640, WMBD)
-                    BF2S = WMBD /* \_SB_.WMID.WQBD.WMBD */
+                    Store (WMBD, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x2F))
+                If (LEqual (Arg0, 0x2F))
                 {
-                    NURL = PROX /* \PROX */
+                    Store (PROX, NURL) /* \_SB_.NURL */
                     CreateField (NURL, 0x00, 0x07F8, CPRX)
-                    BF2S = CPRX /* \_SB_.WMID.WQBD.CPRX */
-                    DerefOf (BSSS [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
+                    Store (CPRX, BF2S) /* \_SB_.BF2S */
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSSS, 
+                        Arg0)), 0x0B))
                 }
 
-                If ((Arg0 == 0x30))
+                If (LEqual (Arg0, 0x30))
                 {
-                    NURL = RURL /* \RURL */
+                    Store (RURL, NURL) /* \_SB_.NURL */
                     CreateField (NURL, 0x00, 0x07F8, CRUL)
-                    BF2S = CRUL /* \_SB_.WMID.WQBD.CRUL */
-                    DerefOf (BSSS [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
+                    Store (CRUL, BF2S) /* \_SB_.BF2S */
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSSS, 
+                        Arg0)), 0x0B))
                 }
 
-                If ((Arg0 == 0x31))
+                If (LEqual (Arg0, 0x31))
                 {
-                    WTB2 = MACA /* \MACA */
+                    Store (MACA, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x90, CMAC)
-                    BF2S = CMAC /* \_SB_.WMID.WQBD.CMAC */
+                    Store (CMAC, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x32))
+                If (LEqual (Arg0, 0x32))
                 {
-                    WTB2 = BHDS /* \BHDS */
+                    Store (BHDS, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0xA8, CHDS)
-                    BF2S = CHDS /* \_SB_.WMID.WQBD.CHDS */
+                    Store (CHDS, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x33))
+                If (LEqual (Arg0, 0x33))
                 {
-                    WTB2 = BHDM /* \BHDM */
+                    Store (BHDM, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x0148, CHDM)
-                    BF2S = CHDM /* \_SB_.WMID.WQBD.CHDM */
+                    Store (CHDM, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x34))
+                If (LEqual (Arg0, 0x34))
                 {
-                    WTB2 = BHDZ /* \BHDZ */
+                    Store (BHDZ, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x48, CHDZ)
-                    BF2S = CHDZ /* \_SB_.WMID.WQBD.CHDZ */
+                    Store (CHDZ, BF2S) /* \_SB_.BF2S */
                 }
 
-                If ((Arg0 == 0x35))
+                If (LEqual (Arg0, 0x35))
                 {
-                    WTB2 = BECV /* \BECV */
+                    Store (BECV, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x90, CBEC)
-                    BF2S = CBEC /* \_SB_.WMID.WQBD.CBEC */
-                    If ((BF2S != ""))
+                    Store (CBEC, BF2S) /* \_SB_.BF2S */
+                    If (LNotEqual (BF2S, ""))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x01
+                        Store (0x01, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
                 }
 
-                If ((Arg0 == 0x36))
+                If (LEqual (Arg0, 0x36))
                 {
-                    WTB2 = BSER /* \BSER */
+                    Store (BSER, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x50, CBSE)
-                    BF2S = CBSE /* \_SB_.WMID.WQBD.CBSE */
-                    If ((BBAT == 0x00))
+                    Store (CBSE, BF2S) /* \_SB_.BF2S */
+                    If (LEqual (BBAT, 0x00))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
                     Else
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x01
+                        Store (0x01, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
                 }
 
-                If ((Arg0 == 0x37))
+                If (LEqual (Arg0, 0x37))
                 {
-                    WTB2 = BMOD /* \BMOD */
+                    Store (BMOD, WTB2) /* \_SB_.WTB2 */
                     CreateField (WTB2, 0x00, 0x58, CBMD)
-                    BF2S = CBMD /* \_SB_.WMID.WQBD.CBMD */
-                    If ((BBAT == 0x00))
+                    Store (CBMD, BF2S) /* \_SB_.BF2S */
+                    If (LEqual (BBAT, 0x00))
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
                     Else
                     {
-                        DerefOf (BSSS [Arg0]) [0x04] = 0x01
+                        Store (0x01, Index (DerefOf (Index (BSSS, Arg0)), 0x04))
                     }
                 }
 
-                DerefOf (BSSS [Arg0]) [0x01] = BF2S /* \_SB_.BF2S */
-                Return (DerefOf (BSSS [Arg0]))
+                Store (BF2S, Index (DerefOf (Index (BSSS, Arg0)), 0x01))
+                Return (DerefOf (Index (BSSS, Arg0)))
             }
 
             Method (WQBE, 1, NotSerialized)
             {
-                Local1 = 0x00
-                Local2 = 0x00
-                Local4 = 0x00
-                Local5 = 0x00
-                Local6 = 0x00
-                Local7 = 0x00
-                BTDN = 0x00
-                If ((Arg0 == 0x00))
+                Store (0x00, Local1)
+                Store (0x00, Local2)
+                Store (0x00, Local4)
+                Store (0x00, Local5)
+                Store (0x00, Local6)
+                Store (0x00, Local7)
+                Store (0x00, BTDN) /* \_SB_.WMID.BTDN */
+                If (LEqual (Arg0, 0x00))
                 {
                     \_SB.SSMI (0xEA7B, 0x00, 0x03, Arg0, 0x00)
-                    DerefOf (BSOL [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
-                    STAT &= 0x0F
-                    WBOR = BORD /* \BORD */
-                    CreateField (WBOR, 0x00, (0x06 * 0x08), CBOS)
-                    While ((Local1 != 0x06))
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSOL, 
+                        Arg0)), 0x0B))
+                    And (STAT, 0x0F, STAT) /* \STAT */
+                    Store (BORD, WBOR) /* \_SB_.WBOR */
+                    CreateField (WBOR, 0x00, Multiply (0x06, 0x08), CBOS)
+                    While (LNotEqual (Local1, 0x06))
                     {
-                        Local4 = DerefOf (WBOR [Local1])
-                        If ((Local4 != 0xFF))
+                        Store (DerefOf (Index (WBOR, Local1)), Local4)
+                        If (LNotEqual (Local4, 0xFF))
                         {
-                            Local5 = 0x00
-                            While ((Local5 != 0x06))
+                            Store (0x00, Local5)
+                            While (LNotEqual (Local5, 0x06))
                             {
-                                Local7 = DerefOf (DerefOf (RMBI [Local5]) [0x00])
-                                If ((Local4 == Local7))
+                                Store (DerefOf (Index (DerefOf (Index (RMBI, Local5)), 0x00)), Local7)
+                                If (LEqual (Local4, Local7))
                                 {
-                                    BF01 = DerefOf (DerefOf (RMBI [Local5]) [0x01])
-                                    BF2S = BF01 /* \_SB_.BF01 */
-                                    CRBI [Local6] = BF2S /* \_SB_.BF2S */
-                                    Local6++
-                                    Local5 = (0x06 - 0x01)
+                                    Store (DerefOf (Index (DerefOf (Index (RMBI, Local5)), 0x01)), BF01) /* \_SB_.BF01 */
+                                    Store (BF01, BF2S) /* \_SB_.BF2S */
+                                    Store (BF2S, Index (CRBI, Local6))
+                                    Increment (Local6)
+                                    Store (Subtract (0x06, 0x01), Local5)
                                 }
 
-                                Local5++
+                                Increment (Local5)
                             }
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
 
-                    Local0 = 0x00
-                    Local5 = 0x00
-                    Local4 = 0x00
-                    Local0 = 0x0D
-                    While ((Local5 != 0x06))
+                    Store (0x00, Local0)
+                    Store (0x00, Local5)
+                    Store (0x00, Local4)
+                    Store (0x0D, Local0)
+                    While (LNotEqual (Local5, 0x06))
                     {
-                        BF01 = DerefOf (CRBI [Local5])
-                        BF2S = BF01 /* \_SB_.BF01 */
-                        DerefOf (BSOL [0x00]) [Local0] = BF2S /* \_SB_.BF2S */
-                        Local5++
-                        Local0++
+                        Store (DerefOf (Index (CRBI, Local5)), BF01) /* \_SB_.BF01 */
+                        Store (BF01, BF2S) /* \_SB_.BF2S */
+                        Store (BF2S, Index (DerefOf (Index (BSOL, 0x00)), Local0))
+                        Increment (Local5)
+                        Increment (Local0)
                     }
 
-                    Local1 = 0x00
-                    Local2 = 0x00
-                    While ((Local2 != 0x06))
+                    Store (0x00, Local1)
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local2, 0x06))
                     {
-                        BF01 = DerefOf (CRBI [Local2])
-                        Local5 = 0x00
-                        While ((DerefOf (BF01 [Local5]) != 0x00))
+                        Store (DerefOf (Index (CRBI, Local2)), BF01) /* \_SB_.BF01 */
+                        Store (0x00, Local5)
+                        While (LNotEqual (DerefOf (Index (BF01, Local5)), 0x00))
                         {
-                            Local3 = DerefOf (BF01 [Local5])
-                            BVAL [Local1] = Local3
-                            Local5++
-                            Local1++
+                            Store (DerefOf (Index (BF01, Local5)), Local3)
+                            Store (Local3, Index (BVAL, Local1))
+                            Increment (Local5)
+                            Increment (Local1)
                         }
 
-                        BVAL [Local1] = 0x2C
-                        Local1++
-                        Local2++
+                        Store (0x2C, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Increment (Local2)
                     }
 
-                    Local2 = 0x00
-                    While ((Local2 != 0x09))
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local2, 0x09))
                     {
-                        BVAL [Local1] = 0x20
-                        Local1++
-                        BVAL [Local1] = 0x2C
-                        Local1++
-                        Local2++
+                        Store (0x20, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Store (0x2C, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Increment (Local2)
                     }
 
-                    BB2S = BVAL /* \_SB_.BVAL */
-                    DerefOf (BSOL [0x00]) [0x01] = BB2S /* \_SB_.BB2S */
+                    Store (BVAL, BB2S) /* \_SB_.BB2S */
+                    Store (BB2S, Index (DerefOf (Index (BSOL, 0x00)), 0x01))
                 }
 
-                If ((Arg0 == 0x01))
+                If (LEqual (Arg0, 0x01))
                 {
-                    Local4 = IBUF ()
+                    Store (IBUF (), Local4)
                     \_SB.SSMI (0xEA7B, 0x00, 0x08, Arg0, 0x00)
-                    DerefOf (BSOL [Arg0]) [0x0B] = ((STAT & 
-                        0xF0) >> 0x04)
-                    STAT &= 0x0F
-                    SUIP = WUFI /* \WUFI */
-                    While ((Local1 != 0x09))
+                    Store (ShiftRight (And (STAT, 0xF0), 0x04), Index (DerefOf (Index (BSOL, 
+                        Arg0)), 0x0B))
+                    And (STAT, 0x0F, STAT) /* \STAT */
+                    Store (WUFI, SUIP) /* \_SB_.SUIP */
+                    While (LNotEqual (Local1, 0x09))
                     {
-                        Local4 = DerefOf (SUIP [Local1])
-                        If ((Local4 != 0xFF))
+                        Store (DerefOf (Index (SUIP, Local1)), Local4)
+                        If (LNotEqual (Local4, 0xFF))
                         {
-                            Local5 = 0x00
-                            While ((Local5 != 0x09))
+                            Store (0x00, Local5)
+                            While (LNotEqual (Local5, 0x09))
                             {
-                                Local7 = DerefOf (DerefOf (UEBL [Local5]) [0x00])
-                                If ((Local4 == Local7))
+                                Store (DerefOf (Index (DerefOf (Index (UEBL, Local5)), 0x00)), Local7)
+                                If (LEqual (Local4, Local7))
                                 {
-                                    BF01 = DerefOf (DerefOf (UEBL [Local5]) [0x01])
-                                    BF2S = BF01 /* \_SB_.BF01 */
-                                    CUBO [Local6] = BF2S /* \_SB_.BF2S */
-                                    Local6++
-                                    BTDN++
-                                    Local5 = (0x09 - 0x01)
+                                    Store (DerefOf (Index (DerefOf (Index (UEBL, Local5)), 0x01)), BF01) /* \_SB_.BF01 */
+                                    Store (BF01, BF2S) /* \_SB_.BF2S */
+                                    Store (BF2S, Index (CUBO, Local6))
+                                    Increment (Local6)
+                                    Increment (BTDN)
+                                    Store (Subtract (0x09, 0x01), Local5)
                                 }
 
-                                Local5++
+                                Increment (Local5)
                             }
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
 
-                    Local0 = 0x00
-                    Local5 = 0x00
-                    Local4 = 0x00
-                    Local0 = 0x0D
-                    While ((Local5 != 0x09))
+                    Store (0x00, Local0)
+                    Store (0x00, Local5)
+                    Store (0x00, Local4)
+                    Store (0x0D, Local0)
+                    While (LNotEqual (Local5, 0x09))
                     {
-                        BF01 = DerefOf (CUBO [Local5])
-                        BF2S = BF01 /* \_SB_.BF01 */
+                        Store (DerefOf (Index (CUBO, Local5)), BF01) /* \_SB_.BF01 */
+                        Store (BF01, BF2S) /* \_SB_.BF2S */
                         If (\SRCM (BF2S, " UEFI Boot", 0x0A))
                         {
-                            BF2S = " "
+                            Store (" ", BF2S) /* \_SB_.BF2S */
                         }
 
-                        DerefOf (BSOL [Arg0]) [Local0] = BF2S /* \_SB_.BF2S */
-                        Local0++
-                        Local5++
+                        Store (BF2S, Index (DerefOf (Index (BSOL, Arg0)), Local0))
+                        Increment (Local0)
+                        Increment (Local5)
                     }
 
-                    Local1 = 0x00
-                    Local2 = 0x00
-                    While ((Local2 != BTDN))
+                    Store (0x00, Local1)
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local2, BTDN))
                     {
-                        BF01 = DerefOf (CUBO [Local2])
-                        Local5 = 0x00
-                        While ((DerefOf (BF01 [Local5]) != 0x00))
+                        Store (DerefOf (Index (CUBO, Local2)), BF01) /* \_SB_.BF01 */
+                        Store (0x00, Local5)
+                        While (LNotEqual (DerefOf (Index (BF01, Local5)), 0x00))
                         {
-                            Local3 = DerefOf (BF01 [Local5])
-                            BVAL [Local1] = Local3
-                            Local5++
-                            Local1++
+                            Store (DerefOf (Index (BF01, Local5)), Local3)
+                            Store (Local3, Index (BVAL, Local1))
+                            Increment (Local5)
+                            Increment (Local1)
                         }
 
-                        BVAL [Local1] = 0x2C
-                        Local1++
-                        Local2++
+                        Store (0x2C, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Increment (Local2)
                     }
 
-                    Local2 = 0x00
-                    While ((Local2 != 0x09))
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local2, 0x09))
                     {
-                        BVAL [Local1] = 0x20
-                        Local1++
-                        BVAL [Local1] = 0x2C
-                        Local1++
-                        Local2++
+                        Store (0x20, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Store (0x2C, Index (BVAL, Local1))
+                        Increment (Local1)
+                        Increment (Local2)
                     }
 
-                    BB2S = BVAL /* \_SB_.BVAL */
-                    DerefOf (BSOL [Arg0]) [0x01] = BB2S /* \_SB_.BB2S */
+                    Store (BVAL, BB2S) /* \_SB_.BB2S */
+                    Store (BB2S, Index (DerefOf (Index (BSOL, Arg0)), 0x01))
                 }
 
-                Return (DerefOf (BSOL [Arg0]))
+                Return (DerefOf (Index (BSOL, Arg0)))
             }
 
             Method (ISSP, 0, NotSerialized)
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
                 \_SB.SSMI (0xEA7B, 0x00, 0x04, 0x00, 0x00)
-                If ((APST == 0x01))
+                If (LEqual (APST, 0x01))
                 {
-                    Local0 = 0x01
+                    Store (0x01, Local0)
                 }
                 Else
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
 
                 Return (Local0)
@@ -25626,21 +25626,21 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (PLOK, 1, NotSerialized)
             {
-                Local1 = 0x00
-                Local2 = 0x00
-                If ((Arg0 == 0x00))
+                Store (0x00, Local1)
+                Store (0x00, Local2)
+                If (LEqual (Arg0, 0x00))
                 {
-                    While ((DerefOf (OAPW [Local1]) != 0x00))
+                    While (LNotEqual (DerefOf (Index (OAPW, Local1)), 0x00))
                     {
-                        Local1++
+                        Increment (Local1)
                     }
 
-                    While ((DerefOf (NAPW [Local2]) != 0x00))
+                    While (LNotEqual (DerefOf (Index (NAPW, Local2)), 0x00))
                     {
-                        Local2++
+                        Increment (Local2)
                     }
 
-                    If (((Local1 > 0x20) || (Local2 > 0x20)))
+                    If (LOr (LGreater (Local1, 0x20), LGreater (Local2, 0x20)))
                     {
                         Return (0x00)
                     }
@@ -25655,50 +25655,50 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GBID, 0, NotSerialized)
             {
-                Local1 = 0x00
-                Local4 = 0x00
-                Local5 = 0x00
-                Local6 = 0x00
-                Local7 = 0x64
-                Local2 = SizeOf (BOIN)
-                Local2--
-                While ((Local4 != Local2))
+                Store (0x00, Local1)
+                Store (0x00, Local4)
+                Store (0x00, Local5)
+                Store (0x00, Local6)
+                Store (0x64, Local7)
+                Store (SizeOf (BOIN), Local2)
+                Decrement (Local2)
+                While (LNotEqual (Local4, Local2))
                 {
-                    Local1 = 0x00
-                    While ((Local1 != SizeOf (TEMP)))
+                    Store (0x00, Local1)
+                    While (LNotEqual (Local1, SizeOf (TEMP)))
                     {
-                        TEMP [Local1] = 0x00
-                        Local1++
+                        Store (0x00, Index (TEMP, Local1))
+                        Increment (Local1)
                     }
 
-                    Local1 = 0x00
-                    While ((Local1 != 0x32))
+                    Store (0x00, Local1)
+                    While (LNotEqual (Local1, 0x32))
                     {
-                        TEMP [Local1] = DerefOf (BOIN [Local4])
-                        If (((DerefOf (BOIN [Local4]) == 0x2C) || (DerefOf (
-                            BOIN [Local4]) == 0x00)))
+                        Store (DerefOf (Index (BOIN, Local4)), Index (TEMP, Local1))
+                        If (LOr (LEqual (DerefOf (Index (BOIN, Local4)), 0x2C), LEqual (DerefOf (Index (
+                            BOIN, Local4)), 0x00)))
                         {
-                            Local1 = 0x32
-                            Local1--
+                            Store (0x32, Local1)
+                            Decrement (Local1)
                         }
 
-                        Local1++
-                        Local4++
+                        Increment (Local1)
+                        Increment (Local4)
                     }
 
-                    If ((DerefOf (BOIN [Local4]) != 0x00))
+                    If (LNotEqual (DerefOf (Index (BOIN, Local4)), 0x00))
                     {
-                        Local3 = FNID ()
-                        If ((Local3 != 0xFF))
+                        Store (FNID (), Local3)
+                        If (LNotEqual (Local3, 0xFF))
                         {
-                            BOID [Local6] = Local3
+                            Store (Local3, Index (BOID, Local6))
                         }
 
-                        Local6++
+                        Increment (Local6)
                     }
                     Else
                     {
-                        Local4 = Local2
+                        Store (Local2, Local4)
                     }
                 }
 
@@ -25707,130 +25707,130 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FNID, 0, NotSerialized)
             {
-                Local3 = 0xFF
-                If ((\SRCM (TEMP, "Optical Disk Drive", 0x11) || \SRCM (TEMP, " Optical Disk Drive", SizeOf (STG0))))
+                Store (0xFF, Local3)
+                If (LOr (\SRCM (TEMP, "Optical Disk Drive", 0x11), \SRCM (TEMP, " Optical Disk Drive", SizeOf (STG0))))
                 {
-                    Local3 = 0x01
+                    Store (0x01, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Hard Drive", 0x13) || \SRCM (TEMP, " Notebook Hard Drive ", 0x15)))
+                If (LOr (\SRCM (TEMP, "Notebook Hard Drive", 0x13), \SRCM (TEMP, " Notebook Hard Drive ", 0x15)))
                 {
-                    Local3 = 0x02
+                    Store (0x02, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Hard Drive 2", 0x15) || \SRCM (TEMP, " Notebook Hard Drive 2 ", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "Notebook Hard Drive 2", 0x15), \SRCM (TEMP, " Notebook Hard Drive 2 ", SizeOf (STG0))))
                 {
-                    Local3 = 0x0C
+                    Store (0x0C, Local3)
                 }
 
-                If ((\SRCM (TEMP, "USB Floppy", 0x0A) || \SRCM (TEMP, " USB Floppy", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "USB Floppy", 0x0A), \SRCM (TEMP, " USB Floppy", SizeOf (STG0))))
                 {
-                    Local3 = 0x03
+                    Store (0x03, Local3)
                 }
 
-                If ((\SRCM (TEMP, "USB CD-ROM", 0x0A) || \SRCM (TEMP, " USB CD-ROM", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "USB CD-ROM", 0x0A), \SRCM (TEMP, " USB CD-ROM", SizeOf (STG0))))
                 {
-                    Local3 = 0x05
+                    Store (0x05, Local3)
                 }
 
-                If ((\SRCM (TEMP, "USB Hard Drive", 0x0E) || \SRCM (TEMP, " USB Hard Drive", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "USB Hard Drive", 0x0E), \SRCM (TEMP, " USB Hard Drive", SizeOf (STG0))))
                 {
-                    Local3 = 0x06
+                    Store (0x06, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Ethernet", 0x11) || \SRCM (TEMP, " Notebook Ethernet ", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "Notebook Ethernet", 0x11), \SRCM (TEMP, " Notebook Ethernet ", SizeOf (STG0))))
                 {
-                    Local3 = 0x07
+                    Store (0x07, Local3)
                 }
 
-                If ((\SRCM (TEMP, "SD Card", 0x07) || \SRCM (TEMP, " SD Card ", 0x09)))
+                If (LOr (\SRCM (TEMP, "SD Card", 0x07), \SRCM (TEMP, " SD Card ", 0x09)))
                 {
-                    Local3 = 0x08
+                    Store (0x08, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Dock Upgrade Bay", 0x10) || \SRCM (TEMP, " Dock Upgrade Bay ", 0x12)))
+                If (LOr (\SRCM (TEMP, "Dock Upgrade Bay", 0x10), \SRCM (TEMP, " Dock Upgrade Bay ", 0x12)))
                 {
-                    Local3 = 0x0A
+                    Store (0x0A, Local3)
                 }
 
-                If ((\SRCM (TEMP, "eSATA Drive", 0x0B) || \SRCM (TEMP, " eSATA Drive ", 0x0D)))
+                If (LOr (\SRCM (TEMP, "eSATA Drive", 0x0B), \SRCM (TEMP, " eSATA Drive ", 0x0D)))
                 {
-                    Local3 = 0x0B
+                    Store (0x0B, Local3)
                 }
 
-                If ((\SRCM (TEMP, "PCIe/M.2 SSD Drive", 0x12) || \SRCM (TEMP, " PCIe/M.2 SSD Drive", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "PCIe/M.2 SSD Drive", 0x12), \SRCM (TEMP, " PCIe/M.2 SSD Drive", SizeOf (STG0))))
                 {
-                    Local3 = 0x0D
+                    Store (0x0D, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Upgrade Bay", 0x14) || \SRCM (TEMP, " Notebook Upgrade Bay", 0x15)))
+                If (LOr (\SRCM (TEMP, "Notebook Upgrade Bay", 0x14), \SRCM (TEMP, " Notebook Upgrade Bay", 0x15)))
                 {
-                    Local3 = 0x01
+                    Store (0x01, Local3)
                 }
 
-                If ((\SRCM (TEMP, "OS Boot Manager", 0x0F) || \SRCM (TEMP, " OS Boot Manager", SizeOf (STG0))))
+                If (LOr (\SRCM (TEMP, "OS Boot Manager", 0x0F), \SRCM (TEMP, " OS Boot Manager", SizeOf (STG0))))
                 {
-                    Local3 = 0x02
+                    Store (0x02, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Ethernet IPV4", 0x16) || \SRCM (TEMP, " Notebook Ethernet IPV4", 0x17)))
+                If (LOr (\SRCM (TEMP, "Notebook Ethernet IPV4", 0x16), \SRCM (TEMP, " Notebook Ethernet IPV4", 0x17)))
                 {
-                    Local3 = 0x03
+                    Store (0x03, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Notebook Ethernet IPV6", 0x16) || \SRCM (TEMP, " Notebook Ethernet IPV6", 0x17)))
+                If (LOr (\SRCM (TEMP, "Notebook Ethernet IPV6", 0x16), \SRCM (TEMP, " Notebook Ethernet IPV6", 0x17)))
                 {
-                    Local3 = 0x04
+                    Store (0x04, Local3)
                 }
 
-                If ((\SRCM (TEMP, "USB Hard Drive", 0x0E) || \SRCM (TEMP, " USB Hard Drive", 0x0F)))
+                If (LOr (\SRCM (TEMP, "USB Hard Drive", 0x0E), \SRCM (TEMP, " USB Hard Drive", 0x0F)))
                 {
-                    Local3 = 0x06
+                    Store (0x06, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Generic USB Device", 0x12) || \SRCM (TEMP, " Generic USB Device", 0x13)))
+                If (LOr (\SRCM (TEMP, "Generic USB Device", 0x12), \SRCM (TEMP, " Generic USB Device", 0x13)))
                 {
-                    Local3 = 0x07
+                    Store (0x07, Local3)
                 }
 
-                If ((\SRCM (TEMP, "eSata Hard Drive", 0x10) || \SRCM (TEMP, " eSata Hard Drive", 0x11)))
+                If (LOr (\SRCM (TEMP, "eSata Hard Drive", 0x10), \SRCM (TEMP, " eSata Hard Drive", 0x11)))
                 {
-                    Local3 = 0x08
+                    Store (0x08, Local3)
                 }
 
-                If ((\SRCM (TEMP, "SD Card Boot", 0x0C) || \SRCM (TEMP, " SD Card Boot", 0x0D)))
+                If (LOr (\SRCM (TEMP, "SD Card Boot", 0x0C), \SRCM (TEMP, " SD Card Boot", 0x0D)))
                 {
-                    Local3 = 0x09
+                    Store (0x09, Local3)
                 }
 
-                If ((\SRCM (TEMP, "HP System Diagnostics", 0x15) || \SRCM (TEMP, " HP System Diagnostics", 0x16)))
+                If (LOr (\SRCM (TEMP, "HP System Diagnostics", 0x15), \SRCM (TEMP, " HP System Diagnostics", 0x16)))
                 {
-                    Local3 = 0x0A
+                    Store (0x0A, Local3)
                 }
 
-                If ((\SRCM (TEMP, "HP Dynamic Protection", 0x11) || \SRCM (TEMP, " HP Dynamic Protection", 0x12)))
+                If (LOr (\SRCM (TEMP, "HP Dynamic Protection", 0x11), \SRCM (TEMP, " HP Dynamic Protection", 0x12)))
                 {
-                    Local3 = 0x0B
+                    Store (0x0B, Local3)
                 }
 
-                If ((\SRCM (TEMP, "HP Remote Image Deployment", 0x1A) || \SRCM (TEMP, " HP Remote Image Deployment", 0x1B)))
+                If (LOr (\SRCM (TEMP, "HP Remote Image Deployment", 0x1A), \SRCM (TEMP, " HP Remote Image Deployment", 0x1B)))
                 {
-                    Local3 = 0x0C
+                    Store (0x0C, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Customized Boot", 0x0F) || \SRCM (TEMP, " Customized Boot", 0x10)))
+                If (LOr (\SRCM (TEMP, "Customized Boot", 0x0F), \SRCM (TEMP, " Customized Boot", 0x10)))
                 {
-                    Local3 = 0x0D
+                    Store (0x0D, Local3)
                 }
 
-                If ((\SRCM (TEMP, "Dock Upgrade Bay (UEFI)", 0x17) || \SRCM (TEMP, " Dock Upgrade Bay (UEFI) ", 0x19)))
+                If (LOr (\SRCM (TEMP, "Dock Upgrade Bay (UEFI)", 0x17), \SRCM (TEMP, " Dock Upgrade Bay (UEFI) ", 0x19)))
                 {
-                    Local3 = 0x0F
+                    Store (0x0F, Local3)
                 }
 
-                If ((\SRCM (TEMP, "PCIe/M.2 SSD Hard Drive", 0x17) || \SRCM (TEMP, " PCIe/M.2 SSD Hard Drive", 0x18)))
+                If (LOr (\SRCM (TEMP, "PCIe/M.2 SSD Hard Drive", 0x17), \SRCM (TEMP, " PCIe/M.2 SSD Hard Drive", 0x18)))
                 {
-                    Local3 = 0x10
+                    Store (0x10, Local3)
                 }
 
                 Return (Local3)
@@ -25838,83 +25838,83 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WQBF, 1, NotSerialized)
             {
-                If ((Arg0 == 0x00))
+                If (LEqual (Arg0, 0x00))
                 {
-                    If ((ISSP () == 0x01))
+                    If (LEqual (ISSP (), 0x01))
                     {
-                        DerefOf (BSPV [0x00]) [0x10] = 0x01
-                        DerefOf (BSPV [0x00]) [0x11] = SPSF /* \SPSF */
+                        Store (0x01, Index (DerefOf (Index (BSPV, 0x00)), 0x10))
+                        Store (SPSF, Index (DerefOf (Index (BSPV, 0x00)), 0x11))
                     }
                     Else
                     {
-                        DerefOf (BSPV [0x00]) [0x10] = 0x00
-                        DerefOf (BSPV [0x00]) [0x11] = 0xFFFFFFFF
+                        Store (0x00, Index (DerefOf (Index (BSPV, 0x00)), 0x10))
+                        Store (0xFFFFFFFF, Index (DerefOf (Index (BSPV, 0x00)), 0x11))
                     }
 
                     \_SB.SSMI (0xEA7B, 0x00, 0x06, 0x00, 0x00)
-                    DerefOf (BSPV [0x00]) [0x0C] = PWDL /* \PWDL */
+                    Store (PWDL, Index (DerefOf (Index (BSPV, 0x00)), 0x0C))
                 }
                 Else
                 {
                     \_SB.SSMI (0xEA7B, 0x00, 0x07, Arg0, 0x00)
                 }
 
-                Return (DerefOf (BSPV [Arg0]))
+                Return (DerefOf (Index (BSPV, Arg0)))
             }
 
             Method (WQBG, 1, NotSerialized)
             {
                 \_SB.SSMI (0xEA7B, 0x00, 0x06, 0x00, 0x00)
-                If ((FMOD == 0x00))
+                If (LEqual (FMOD, 0x00))
                 {
-                    Local1 = 0x00
-                    Local2 = 0x00
-                    Local3 = 0x01
-                    While ((Local3 && (Local1 < SizeOf (MPMI))))
+                    Store (0x00, Local1)
+                    Store (0x00, Local2)
+                    Store (0x01, Local3)
+                    While (LAnd (Local3, LLess (Local1, SizeOf (MPMI))))
                     {
-                        Local2 = DerefOf (MPMI [Local1])
-                        If ((Arg0 == Local2))
+                        Store (DerefOf (Index (MPMI, Local1)), Local2)
+                        If (LEqual (Arg0, Local2))
                         {
-                            DerefOf (BSIN [Arg0]) [0x03] = 0x01
-                            Local3 = 0x00
+                            Store (0x01, Index (DerefOf (Index (BSIN, Arg0)), 0x03))
+                            Store (0x00, Local3)
                         }
-                        ElseIf ((Arg0 < Local2))
+                        ElseIf (LLess (Arg0, Local2))
                         {
-                            Local3 = 0x00
+                            Store (0x00, Local3)
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
 
-                    Local3 = 0x00
+                    Store (0x00, Local3)
                 }
 
-                Local4 = 0x00
-                If ((Arg0 == 0x00))
+                Store (0x00, Local4)
+                If (LEqual (Arg0, 0x00))
                 {
-                    Local4 = PWDL /* \PWDL */
+                    Store (PWDL, Local4)
                 }
 
-                If ((Arg0 == 0x01))
+                If (LEqual (Arg0, 0x01))
                 {
-                    Local4 = MPMC /* \MPMC */
+                    Store (MPMC, Local4)
                 }
 
-                DerefOf (BSIN [Arg0]) [0x0E] = Local4
-                If ((Local4 <= 0x09))
+                Store (Local4, Index (DerefOf (Index (BSIN, Arg0)), 0x0E))
+                If (LLessEqual (Local4, 0x09))
                 {
-                    Local2 = 0x01
+                    Store (0x01, Local2)
                 }
                 Else
                 {
-                    Local2 = 0x02
+                    Store (0x02, Local2)
                 }
 
                 ToBCD (Local4, Local1)
-                Local3 = \ISTR (Local1, Local2)
-                BF2S = Local3
-                DerefOf (BSIN [Arg0]) [0x01] = BF2S /* \_SB_.BF2S */
-                Return (DerefOf (BSIN [Arg0]))
+                Store (\ISTR (Local1, Local2), Local3)
+                Store (Local3, BF2S) /* \_SB_.BF2S */
+                Store (BF2S, Index (DerefOf (Index (BSIN, Arg0)), 0x01))
+                Return (DerefOf (Index (BSIN, Arg0)))
             }
 
             Method (WQBH, 0, NotSerialized)
@@ -25928,50 +25928,50 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (WQBJ, 1, NotSerialized)
             {
                 \_SB.SSMI (0xEA7B, 0x02, Arg0, 0x00, 0x00)
-                If ((STAT == 0x00))
+                If (LEqual (STAT, 0x00))
                 {
-                    BF2S = USRN /* \USRN */
-                    DerefOf (BUSR [Arg0]) [0x00] = BF2S /* \_SB_.BF2S */
-                    DerefOf (BUSR [Arg0]) [0x12] = ROLE /* \ROLE */
+                    Store (USRN, BF2S) /* \_SB_.BF2S */
+                    Store (BF2S, Index (DerefOf (Index (BUSR, Arg0)), 0x00))
+                    Store (ROLE, Index (DerefOf (Index (BUSR, Arg0)), 0x12))
                     CreateDWordField (HASH, 0x00, HSH1)
-                    If ((HSH1 != 0x00))
+                    If (LNotEqual (HSH1, 0x00))
                     {
-                        DerefOf (BUSR [Arg0]) [0x10] = 0x01
-                        If ((Arg0 == 0x00))
+                        Store (0x01, Index (DerefOf (Index (BUSR, Arg0)), 0x10))
+                        If (LEqual (Arg0, 0x00))
                         {
-                            DerefOf (BUSR [Arg0]) [0x11] = SPSF /* \SPSF */
+                            Store (SPSF, Index (DerefOf (Index (BUSR, Arg0)), 0x11))
                         }
                         Else
                         {
-                            DerefOf (BUSR [Arg0]) [0x11] = 0x00
+                            Store (0x00, Index (DerefOf (Index (BUSR, Arg0)), 0x11))
                         }
                     }
                     Else
                     {
-                        DerefOf (BUSR [Arg0]) [0x10] = 0x00
+                        Store (0x00, Index (DerefOf (Index (BUSR, Arg0)), 0x10))
                     }
                 }
                 Else
                 {
-                    DerefOf (BUSR [Arg0]) [0x00] = NULL /* \_SB_.WMID.NULL */
-                    DerefOf (BUSR [0x00]) [0x12] = 0x00
-                    DerefOf (BUSR [Arg0]) [0x10] = 0x00
+                    Store (NULL, Index (DerefOf (Index (BUSR, Arg0)), 0x00))
+                    Store (0x00, Index (DerefOf (Index (BUSR, 0x00)), 0x12))
+                    Store (0x00, Index (DerefOf (Index (BUSR, Arg0)), 0x10))
                 }
 
-                Return (DerefOf (BUSR [Arg0]))
+                Return (DerefOf (Index (BUSR, Arg0)))
             }
 
             Method (USPP, 0, NotSerialized)
             {
-                Local0 = 0x00
+                Store (0x00, Local0)
                 \_SB.SSMI (0xEA7B, 0x00, 0x05, 0x00, 0x00)
-                If ((SECO == 0x01))
+                If (LEqual (SECO, 0x01))
                 {
-                    Local0 = 0x01
+                    Store (0x01, Local0)
                 }
                 Else
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
 
                 Return (Local0)
@@ -25979,11 +25979,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (ZPBF, 0, NotSerialized)
             {
-                Local3 = 0x00
-                While ((Local3 != SizeOf (PCBF)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (PCBF)))
                 {
-                    PCBF [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (PCBF, Local3))
+                    Increment (Local3)
                 }
 
                 Return (0x00)
@@ -26003,95 +26003,95 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (WMBA, 3, Serialized)
             {
                 IWMP ()
-                If ((Arg1 == 0x01))
+                If (LEqual (Arg1, 0x01))
                 {
-                    Local0 = Arg2
-                    Local1 = SizeOf (Local0)
-                    Local2 = 0x00
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = 0x00
-                    Local3 = IBUF ()
-                    While ((Local5 != Local4))
+                    Store (Arg2, Local0)
+                    Store (SizeOf (Local0), Local1)
+                    Store (0x00, Local2)
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (0x00, Local3)
+                    Store (IBUF (), Local3)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        ST01 [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
-                        Local2++
-                        Local5++
+                        Store (DerefOf (Index (Local0, Local2)), Index (ST01, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
+                        Increment (Local2)
+                        Increment (Local5)
                     }
 
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    PCHG = 0x00
-                    If ((\SRCM (ST01, "Legacy Boot Order Security Level", 0x20) || \SRCM (ST01, "UEFI Boot Order Security Level", 0x1E)))
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (0x00, PCHG) /* \_SB_.PCHG */
+                    If (LOr (\SRCM (ST01, "Legacy Boot Order Security Level", 0x20), \SRCM (ST01, "UEFI Boot Order Security Level", 0x1E)))
                     {
-                        Local5 = 0x00
+                        Store (0x00, Local5)
                     }
-                    ElseIf ((\SRCM (ST01, "Legacy Boot Order", 0x11) || \SRCM (ST01, "UEFI Boot Order", 0x0F)))
+                    ElseIf (LOr (\SRCM (ST01, "Legacy Boot Order", 0x11), \SRCM (ST01, "UEFI Boot Order", 0x0F)))
                     {
-                        Local2--
-                        Local4 += (DerefOf (Local0 [Local2]) * 0x0100)
-                        Local2++
-                        While ((Local5 != Local4))
+                        Decrement (Local2)
+                        Add (Local4, Multiply (DerefOf (Index (Local0, Local2)), 0x0100), Local4)
+                        Increment (Local2)
+                        While (LNotEqual (Local5, Local4))
                         {
-                            BOIN [Local6] = DerefOf (Local0 [Local2])
-                            Local2++
-                            Local5++
-                            Local6++
-                            Local2++
-                            Local5++
+                            Store (DerefOf (Index (Local0, Local2)), Index (BOIN, Local6))
+                            Increment (Local2)
+                            Increment (Local5)
+                            Increment (Local6)
+                            Increment (Local2)
+                            Increment (Local5)
                         }
 
-                        If ((Local5 == Local4))
+                        If (LEqual (Local5, Local4))
                         {
-                            Local4 = 0x00
+                            Store (0x00, Local4)
                         }
                     }
 
                     If (\SRCM (ST01, "Setup Password", 0x0E))
                     {
-                        While ((Local5 != Local4))
+                        While (LNotEqual (Local5, Local4))
                         {
-                            PCBF [Local6] = DerefOf (Local0 [Local2])
-                            Local2++
-                            Local5++
-                            Local6++
+                            Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                            Increment (Local2)
+                            Increment (Local5)
+                            Increment (Local6)
                         }
 
-                        NAPW = PCBF /* \_SB_.PCBF */
-                        Local4 = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local2++
-                        Local5 = 0x00
-                        Local6 = 0x00
-                        Local3 = ZPBF ()
-                        While ((Local5 != Local4))
+                        Store (PCBF, NAPW) /* \NAPW */
+                        Store (DerefOf (Index (Local0, Local2)), Local4)
+                        Increment (Local2)
+                        Increment (Local2)
+                        Store (0x00, Local5)
+                        Store (0x00, Local6)
+                        Store (ZPBF (), Local3)
+                        While (LNotEqual (Local5, Local4))
                         {
-                            PCBF [Local6] = DerefOf (Local0 [Local2])
-                            Local2++
-                            Local5++
-                            Local6++
+                            Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                            Increment (Local2)
+                            Increment (Local5)
+                            Increment (Local6)
                         }
 
-                        OAPW = PCBF /* \_SB_.PCBF */
+                        Store (PCBF, OAPW) /* \OAPW */
                         \_SB.SSMI (0xEA7B, 0x01, 0x04, 0x0400, 0x00)
-                        If ((STAT == 0x00))
+                        If (LEqual (STAT, 0x00))
                         {
-                            ETYP [0x00] = 0x00
+                            Store (0x00, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
-                        If ((STAT == 0x06))
+                        If (LEqual (STAT, 0x06))
                         {
-                            ETYP [0x00] = 0x01
+                            Store (0x01, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
@@ -26100,140 +26100,140 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
                     If (\SRCM (ST01, "Notebook hard drive drivelock master password", 0x2D))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x00)
+                        Store (HDDL (Local0, Local2, Local4, 0x00), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
                     If (\SRCM (ST01, "Notebook hard drive drivelock user password", 0x2B))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x01)
+                        Store (HDDL (Local0, Local2, Local4, 0x01), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
                     If (\SRCM (ST01, "Upgrade bay hard drive drivelock master password", 0x30))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x02)
+                        Store (HDDL (Local0, Local2, Local4, 0x02), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
                     If (\SRCM (ST01, "Upgrade bay hard drive drivelock user password", 0x2E))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x03)
+                        Store (HDDL (Local0, Local2, Local4, 0x03), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
                     If (\SRCM (ST01, "drivelock master password", 0x19))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x06)
+                        Store (HDDL (Local0, Local2, Local4, 0x06), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
                     If (\SRCM (ST01, "drivelock user password", 0x17))
                     {
-                        STAT = HDDL (Local0, Local2, Local4, 0x07)
+                        Store (HDDL (Local0, Local2, Local4, 0x07), STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    VFSZ = Local4
-                    While ((Local5 != Local4))
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (Local4, VFSZ) /* \_SB_.VFSZ */
+                    While (LNotEqual (Local5, Local4))
                     {
-                        ST02 [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
-                        Local2++
-                        Local5++
+                        Store (DerefOf (Index (Local0, Local2)), Index (ST02, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
+                        Increment (Local2)
+                        Increment (Local5)
                     }
 
-                    LEN2 = Local6
-                    Local4 = DerefOf (Local0 [Local2])
-                    If (((ISSP () == 0x01) && (Local4 == 0x00)))
+                    Store (Local6, LEN2) /* \_SB_.WMID.LEN2 */
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    If (LAnd (LEqual (ISSP (), 0x01), LEqual (Local4, 0x00)))
                     {
-                        ETYP [0x00] = 0x01
+                        Store (0x01, Index (ETYP, 0x00))
                         Notify (\_SB.WMID, 0xA0) // Device-Specific
                         Return (0x06)
                     }
 
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = ZPBF ()
-                    While ((Local5 != Local4))
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (ZPBF (), Local3)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        PCBF [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
+                        Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
                     }
 
-                    OAPW = PCBF /* \_SB_.PCBF */
-                    Local7 = 0x00
-                    Local4 = 0x00
-                    Local2 = 0x00
-                    Local5 = 0xFA
-                    While ((Local5 != Local4))
+                    Store (PCBF, OAPW) /* \OAPW */
+                    Store (0x00, Local7)
+                    Store (0x00, Local4)
+                    Store (0x00, Local2)
+                    Store (0xFA, Local5)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        ST14 = DerefOf (DerefOf (BISE [Local4]) [0x00])
+                        Store (DerefOf (Index (DerefOf (Index (BISE, Local4)), 0x00)), ST14) /* \_SB_.ST14 */
                         If (\SRCM (ST01, ST14, SizeOf (ST14)))
                         {
-                            Local4 = 0xFA
-                            Local4--
-                            Local2 = 0x01
+                            Store (0xFA, Local4)
+                            Decrement (Local4)
+                            Store (0x01, Local2)
                         }
 
-                        Local7++
-                        Local4++
+                        Increment (Local7)
+                        Increment (Local4)
                     }
 
-                    Local7--
-                    If ((\SRCM (ST01, "Legacy Boot Order Security Level", 0x20) || \SRCM (ST01, "UEFI Boot Order Security Level", 0x1E)))
+                    Decrement (Local7)
+                    If (LOr (\SRCM (ST01, "Legacy Boot Order Security Level", 0x20), \SRCM (ST01, "UEFI Boot Order Security Level", 0x1E)))
                     {
-                        Local2 = 0x01
+                        Store (0x01, Local2)
                     }
                     Else
                     {
                         If (\SRCM (ST01, "Legacy Boot Order", 0x11))
                         {
-                            Local2 = 0x03
+                            Store (0x03, Local2)
                         }
 
                         If (\SRCM (ST01, "UEFI Boot Order", 0x0F))
                         {
-                            Local2 = 0x08
+                            Store (0x08, Local2)
                         }
                     }
 
-                    If ((\SRCM (ST01, "Password Minimum Length", 0x17) || \SRCM (ST01, "Manufacturing Programming Mode Counter", 0x26)))
+                    If (LOr (\SRCM (ST01, "Password Minimum Length", 0x17), \SRCM (ST01, "Manufacturing Programming Mode Counter", 0x26)))
                     {
-                        Local2 = 0x06
-                        If ((VFSZ == 0x04))
+                        Store (0x06, Local2)
+                        If (LEqual (VFSZ, 0x04))
                         {
                             CreateByteField (ST02, 0x00, HIGB)
                             CreateByteField (ST02, 0x01, LOWB)
-                            Local4 = (HIGB - 0x30)
-                            Local5 = (LOWB - 0x30)
-                            Local4 = (Local5 + (Local4 * 0x0A))
+                            Subtract (HIGB, 0x30, Local4)
+                            Subtract (LOWB, 0x30, Local5)
+                            Add (Local5, Multiply (Local4, 0x0A), Local4)
                         }
                         Else
                         {
                             CreateByteField (ST02, 0x00, MINL)
-                            Local4 = (MINL - 0x30)
+                            Subtract (MINL, 0x30, Local4)
                         }
 
                         If (\SRCM (ST01, "Password Minimum Length", 0x17))
                         {
-                            If (((Local4 >= 0x04) && (Local4 <= 0x20)))
+                            If (LAnd (LGreaterEqual (Local4, 0x04), LLessEqual (Local4, 0x20)))
                             {
-                                PWDL = Local4
-                                FLAG = 0x00
-                                Local7 = 0x00
+                                Store (Local4, PWDL) /* \PWDL */
+                                Store (0x00, FLAG) /* \_SB_.FLAG */
+                                Store (0x00, Local7)
                             }
                             Else
                             {
-                                STAT = 0x05
+                                Store (0x05, STAT) /* \STAT */
                                 Return (STAT) /* \STAT */
                             }
                         }
@@ -26242,727 +26242,727 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                             If (FMOD)
                             {
-                                If (((Local4 >= 0x00) && (Local4 <= 0x0A)))
+                                If (LAnd (LGreaterEqual (Local4, 0x00), LLessEqual (Local4, 0x0A)))
                                 {
-                                    MPMC = Local4
-                                    FLAG = 0x00
-                                    Local7 = 0x01
-                                    If ((Local4 == 0x0A))
+                                    Store (Local4, MPMC) /* \MPMC */
+                                    Store (0x00, FLAG) /* \_SB_.FLAG */
+                                    Store (0x01, Local7)
+                                    If (LEqual (Local4, 0x0A))
                                     {
-                                        Local0 = 0x00
-                                        While ((Local0 < 0xFA))
+                                        Store (0x00, Local0)
+                                        While (LLess (Local0, 0xFA))
                                         {
-                                            Local5 = DerefOf (DerefOf (BISE [Local0]) [0x00])
+                                            Store (DerefOf (Index (DerefOf (Index (BISE, Local0)), 0x00)), Local5)
                                             If (\SRCP (Local5, "Manufacturing Programming Mode"))
                                             {
                                                 Break
                                             }
 
-                                            Local0++
+                                            Increment (Local0)
                                         }
 
                                         \_SB.SSMI (0xEA7B, 0x01, Local0, 0x0100, 0x00)
-                                        FMOD = 0x00
+                                        Store (0x00, FMOD) /* \FMOD */
                                     }
                                 }
                                 Else
                                 {
-                                    STAT = 0x05
+                                    Store (0x05, STAT) /* \STAT */
                                     Return (STAT) /* \STAT */
                                 }
                             }
                             Else
                             {
-                                STAT = 0x01
+                                Store (0x01, STAT) /* \STAT */
                                 Return (STAT) /* \STAT */
                             }
                         }
 
-                        Local6 = 0x06
-                        Local6 <<= 0x08
+                        Store (0x06, Local6)
+                        ShiftLeft (Local6, 0x08, Local6)
                     }
 
-                    If ((Local2 == 0x00))
+                    If (LEqual (Local2, 0x00))
                     {
-                        Local7 = 0x00
-                        Local4 = 0x00
-                        While ((Local4 < 0x38))
+                        Store (0x00, Local7)
+                        Store (0x00, Local4)
+                        While (LLess (Local4, 0x38))
                         {
-                            ST14 = DerefOf (DerefOf (BSSS [Local4]) [0x00])
+                            Store (DerefOf (Index (DerefOf (Index (BSSS, Local4)), 0x00)), ST14) /* \_SB_.ST14 */
                             If (\SRCM (ST01, ST14, SizeOf (ST14)))
                             {
-                                Local4 = 0x38
-                                Local2 = 0x02
+                                Store (0x38, Local4)
+                                Store (0x02, Local2)
                             }
 
-                            Local7++
-                            Local4++
+                            Increment (Local7)
+                            Increment (Local4)
                         }
 
-                        Local7--
+                        Decrement (Local7)
                     }
 
-                    If ((Local2 == 0x01))
+                    If (LEqual (Local2, 0x01))
                     {
-                        FLAG = 0x05
+                        Store (0x05, FLAG) /* \_SB_.FLAG */
                         If (FMOD)
                         {
                             If (\SRCM (ST01, "Manufacturing Programming Mode", 0x1E))
                             {
                                 If (\SRCM (ST02, LLCK, 0x04))
                                 {
-                                    Local6 = 0x00
-                                    FLAG = 0x00
-                                    FMOD = 0x00
+                                    Store (0x00, Local6)
+                                    Store (0x00, FLAG) /* \_SB_.FLAG */
+                                    Store (0x00, FMOD) /* \FMOD */
                                 }
                             }
                         }
 
-                        Local0 = DerefOf (BISE [Local7])
-                        Local1 = 0x0E
-                        Local3 = DerefOf (Local0 [0x0D])
-                        Local3 += Local1
-                        While ((Local1 < Local3))
+                        Store (DerefOf (Index (BISE, Local7)), Local0)
+                        Store (0x0E, Local1)
+                        Store (DerefOf (Index (Local0, 0x0D)), Local3)
+                        Add (Local3, Local1, Local3)
+                        While (LLess (Local1, Local3))
                         {
-                            Local4 = DerefOf (Local0 [Local1])
+                            Store (DerefOf (Index (Local0, Local1)), Local4)
                             If (\SRCM (ST02, Local4, LEN2))
                             {
-                                Local6 = (Local1 - 0x0E)
-                                FLAG = 0x00
+                                Subtract (Local1, 0x0E, Local6)
+                                Store (0x00, FLAG) /* \_SB_.FLAG */
                                 Break
                             }
 
-                            Local1++
+                            Increment (Local1)
                         }
 
-                        If (\SRCP (DerefOf (Local0 [0x0E]), CHGE))
+                        If (\SRCP (DerefOf (Index (Local0, 0x0E)), CHGE))
                         {
                             Switch (Local6)
                             {
                                 Case (0x00)
                                 {
-                                    Local6 = 0x02
+                                    Store (0x02, Local6)
                                 }
                                 Case (0x01)
                                 {
-                                    Local6 = 0x01
+                                    Store (0x01, Local6)
                                 }
                                 Case (0x02)
                                 {
-                                    Local6 = 0x03
+                                    Store (0x03, Local6)
                                 }
 
                             }
 
-                            PCHG = 0x01
+                            Store (0x01, PCHG) /* \_SB_.PCHG */
                         }
-                        ElseIf (\SRCP (DerefOf (Local0 [0x0E]), NONO))
+                        ElseIf (\SRCP (DerefOf (Index (Local0, 0x0E)), NONO))
                         {
                             If (\SRCM (ST01, "Restore Defaults", 0x10))
                             {
                                 If (\SRCM (ST02, "Yes", 0x03))
                                 {
                                     \_SB.SSMI (0xEA7C, 0x00, 0x00, 0x00, 0x00)
-                                    If ((STAT == 0x00))
+                                    If (LEqual (STAT, 0x00))
                                     {
-                                        ETYP [0x00] = 0x00
+                                        Store (0x00, Index (ETYP, 0x00))
                                         Notify (\_SB.WMID, 0xA0) // Device-Specific
                                     }
 
-                                    If ((STAT == 0x06))
+                                    If (LEqual (STAT, 0x06))
                                     {
-                                        ETYP [0x00] = 0x01
+                                        Store (0x01, Index (ETYP, 0x00))
                                         Notify (\_SB.WMID, 0xA0) // Device-Specific
                                     }
                                 }
                             }
-                            ElseIf (((\SRCM (ST01, "Reset BIOS security to factory default", 0x26) == 0x00) && (\SRCM (ST01, 
-                                "Permanent Disable Absolute Persistence Module Set Once", 0x36) == 0x00)))
+                            ElseIf (LAnd (LEqual (\SRCM (ST01, "Reset BIOS security to factory default", 0x26), 0x00), LEqual (\SRCM (ST01, 
+                                "Permanent Disable Absolute Persistence Module Set Once", 0x36), 0x00)))
                             {
-                                PCHG = 0x01
+                                Store (0x01, PCHG) /* \_SB_.PCHG */
                             }
                         }
-                        ElseIf ((\SRCM (ST01, "Parallel port mode", 0x12) && (Local6 == 0x03)))
+                        ElseIf (LAnd (\SRCM (ST01, "Parallel port mode", 0x12), LEqual (Local6, 0x03)))
                         {
-                            Local6 = 0x04
+                            Store (0x04, Local6)
                         }
                         ElseIf (\SRCM (ST01, "Disable charging port in all sleep/off states below(%):", 0x37))
                         {
-                            Local6++
+                            Increment (Local6)
                         }
                         ElseIf (\SRCM (ST01, "Manufacturing Programming Mode", 0x1E))
                         {
-                            If (!FMOD)
+                            If (LNot (FMOD))
                             {
-                                If ((Local6 == 0x01))
+                                If (LEqual (Local6, 0x01))
                                 {
-                                    FLAG = 0x05
+                                    Store (0x05, FLAG) /* \_SB_.FLAG */
                                 }
                             }
                         }
 
-                        If ((PCHG == 0x01))
+                        If (LEqual (PCHG, 0x01))
                         {
-                            Local1 = 0x01
+                            Store (0x01, Local1)
                             If (FMOD)
                             {
-                                If ((\SRCM (ST01, "Reset Authentication Credential", 0x1F) || \SRCM (ST01, "TPM Reset to Factory Defaults", 0x1D)))
+                                If (LOr (\SRCM (ST01, "Reset Authentication Credential", 0x1F), \SRCM (ST01, "TPM Reset to Factory Defaults", 0x1D)))
                                 {
-                                    Local1 = 0x00
+                                    Store (0x00, Local1)
                                 }
                             }
 
-                            If ((Local1 && (ISSP () == 0x00)))
+                            If (LAnd (Local1, LEqual (ISSP (), 0x00)))
                             {
-                                STAT = 0x8001
+                                Store (0x8001, STAT) /* \STAT */
                                 Return (STAT) /* \STAT */
                             }
                         }
 
-                        Local6 &= 0xFF
-                        Local3 = 0x01
-                        Local6 |= (Local3 << 0x08)
+                        And (Local6, 0xFF, Local6)
+                        Store (0x01, Local3)
+                        Or (ShiftLeft (Local3, 0x08), Local6, Local6)
                     }
 
-                    If ((Local2 == 0x02))
+                    If (LEqual (Local2, 0x02))
                     {
-                        Local4 = 0x00
-                        Local5 = 0x02
-                        If ((FMOD == 0x00))
+                        Store (0x00, Local4)
+                        Store (0x02, Local5)
+                        If (LEqual (FMOD, 0x00))
                         {
-                            While ((Local4 < SizeOf (MPMS)))
+                            While (LLess (Local4, SizeOf (MPMS)))
                             {
-                                If (\SRCM (ST01, DerefOf (MPMS [Local4]), SizeOf (ST01)))
+                                If (\SRCM (ST01, DerefOf (Index (MPMS, Local4)), SizeOf (ST01)))
                                 {
-                                    STAT = 0x01
+                                    Store (0x01, STAT) /* \STAT */
                                     Return (STAT) /* \STAT */
                                 }
 
-                                Local4++
+                                Increment (Local4)
                             }
 
-                            Local4 = 0x00
+                            Store (0x00, Local4)
                         }
 
-                        While ((Local4 < SizeOf (TROS)))
+                        While (LLess (Local4, SizeOf (TROS)))
                         {
-                            If (\SRCM (ST01, DerefOf (TROS [Local4]), SizeOf (ST01)))
+                            If (\SRCM (ST01, DerefOf (Index (TROS, Local4)), SizeOf (ST01)))
                             {
-                                STAT = 0x01
+                                Store (0x01, STAT) /* \STAT */
                                 Return (STAT) /* \STAT */
                             }
 
-                            Local4++
+                            Increment (Local4)
                         }
 
-                        Local4 = 0x00
-                        Local7 = 0x00
+                        Store (0x00, Local4)
+                        Store (0x00, Local7)
                         If (\SRCM (ST01, "Asset Tracking Number", SizeOf (ST01)))
                         {
-                            BF2S = ST02 /* \_SB_.ST02 */
-                            Local4 = 0x00
-                            Local5 = 0x00
-                            Local1 = 0x00
-                            Local1 = SizeOf (ST02)
-                            While ((Local5 != Local1))
+                            Store (ST02, BF2S) /* \_SB_.BF2S */
+                            Store (0x00, Local4)
+                            Store (0x00, Local5)
+                            Store (0x00, Local1)
+                            Store (SizeOf (ST02), Local1)
+                            While (LNotEqual (Local5, Local1))
                             {
-                                If ((DerefOf (ST02 [Local4]) == 0x00))
+                                If (LEqual (DerefOf (Index (ST02, Local4)), 0x00))
                                 {
-                                    Local5 = SizeOf (ST02)
-                                    Local5--
+                                    Store (SizeOf (ST02), Local5)
+                                    Decrement (Local5)
                                 }
 
-                                Local4++
-                                Local5++
+                                Increment (Local4)
+                                Increment (Local5)
                             }
 
-                            Local4--
-                            If ((Local4 > 0x12))
+                            Decrement (Local4)
+                            If (LGreater (Local4, 0x12))
                             {
-                                FLAG = 0x05
+                                Store (0x05, FLAG) /* \_SB_.FLAG */
                             }
                             Else
                             {
-                                FLAG = 0x00
+                                Store (0x00, FLAG) /* \_SB_.FLAG */
                             }
 
-                            ASTL = Local4
-                            WATS = ST02 /* \_SB_.ST02 */
-                            ASTG = WATS /* \_SB_.WATS */
-                            WTB3 = ASTG /* \ASTG */
+                            Store (Local4, ASTL) /* \ASTL */
+                            Store (ST02, WATS) /* \_SB_.WATS */
+                            Store (WATS, ASTG) /* \ASTG */
+                            Store (ASTG, WTB3) /* \_SB_.WTB3 */
                         }
 
                         If (\SRCM (ST01, "Ownership Tag", SizeOf (ST01)))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x50))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x50))
                             {
-                                WONT [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (WONT, Local1))
+                                Increment (Local1)
                             }
 
-                            OWNT = WONT /* \_SB_.WONT */
-                            Local7 = 0x01
-                            FLAG = 0x00
+                            Store (WONT, OWNT) /* \OWNT */
+                            Store (0x01, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "BIOS Power-On Time (hh:mm)", SizeOf (ST01)))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x05))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x05))
                             {
-                                TATM [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TATM, Local1))
+                                Increment (Local1)
                             }
 
-                            ATIM = TATM /* \_SB_.TATM */
-                            Local7 = 0x03
-                            FLAG = 0x00
+                            Store (TATM, ATIM) /* \ATIM */
+                            Store (0x03, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "System Configuration ID", 0x17))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x40))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x40))
                             {
-                                TPCD [Local1] = 0x00
-                                Local1++
+                                Store (0x00, Index (TPCD, Local1))
+                                Increment (Local1)
                             }
 
-                            Local1 = 0x00
-                            While ((Local1 != 0x40))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x40))
                             {
-                                TPCD [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TPCD, Local1))
+                                Increment (Local1)
                             }
 
-                            PCID = TPCD /* \_SB_.TPCD */
-                            Local7 = 0x04
-                            FLAG = 0x00
+                            Store (TPCD, PCID) /* \PCID */
+                            Store (0x04, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Enter Feature Byte", 0x12))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x0190))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x0190))
                             {
-                                TPFB [Local1] = 0x00
-                                Local1++
+                                Store (0x00, Index (TPFB, Local1))
+                                Increment (Local1)
                             }
 
-                            Local1 = 0x00
-                            While ((Local1 != 0x0190))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x0190))
                             {
-                                TPFB [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TPFB, Local1))
+                                Increment (Local1)
                             }
 
-                            FBID = TPFB /* \_SB_.TPFB */
-                            Local7 = 0x0F
-                            FLAG = 0x00
+                            Store (TPFB, FBID) /* \FBID */
+                            Store (0x0F, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Enter Build ID", 0x0E))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0xC8))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0xC8))
                             {
-                                TPBD [Local1] = 0x00
-                                Local1++
+                                Store (0x00, Index (TPBD, Local1))
+                                Increment (Local1)
                             }
 
-                            Local1 = 0x00
-                            While ((Local1 != 0xC8))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0xC8))
                             {
-                                TPBD [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TPBD, Local1))
+                                Increment (Local1)
                             }
 
-                            BIDD = TPBD /* \_SB_.TPBD */
-                            Local7 = 0x10
-                            FLAG = 0x00
+                            Store (TPBD, BIDD) /* \BIDD */
+                            Store (0x10, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Serial Number", 0x0D))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (TBUF)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (TBUF)))
                             {
-                                TBUF [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TBUF, Local1))
+                                Increment (Local1)
                             }
 
-                            SERL = TBUF /* \_SB_.TBUF */
-                            Local7 = 0x06
-                            FLAG = 0x00
+                            Store (TBUF, SERL) /* \SERL */
+                            Store (0x06, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "SKU Number", 0x0A))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (TSKU)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (TSKU)))
                             {
-                                TSKU [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TSKU, Local1))
+                                Increment (Local1)
                             }
 
-                            SKUN = TSKU /* \_SB_.TSKU */
-                            Local7 = 0x07
-                            FLAG = 0x00
+                            Store (TSKU, SKUN) /* \SKUN */
+                            Store (0x07, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Product Name", 0x0C))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (TBUF)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (TBUF)))
                             {
-                                TBUF [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TBUF, Local1))
+                                Increment (Local1)
                             }
 
-                            MODL = TBUF /* \_SB_.TBUF */
-                            Local7 = 0x08
-                            FLAG = 0x00
+                            Store (TBUF, MODL) /* \MODL */
+                            Store (0x08, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "MS Digital Marker", 0x11))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (TOA3)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (TOA3)))
                             {
-                                TOA3 [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TOA3, Local1))
+                                Increment (Local1)
                             }
 
-                            MSDM = TOA3 /* \_SB_.TOA3 */
-                            Local7 = 0x0A
-                            FLAG = 0x00
+                            Store (TOA3, MSDM) /* \MSDM */
+                            Store (0x0A, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Product Family", 0x0E))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (WTB4)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (WTB4)))
                             {
-                                WTB4 [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (WTB4, Local1))
+                                Increment (Local1)
                             }
 
-                            PLFN = WTB4 /* \_SB_.WTB4 */
-                            Local7 = 0x0B
-                            FLAG = 0x00
+                            Store (WTB4, PLFN) /* \PLFN */
+                            Store (0x0B, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "System Board CT", 0x0F))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != SizeOf (TBCT)))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, SizeOf (TBCT)))
                             {
-                                TBCT [Local1] = 0x00
-                                Local1++
+                                Store (0x00, Index (TBCT, Local1))
+                                Increment (Local1)
                             }
 
-                            Local1 = 0x00
-                            While ((Local1 < (SizeOf (TBCT) - 0x01)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, Subtract (SizeOf (TBCT), 0x01)))
                             {
-                                TBCT [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TBCT, Local1))
+                                Increment (Local1)
                             }
 
-                            SBCT = TBCT /* \_SB_.TBCT */
-                            Local7 = 0x09
-                            FLAG = 0x00
+                            Store (TBCT, SBCT) /* \SBCT */
+                            Store (0x09, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Define Custom URL", 0x11))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x82))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x82))
                             {
-                                TURL [Local1] = 0x00
-                                Local1++
+                                Store (0x00, Index (TURL, Local1))
+                                Increment (Local1)
                             }
 
-                            Local1 = 0x00
-                            While ((Local1 != 0x82))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x82))
                             {
-                                TURL [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (TURL, Local1))
+                                Increment (Local1)
                             }
 
-                            CURL = TURL /* \_SB_.TURL */
-                            Local7 = 0x05
-                            FLAG = 0x00
+                            Store (TURL, CURL) /* \CURL */
+                            Store (0x05, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "HP Dynamic Protection Version", 0x15))
                         {
-                            Debug = "HP Dynamic Protection Version"
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (WHVV)))
+                            Store ("HP Dynamic Protection Version", Debug)
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (WHVV)))
                             {
-                                WHVV [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (WHVV, Local1))
+                                Increment (Local1)
                             }
 
-                            HVER = WHVV /* \_SB_.WHVV */
-                            Local7 = 0x0C
-                            FLAG = 0x00
-                            Debug = HVER /* \HVER */
+                            Store (WHVV, HVER) /* \HVER */
+                            Store (0x0C, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
+                            Store (HVER, Debug)
                         }
 
                         If (\SRCM (ST01, "HP Dynamic Protection Config Hash", 0x19))
                         {
-                            Debug = "HP Dynamic Protection Config Hash"
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (WHVC)))
+                            Store ("HP Dynamic Protection Config Hash", Debug)
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (WHVC)))
                             {
-                                WHVC [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (WHVC, Local1))
+                                Increment (Local1)
                             }
 
-                            HVCH = WHVC /* \_SB_.WHVC */
-                            Local7 = 0x0D
-                            FLAG = 0x00
-                            Debug = HVCH /* \HVCH */
+                            Store (WHVC, HVCH) /* \HVCH */
+                            Store (0x0D, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
+                            Store (HVCH, Debug)
                         }
 
                         If (\SRCM (ST01, "Define Customized Boot Option", SizeOf (ST01)))
                         {
-                            Local1 = 0x00
-                            While ((Local1 != 0x3B))
+                            Store (0x00, Local1)
+                            While (LNotEqual (Local1, 0x3B))
                             {
-                                WCBT [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (WCBT, Local1))
+                                Increment (Local1)
                             }
 
-                            CUBT = WCBT /* \_SB_.WCBT */
-                            Local7 = 0x0E
-                            FLAG = 0x00
+                            Store (WCBT, CUBT) /* \CUBT */
+                            Store (0x0E, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Update Address", 0x0E))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (NURL)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (NURL)))
                             {
-                                NURL [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (NURL, Local1))
+                                Increment (Local1)
                             }
 
-                            RURL = NURL /* \_SB_.NURL */
-                            Local7 = 0x11
-                            FLAG = 0x00
+                            Store (NURL, RURL) /* \RURL */
+                            Store (0x11, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Proxy Address", 0x0D))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (NURL)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (NURL)))
                             {
-                                NURL [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (NURL, Local1))
+                                Increment (Local1)
                             }
 
-                            PROX = NURL /* \_SB_.NURL */
-                            Local7 = 0x12
-                            FLAG = 0x00
+                            Store (NURL, PROX) /* \PROX */
+                            Store (0x12, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Base/Travel Keyboard Serial Number", 0x22))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (SEBU)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (SEBU)))
                             {
-                                SEBU [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (SEBU, Local1))
+                                Increment (Local1)
                             }
 
-                            BSER = SEBU /* \_SB_.SEBU */
-                            Local7 = 0x13
-                            FLAG = 0x00
+                            Store (SEBU, BSER) /* \BSER */
+                            Store (0x13, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
                         If (\SRCM (ST01, "Base/Travel Keyboard SKU Number", 0x1F))
                         {
-                            Local1 = 0x00
-                            While ((Local1 < SizeOf (MDBU)))
+                            Store (0x00, Local1)
+                            While (LLess (Local1, SizeOf (MDBU)))
                             {
-                                MDBU [Local1] = DerefOf (ST02 [Local1])
-                                Local1++
+                                Store (DerefOf (Index (ST02, Local1)), Index (MDBU, Local1))
+                                Increment (Local1)
                             }
 
-                            BMOD = MDBU /* \_SB_.MDBU */
-                            Local7 = 0x14
-                            FLAG = 0x00
+                            Store (MDBU, BMOD) /* \BMOD */
+                            Store (0x14, Local7)
+                            Store (0x00, FLAG) /* \_SB_.FLAG */
                         }
 
-                        Local6 = 0x02
-                        Local6 <<= 0x08
+                        Store (0x02, Local6)
+                        ShiftLeft (Local6, 0x08, Local6)
                     }
 
-                    If ((Local2 == 0x03))
+                    If (LEqual (Local2, 0x03))
                     {
-                        Local1 = 0x00
-                        Local2 = 0x00
-                        Local3 = 0x00
-                        Local4 = 0x00
-                        Local5 = 0x00
-                        Local6 = 0x00
-                        Local7 = 0x00
+                        Store (0x00, Local1)
+                        Store (0x00, Local2)
+                        Store (0x00, Local3)
+                        Store (0x00, Local4)
+                        Store (0x00, Local5)
+                        Store (0x00, Local6)
+                        Store (0x00, Local7)
                         \_SB.SSMI (0xEA7B, 0x00, 0x03, 0x00, 0x00)
-                        Local2 = 0x00
-                        WSIP = BORD /* \BORD */
-                        Local1 = GBID ()
-                        DVAL = 0x00
-                        While ((Local2 < 0x64))
+                        Store (0x00, Local2)
+                        Store (BORD, WSIP) /* \_SB_.WSIP */
+                        Store (GBID (), Local1)
+                        Store (0x00, DVAL) /* \_SB_.DVAL */
+                        While (LLess (Local2, 0x64))
                         {
-                            Local5 = 0x00
-                            Local6 = 0x00
-                            While ((Local6 < 0x06))
+                            Store (0x00, Local5)
+                            Store (0x00, Local6)
+                            While (LLess (Local6, 0x06))
                             {
-                                If ((DerefOf (BOID [Local2]) == DerefOf (WSIP [Local5])))
+                                If (LEqual (DerefOf (Index (BOID, Local2)), DerefOf (Index (WSIP, Local5))))
                                 {
-                                    DVAL = 0x01
-                                    Local6 = (0x06 - 0x01)
+                                    Store (0x01, DVAL) /* \_SB_.DVAL */
+                                    Store (Subtract (0x06, 0x01), Local6)
                                 }
 
-                                Local5++
-                                Local6++
+                                Increment (Local5)
+                                Increment (Local6)
                             }
 
-                            Local5--
-                            If ((DVAL == 0x01))
+                            Decrement (Local5)
+                            If (LEqual (DVAL, 0x01))
                             {
-                                Local4 = Local5
-                                Local4--
-                                While ((Local5 > Local3))
+                                Store (Local5, Local4)
+                                Decrement (Local4)
+                                While (LGreater (Local5, Local3))
                                 {
-                                    WSIP [Local5] = DerefOf (WSIP [Local4])
-                                    Local5--
-                                    Local4--
+                                    Store (DerefOf (Index (WSIP, Local4)), Index (WSIP, Local5))
+                                    Decrement (Local5)
+                                    Decrement (Local4)
                                 }
 
-                                WSIP [Local3] = DerefOf (BOID [Local2])
-                                Local3++
+                                Store (DerefOf (Index (BOID, Local2)), Index (WSIP, Local3))
+                                Increment (Local3)
                             }
 
-                            Local2++
-                            DVAL = 0x00
+                            Increment (Local2)
+                            Store (0x00, DVAL) /* \_SB_.DVAL */
                         }
 
-                        BORD = WSIP /* \_SB_.WSIP */
-                        FLAG = 0x00
-                        Local7 = 0x00
-                        Local6 = 0x03
-                        Local6 <<= 0x08
+                        Store (WSIP, BORD) /* \BORD */
+                        Store (0x00, FLAG) /* \_SB_.FLAG */
+                        Store (0x00, Local7)
+                        Store (0x03, Local6)
+                        ShiftLeft (Local6, 0x08, Local6)
                     }
 
-                    If ((Local2 == 0x08))
+                    If (LEqual (Local2, 0x08))
                     {
-                        Local1 = 0x00
-                        Local2 = 0x00
-                        Local3 = 0x00
-                        Local4 = 0x00
-                        Local5 = 0x00
-                        Local6 = 0x00
-                        Local7 = 0x00
+                        Store (0x00, Local1)
+                        Store (0x00, Local2)
+                        Store (0x00, Local3)
+                        Store (0x00, Local4)
+                        Store (0x00, Local5)
+                        Store (0x00, Local6)
+                        Store (0x00, Local7)
                         \_SB.SSMI (0xEA7B, 0x00, 0x08, 0x00, 0x00)
-                        SUIP = WUFI /* \WUFI */
-                        BTDN = 0x00
-                        Local1 = 0x00
-                        While ((Local1 != 0x09))
+                        Store (WUFI, SUIP) /* \_SB_.SUIP */
+                        Store (0x00, BTDN) /* \_SB_.WMID.BTDN */
+                        Store (0x00, Local1)
+                        While (LNotEqual (Local1, 0x09))
                         {
-                            Local4 = DerefOf (SUIP [Local1])
-                            If ((Local4 != 0xFF))
+                            Store (DerefOf (Index (SUIP, Local1)), Local4)
+                            If (LNotEqual (Local4, 0xFF))
                             {
-                                Local5 = 0x00
-                                While ((Local5 != 0x09))
+                                Store (0x00, Local5)
+                                While (LNotEqual (Local5, 0x09))
                                 {
-                                    Local7 = DerefOf (DerefOf (UEBL [Local5]) [0x00])
-                                    If ((Local4 == Local7))
+                                    Store (DerefOf (Index (DerefOf (Index (UEBL, Local5)), 0x00)), Local7)
+                                    If (LEqual (Local4, Local7))
                                     {
-                                        BTDN++
-                                        Local5 = (0x09 - 0x01)
+                                        Increment (BTDN)
+                                        Store (Subtract (0x09, 0x01), Local5)
                                     }
 
-                                    Local5++
+                                    Increment (Local5)
                                 }
                             }
 
-                            Local1++
+                            Increment (Local1)
                         }
 
-                        Local2 = 0x00
-                        Local1 = GBID ()
-                        DVAL = 0x00
-                        While ((Local2 < 0x64))
+                        Store (0x00, Local2)
+                        Store (GBID (), Local1)
+                        Store (0x00, DVAL) /* \_SB_.DVAL */
+                        While (LLess (Local2, 0x64))
                         {
-                            Local5 = 0x00
-                            Local6 = 0x00
-                            While ((Local6 < BTDN))
+                            Store (0x00, Local5)
+                            Store (0x00, Local6)
+                            While (LLess (Local6, BTDN))
                             {
-                                If ((DerefOf (BOID [Local2]) == DerefOf (SUIP [Local5])))
+                                If (LEqual (DerefOf (Index (BOID, Local2)), DerefOf (Index (SUIP, Local5))))
                                 {
-                                    DVAL = 0x01
-                                    Local6 = (BTDN - 0x01)
+                                    Store (0x01, DVAL) /* \_SB_.DVAL */
+                                    Store (Subtract (BTDN, 0x01), Local6)
                                 }
 
-                                Local5++
-                                Local6++
+                                Increment (Local5)
+                                Increment (Local6)
                             }
 
-                            Local5--
-                            If ((DVAL == 0x01))
+                            Decrement (Local5)
+                            If (LEqual (DVAL, 0x01))
                             {
-                                Local4 = Local5
-                                Local4--
-                                While ((Local5 > Local3))
+                                Store (Local5, Local4)
+                                Decrement (Local4)
+                                While (LGreater (Local5, Local3))
                                 {
-                                    SUIP [Local5] = DerefOf (SUIP [Local4])
-                                    Local5--
-                                    Local4--
+                                    Store (DerefOf (Index (SUIP, Local4)), Index (SUIP, Local5))
+                                    Decrement (Local5)
+                                    Decrement (Local4)
                                 }
 
-                                SUIP [Local3] = DerefOf (BOID [Local2])
-                                Local3++
+                                Store (DerefOf (Index (BOID, Local2)), Index (SUIP, Local3))
+                                Increment (Local3)
                             }
 
-                            Local2++
-                            DVAL = 0x00
+                            Increment (Local2)
+                            Store (0x00, DVAL) /* \_SB_.DVAL */
                         }
 
-                        WUFI = SUIP /* \_SB_.SUIP */
-                        FLAG = 0x00
-                        Local7 = 0x00
-                        Local6 = 0x08
-                        Local6 <<= 0x08
+                        Store (SUIP, WUFI) /* \WUFI */
+                        Store (0x00, FLAG) /* \_SB_.FLAG */
+                        Store (0x00, Local7)
+                        Store (0x08, Local6)
+                        ShiftLeft (Local6, 0x08, Local6)
                     }
 
-                    If ((Local2 == 0x00))
+                    If (LEqual (Local2, 0x00))
                     {
-                        STAT = 0x01
+                        Store (0x01, STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
-                    If ((FLAG == 0x05))
+                    If (LEqual (FLAG, 0x05))
                     {
-                        STAT = 0x05
+                        Store (0x05, STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
-                    If ((Local2 != 0x00))
+                    If (LNotEqual (Local2, 0x00))
                     {
                         \_SB.SSMI (0xEA7B, 0x01, Local7, Local6, 0x00)
-                        If ((STAT == 0x00))
+                        If (LEqual (STAT, 0x00))
                         {
-                            ETYP [0x00] = 0x00
+                            Store (0x00, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
-                        If ((STAT == 0x06))
+                        If (LEqual (STAT, 0x06))
                         {
-                            ETYP [0x00] = 0x01
+                            Store (0x01, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
                     }
@@ -26970,57 +26970,57 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Return (STAT) /* \STAT */
                 }
 
-                If ((Arg1 == 0x02))
+                If (LEqual (Arg1, 0x02))
                 {
-                    Local0 = Arg2
-                    Local1 = SizeOf (Local0)
-                    Local2 = 0x00
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = 0x00
-                    Local3 = ZPBF ()
-                    If ((ISSP () == 0x01))
+                    Store (Arg2, Local0)
+                    Store (SizeOf (Local0), Local1)
+                    Store (0x00, Local2)
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (0x00, Local3)
+                    Store (ZPBF (), Local3)
+                    If (LEqual (ISSP (), 0x01))
                     {
-                        While ((Local5 != Local4))
+                        While (LNotEqual (Local5, Local4))
                         {
-                            PCBF [Local6] = DerefOf (Local0 [Local2])
-                            Local2++
-                            Local5++
-                            Local6++
+                            Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                            Increment (Local2)
+                            Increment (Local5)
+                            Increment (Local6)
                         }
 
-                        OAPW = PCBF /* \_SB_.PCBF */
-                        Local4 = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local2++
-                        Local5 = 0x00
-                        Local6 = 0x00
-                        While ((Local5 != Local4))
+                        Store (PCBF, OAPW) /* \OAPW */
+                        Store (DerefOf (Index (Local0, Local2)), Local4)
+                        Increment (Local2)
+                        Increment (Local2)
+                        Store (0x00, Local5)
+                        Store (0x00, Local6)
+                        While (LNotEqual (Local5, Local4))
                         {
-                            STG1 [Local6] = DerefOf (Local0 [Local2])
-                            Local2++
-                            Local5++
-                            Local6++
-                            Local2++
-                            Local5++
+                            Store (DerefOf (Index (Local0, Local2)), Index (STG1, Local6))
+                            Increment (Local2)
+                            Increment (Local5)
+                            Increment (Local6)
+                            Increment (Local2)
+                            Increment (Local5)
                         }
                     }
 
                     If (\SRCM (STG1, "true", 0x04))
                     {
                         \_SB.SSMI (0xEA7C, 0x01, 0x00, 0x00, 0x00)
-                        If ((STAT == 0x00))
+                        If (LEqual (STAT, 0x00))
                         {
-                            ETYP [0x00] = 0x00
+                            Store (0x00, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
-                        If ((STAT == 0x06))
+                        If (LEqual (STAT, 0x06))
                         {
-                            ETYP [0x00] = 0x01
+                            Store (0x01, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
@@ -27029,15 +27029,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     Else
                     {
                         \_SB.SSMI (0xEA7C, 0x00, 0x00, 0x00, 0x00)
-                        If ((STAT == 0x00))
+                        If (LEqual (STAT, 0x00))
                         {
-                            ETYP [0x00] = 0x00
+                            Store (0x00, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
-                        If ((STAT == 0x06))
+                        If (LEqual (STAT, 0x06))
                         {
-                            ETYP [0x00] = 0x01
+                            Store (0x01, Index (ETYP, 0x00))
                             Notify (\_SB.WMID, 0xA0) // Device-Specific
                         }
 
@@ -27046,94 +27046,94 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 }
                 Else
                 {
-                    STAT = 0x05
+                    Store (0x05, STAT) /* \STAT */
                     Return (STAT) /* \STAT */
                 }
             }
 
             Method (IBUF, 0, NotSerialized)
             {
-                Local3 = 0x00
-                STAT = 0x05
-                While ((Local3 != SizeOf (ST01)))
+                Store (0x00, Local3)
+                Store (0x05, STAT) /* \STAT */
+                While (LNotEqual (Local3, SizeOf (ST01)))
                 {
-                    ST01 [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (ST01, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (ST02)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (ST02)))
                 {
-                    ST02 [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (ST02, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (ST03)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (ST03)))
                 {
-                    ST03 [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (ST03, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (BOIN)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (BOIN)))
                 {
-                    BOIN [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (BOIN, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (BOID)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (BOID)))
                 {
-                    BOID [Local3] = 0xFF
-                    Local3++
+                    Store (0xFF, Index (BOID, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (WSPS)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (WSPS)))
                 {
-                    WSPS [Local3] = 0x00
-                    WNWP [Local3] = 0x00
-                    WPPS [Local3] = 0x00
-                    WNPP [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (WSPS, Local3))
+                    Store (0x00, Index (WNWP, Local3))
+                    Store (0x00, Index (WPPS, Local3))
+                    Store (0x00, Index (WNPP, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (PCBF)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (PCBF)))
                 {
-                    PCBF [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (PCBF, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (ST11)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (ST11)))
                 {
-                    ST11 [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (ST11, Local3))
+                    Increment (Local3)
                 }
 
-                OAPW = WSPS /* \_SB_.WSPS */
-                NAPW = WNWP /* \_SB_.WNWP */
-                Local3 = 0x00
-                While ((Local3 != SizeOf (BVAL)))
+                Store (WSPS, OAPW) /* \OAPW */
+                Store (WNWP, NAPW) /* \NAPW */
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (BVAL)))
                 {
-                    BVAL [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (BVAL, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != SizeOf (BF01)))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, SizeOf (BF01)))
                 {
-                    BF01 [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (BF01, Local3))
+                    Increment (Local3)
                 }
 
-                Local3 = 0x00
-                While ((Local3 != 0x09))
+                Store (0x00, Local3)
+                While (LNotEqual (Local3, 0x09))
                 {
-                    SUIP [Local3] = 0x00
-                    Local3++
+                    Store (0x00, Index (SUIP, Local3))
+                    Increment (Local3)
                 }
 
                 Return (0x00)
@@ -27141,105 +27141,105 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WMAC, 3, NotSerialized)
             {
-                If ((Arg1 == 0x01))
+                If (LEqual (Arg1, 0x01))
                 {
-                    Local0 = Arg2
-                    Local1 = SizeOf (Local0)
-                    Local2 = 0x00
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = 0x00
-                    If ((Local4 > 0x40))
+                    Store (Arg2, Local0)
+                    Store (SizeOf (Local0), Local1)
+                    Store (0x00, Local2)
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (0x00, Local3)
+                    If (LGreater (Local4, 0x40))
                     {
-                        STAT = 0x05
+                        Store (0x05, STAT) /* \STAT */
                         Return (STAT) /* \STAT */
                     }
 
-                    Local3 = 0x00
-                    While ((Local3 != SizeOf (BUFU)))
+                    Store (0x00, Local3)
+                    While (LNotEqual (Local3, SizeOf (BUFU)))
                     {
-                        BUFU [Local3] = 0x00
-                        Local3++
+                        Store (0x00, Index (BUFU, Local3))
+                        Increment (Local3)
                     }
 
                     Divide (Local4, 0x02, Local3, Local1)
-                    Local3 = 0x00
-                    While ((Local5 != Local4))
+                    Store (0x00, Local3)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        BUFU [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
-                        Local2++
-                        Local5++
+                        Store (DerefOf (Index (Local0, Local2)), Index (BUFU, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
+                        Increment (Local2)
+                        Increment (Local5)
                     }
 
-                    Local5 = (Local1 & 0x01)
-                    If ((Local5 == 0x00))
+                    And (Local1, 0x01, Local5)
+                    If (LEqual (Local5, 0x00))
                     {
-                        Local4 = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local2++
+                        Store (DerefOf (Index (Local0, Local2)), Local4)
+                        Increment (Local2)
+                        Increment (Local2)
                     }
 
-                    USRN = BUFU /* \_SB_.BUFU */
-                    Local5 = 0x00
-                    Local6 = 0x00
+                    Store (BUFU, USRN) /* \USRN */
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
                     CreateDWordField (Local0, Local2, WROL)
-                    ROLE = WROL /* \_SB_.WMID.WMAC.WROL */
-                    Local2 += 0x04
+                    Store (WROL, ROLE) /* \ROLE */
+                    Add (Local2, 0x04, Local2)
                     CreateDWordField (Local0, Local2, WCMD)
-                    CMDV = WCMD /* \_SB_.WMID.WMAC.WCMD */
-                    Local2 += 0x04
+                    Store (WCMD, CMDV) /* \CMDV */
+                    Add (Local2, 0x04, Local2)
                     CreateDWordField (Local0, Local2, WKBD)
-                    KBDL = WKBD /* \_SB_.WMID.WMAC.WKBD */
-                    Local2 += 0x04
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local3 = ZPBF ()
-                    OAPW = PCBF /* \_SB_.PCBF */
-                    NAPW = PCBF /* \_SB_.PCBF */
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = 0x00
-                    While ((Local5 != Local4))
+                    Store (WKBD, KBDL) /* \KBDL */
+                    Add (Local2, 0x04, Local2)
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (ZPBF (), Local3)
+                    Store (PCBF, OAPW) /* \OAPW */
+                    Store (PCBF, NAPW) /* \NAPW */
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (0x00, Local3)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        PCBF [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
+                        Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
                     }
 
-                    OAPW = PCBF /* \_SB_.PCBF */
-                    Local4 = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local2++
-                    Local5 = 0x00
-                    Local6 = 0x00
-                    Local3 = ZPBF ()
-                    While ((Local5 != Local4))
+                    Store (PCBF, OAPW) /* \OAPW */
+                    Store (DerefOf (Index (Local0, Local2)), Local4)
+                    Increment (Local2)
+                    Increment (Local2)
+                    Store (0x00, Local5)
+                    Store (0x00, Local6)
+                    Store (ZPBF (), Local3)
+                    While (LNotEqual (Local5, Local4))
                     {
-                        PCBF [Local6] = DerefOf (Local0 [Local2])
-                        Local2++
-                        Local5++
-                        Local6++
+                        Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                        Increment (Local2)
+                        Increment (Local5)
+                        Increment (Local6)
                     }
 
-                    NAPW = PCBF /* \_SB_.PCBF */
+                    Store (PCBF, NAPW) /* \NAPW */
                     \_SB.SSMI (0xEA7B, 0x03, CMDV, 0x00, 0x00)
-                    If ((STAT == 0x00))
+                    If (LEqual (STAT, 0x00))
                     {
-                        ETYP [0x00] = 0x00
+                        Store (0x00, Index (ETYP, 0x00))
                         Notify (\_SB.WMID, 0xA0) // Device-Specific
                     }
 
-                    If ((STAT == 0x06))
+                    If (LEqual (STAT, 0x06))
                     {
-                        ETYP [0x00] = 0x01
+                        Store (0x01, Index (ETYP, 0x00))
                         Notify (\_SB.WMID, 0xA0) // Device-Specific
                     }
 
@@ -27247,25 +27247,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 }
                 Else
                 {
-                    STAT = 0x05
+                    Store (0x05, STAT) /* \STAT */
                     Return (STAT) /* \STAT */
                 }
             }
 
             Method (STLN, 1, NotSerialized)
             {
-                Local0 = Arg0
-                Local1 = 0x00
-                While ((Local1 != SizeOf (Local0)))
+                Store (Arg0, Local0)
+                Store (0x00, Local1)
+                While (LNotEqual (Local1, SizeOf (Local0)))
                 {
-                    Local2 = DerefOf (Local0 [Local1])
-                    If ((Local2 == 0x00))
+                    Store (DerefOf (Index (Local0, Local1)), Local2)
+                    If (LEqual (Local2, 0x00))
                     {
-                        Local1 = SizeOf (Local0)
+                        Store (SizeOf (Local0), Local1)
                     }
                     Else
                     {
-                        Local1++
+                        Increment (Local1)
                     }
                 }
 
@@ -27274,49 +27274,49 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (HDDL, 4, NotSerialized)
             {
-                Local0 = Arg0
-                Local2 = Arg1
-                Local4 = Arg2
-                Local3 = Arg3
-                Local6 = 0x00
-                Local5 = 0x00
-                While ((Local5 != Local4))
+                Store (Arg0, Local0)
+                Store (Arg1, Local2)
+                Store (Arg2, Local4)
+                Store (Arg3, Local3)
+                Store (0x00, Local6)
+                Store (0x00, Local5)
+                While (LNotEqual (Local5, Local4))
                 {
-                    PCBF [Local6] = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local5++
-                    Local6++
+                    Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                    Increment (Local2)
+                    Increment (Local5)
+                    Increment (Local6)
                 }
 
-                NAPW = PCBF /* \_SB_.PCBF */
-                Local4 = DerefOf (Local0 [Local2])
-                Local2++
-                Local2++
-                Local5 = 0x00
-                Local6 = 0x00
-                Local1 = ZPBF ()
-                While ((Local5 != Local4))
+                Store (PCBF, NAPW) /* \NAPW */
+                Store (DerefOf (Index (Local0, Local2)), Local4)
+                Increment (Local2)
+                Increment (Local2)
+                Store (0x00, Local5)
+                Store (0x00, Local6)
+                Store (ZPBF (), Local1)
+                While (LNotEqual (Local5, Local4))
                 {
-                    PCBF [Local6] = DerefOf (Local0 [Local2])
-                    Local2++
-                    Local5++
-                    Local6++
+                    Store (DerefOf (Index (Local0, Local2)), Index (PCBF, Local6))
+                    Increment (Local2)
+                    Increment (Local5)
+                    Increment (Local6)
                 }
 
-                OAPW = PCBF /* \_SB_.PCBF */
+                Store (PCBF, OAPW) /* \OAPW */
                 \_SB.SSMI (0xEA7B, 0x01, Local3, 0x0700, 0x00)
-                If ((STAT == 0x00))
+                If (LEqual (STAT, 0x00))
                 {
-                    ETYP [0x00] = 0x00
+                    Store (0x00, Index (ETYP, 0x00))
                     Notify (\_SB.WMID, 0xA0) // Device-Specific
                 }
                 Else
                 {
                 }
 
-                If ((STAT == 0x06))
+                If (LEqual (STAT, 0x06))
                 {
-                    ETYP [0x00] = 0x01
+                    Store (0x01, Index (ETYP, 0x00))
                     Notify (\_SB.WMID, 0xA0) // Device-Specific
                 }
 
@@ -27367,15 +27367,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             })
             Method (WMAA, 3, Serialized)
             {
-                Debug = "WMAA Enter"
+                Store ("WMAA Enter", Debug)
                 Return (WHCM (Arg1, Arg2))
             }
 
             Method (WGDD, 0, NotSerialized)
             {
-                Debug = "GetDisplayDevices"
-                Local1 = VGDD (0x01)
-                If ((Local1 == 0xFFFF))
+                Store ("GetDisplayDevices", Debug)
+                Store (VGDD (0x01), Local1)
+                If (LEqual (Local1, 0xFFFF))
                 {
                     Return (Package (0x02)
                     {
@@ -27385,43 +27385,43 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 }
                 Else
                 {
-                    Local2 = (Local1 & 0x1F)
-                    If ((Local1 & 0xFFE0))
+                    And (Local1, 0x1F, Local2)
+                    If (And (Local1, 0xFFE0))
                     {
-                        Local2 |= 0x20
+                        Or (Local2, 0x20, Local2)
                     }
 
-                    Local0 = Package (0x03)
+                    Store (Package (0x03)
                         {
                             0x00, 
                             0x04, 
                             Buffer (0x04){}
-                        }
-                    DerefOf (Local0 [0x02]) [0x00] = Local2
-                    DerefOf (Local0 [0x02]) [0x01] = 0x01
-                    DerefOf (Local0 [0x02]) [0x02] = 0x01
+                        }, Local0)
+                    Store (Local2, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x02))
                     Return (Local0)
                 }
             }
 
             Method (WSDD, 1, NotSerialized)
             {
-                Debug = "SETDisplayDevices"
-                Debug = Arg0
-                Local0 = (Arg0 & 0x1F)
-                If ((Arg0 & 0x20))
+                Store ("SETDisplayDevices", Debug)
+                Store (Arg0, Debug)
+                And (Arg0, 0x1F, Local0)
+                If (And (Arg0, 0x20))
                 {
-                    Local1 = (WDST & 0xFFE0)
+                    And (WDST, 0xFFE0, Local1)
                     If (FindSetRightBit (Local1, Local2))
                     {
-                        Local3 = (0x01 << Local2--)
-                        Local0 |= Local3
+                        ShiftLeft (0x01, Decrement (Local2), Local3)
+                        Or (Local0, Local3, Local0)
                     }
                 }
 
-                Debug = Local0
-                Debug = WDPE /* \WDPE */
-                If ((VSDD (Local0) == 0xFFFF))
+                Store (Local0, Debug)
+                Store (WDPE, Debug)
+                If (LEqual (VSDD (Local0), 0xFFFF))
                 {
                     Return (Package (0x02)
                     {
@@ -27477,7 +27477,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGDS, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x01, 
@@ -27485,10 +27485,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         {
                              0x00                                             // .
                         }
-                    }
+                    }, Local0)
                 If (\_SB.DCKD ())
                 {
-                    Local0 = Package (0x03)
+                    Store (Package (0x03)
                         {
                             0x00, 
                             0x01, 
@@ -27496,7 +27496,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             {
                                  0x01                                             // .
                             }
-                        }
+                        }, Local0)
                 }
 
                 Return (Local0)
@@ -27504,10 +27504,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGWS, 0, NotSerialized)
             {
-                Local2 = Package (0x03){}
-                Local2 [0x00] = 0x00
-                Local2 [0x01] = 0x50
-                Local2 [0x02] = WLDA /* \WLDA */
+                Store (Package (0x03){}, Local2)
+                Store (0x00, Index (Local2, 0x00))
+                Store (0x50, Index (Local2, 0x01))
+                Store (WLDA, Index (Local2, 0x02))
                 Return (Local2)
             }
 
@@ -27528,7 +27528,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGBI, 1, NotSerialized)
             {
-                If ((Arg0 < SizeOf (NBTI)))
+                If (LLess (Arg0, SizeOf (NBTI)))
                 {
                     Return (\_SB.PCI0.LPCB.EC0.GBTI (Arg0))
                 }
@@ -27544,42 +27544,42 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGBN, 0, NotSerialized)
             {
-                Debug = "Return Bezel function table"
-                Local0 = 0x0E
-                Local0 += 0x02
-                Local1 = Buffer (0x0A)
+                Store ("Return Bezel function table", Debug)
+                Store (0x0E, Local0)
+                Add (Local0, 0x02, Local0)
+                Store (Buffer (0x0A)
                     {
                         /* 0000 */  0x31, 0x01, 0xAE, 0x01, 0xB6, 0x01, 0xB7, 0x01,  // 1.......
                         /* 0008 */  0x70, 0x02                                       // p.
-                    }
+                    }, Local1)
                 Concatenate (Local1, Buffer (0x06)
                     {
                          0xFF, 0xFF, 0xA9, 0x21, 0x00, 0x00               // ...!..
                     }, Local2)
-                Local3 = Package (0x03){}
-                Local3 [0x00] = 0x00
-                Local3 [0x01] = Local0
-                Local3 [0x02] = Local2
+                Store (Package (0x03){}, Local3)
+                Store (0x00, Index (Local3, 0x00))
+                Store (Local0, Index (Local3, 0x01))
+                Store (Local2, Index (Local3, 0x02))
                 Return (Local3)
             }
 
             Method (GHKS, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                DerefOf (Local0 [0x02]) [0x00] = \_SB.PCI0.LPCB.EC0.GSHK ()
+                    }, Local0)
+                Store (\_SB.PCI0.LPCB.EC0.GSHK (), Index (DerefOf (Index (Local0, 0x02)), 0x00))
                 Return (Local0)
             }
 
             Method (SHKS, 1, NotSerialized)
             {
                 \_SB.PCI0.LPCB.EC0.SSHK (Arg0)
-                Debug = "SHK VALUE"
-                Debug = \_SB.PCI0.LPCB.EC0.SHK
+                Store ("SHK VALUE", Debug)
+                Store (\_SB.PCI0.LPCB.EC0.SHK, Debug)
                 Return (Package (0x02)
                 {
                     0x00, 
@@ -27589,17 +27589,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FUF4, 1, NotSerialized)
             {
-                Local0 = (Arg0 & 0x1F)
-                Local1 = (Arg0 & 0xFFE0)
+                And (Arg0, 0x1F, Local0)
+                And (Arg0, 0xFFE0, Local1)
                 If (Local1)
                 {
-                    Local0 |= 0x20
+                    Or (Local0, 0x20, Local0)
                     FindSetRightBit (Local1, Local2)
-                    Local3 = (0x01 << Local2--)
-                    Local1 &= ~Local3
+                    ShiftLeft (0x01, Decrement (Local2), Local3)
+                    And (Local1, Not (Local3), Local1)
                     If (Local1)
                     {
-                        Local0 |= 0x10
+                        Or (Local0, 0x10, Local0)
                     }
                 }
 
@@ -27608,66 +27608,66 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (HKFR, 0, NotSerialized)
             {
-                Debug = "HotkeyFunctionResponse"
-                Local0 = Package (0x03)
+                Store ("HotkeyFunctionResponse", Debug)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                Local2 = ASMB /* \ASMB */
-                Local1 = DerefOf (Local2 [0x00])
-                If ((Local1 == 0x0D))
+                    }, Local0)
+                Store (ASMB, Local2)
+                Store (DerefOf (Index (Local2, 0x00)), Local1)
+                If (LEqual (Local1, 0x0D))
                 {
-                    DerefOf (Local0 [0x02]) [0x00] = 0x31
-                    DerefOf (Local0 [0x02]) [0x01] = 0x01
+                    Store (0x31, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                 }
 
-                If ((Local1 == 0x04))
+                If (LEqual (Local1, 0x04))
                 {
-                    Debug = "VideoGetDisplayDevices enter"
+                    Store ("VideoGetDisplayDevices enter", Debug)
                     VGDD (0x00)
-                    DerefOf (Local0 [0x02]) [0x00] = 0xAE
-                    DerefOf (Local0 [0x02]) [0x01] = 0x01
-                    Local3 = FUF4 (WDGN)
-                    Local4 = FUF4 (WDSA)
-                    DerefOf (Local0 [0x02]) [0x02] = Local3
-                    DerefOf (Local0 [0x02]) [0x03] = Local4
-                    Debug = "Next Display devices variable"
-                    Debug = WDGN /* \WDGN */
-                    Debug = "Current active Display Devices Variable"
-                    Debug = WDSA /* \WDSA */
-                    Debug = "VideoGetDisplayDevices exit"
+                    Store (0xAE, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                    Store (FUF4 (WDGN), Local3)
+                    Store (FUF4 (WDSA), Local4)
+                    Store (Local3, Index (DerefOf (Index (Local0, 0x02)), 0x02))
+                    Store (Local4, Index (DerefOf (Index (Local0, 0x02)), 0x03))
+                    Store ("Next Display devices variable", Debug)
+                    Store (WDGN, Debug)
+                    Store ("Current active Display Devices Variable", Debug)
+                    Store (WDSA, Debug)
+                    Store ("VideoGetDisplayDevices exit", Debug)
                 }
 
-                If ((Local1 == 0x08))
+                If (LEqual (Local1, 0x08))
                 {
-                    DerefOf (Local0 [0x02]) [0x00] = 0x70
-                    DerefOf (Local0 [0x02]) [0x01] = 0x02
+                    Store (0x70, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x02, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                 }
 
-                If (((Local1 == 0x09) || (Local1 == 0x0A)))
+                If (LOr (LEqual (Local1, 0x09), LEqual (Local1, 0x0A)))
                 {
-                    If ((Local1 == 0x09))
+                    If (LEqual (Local1, 0x09))
                     {
-                        Local1 = 0x09
+                        Store (0x09, Local1)
                     }
-                    ElseIf ((Local1 == 0x0A))
+                    ElseIf (LEqual (Local1, 0x0A))
                     {
-                        Local1 = 0x0A
+                        Store (0x0A, Local1)
                     }
 
                     \_GPE.VBRE (Local1)
-                    DerefOf (Local0 [0x02]) [0x00] = (0xAD + Local1)
-                    DerefOf (Local0 [0x02]) [0x01] = 0x01
-                    If ((WDPE & 0x40))
+                    Add (0xAD, Local1, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                    If (And (WDPE, 0x40))
                     {
                         Wait (\_SB.BEVT, 0x10)
                     }
 
-                    DerefOf (Local0 [0x02]) [0x02] = BRID /* \BRID */
-                    DerefOf (Local0 [0x02]) [0x03] = DerefOf (Local2 [
-                        0x03])
+                    Store (BRID, Index (DerefOf (Index (Local0, 0x02)), 0x02))
+                    Store (DerefOf (Index (Local2, 0x03)), Index (DerefOf (Index (Local0, 0x02)), 
+                        0x03))
                 }
 
                 Return (Local0)
@@ -27675,17 +27675,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GHKF, 0, NotSerialized)
             {
-                Debug = WDPE /* \WDPE */
-                Debug = WDSA /* \WDSA */
-                Debug = WDST /* \WDST */
-                Debug = WDGN /* \WDGN */
+                Store (WDPE, Debug)
+                Store (WDSA, Debug)
+                Store (WDST, Debug)
+                Store (WDGN, Debug)
                 Reset (\_SB.BEVT)
                 Reset (\_SB.F4EV)
                 \_SB.SSMI (0xEA75, 0x01, 0x0A, 0x574D4953, 0x00)
-                Debug = DID1 /* \DID1 */
-                Debug = WDSA /* \WDSA */
-                Debug = WDST /* \WDST */
-                Debug = WDGN /* \WDGN */
+                Store (DID1, Debug)
+                Store (WDSA, Debug)
+                Store (WDST, Debug)
+                Store (WDGN, Debug)
                 Return (HKFR ())
             }
 
@@ -27699,27 +27699,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (WGBV, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                Local1 = WLBN /* \WLBN */
-                WLBN = 0x00
-                If ((Local1 == 0x02))
+                    }, Local0)
+                Store (WLBN, Local1)
+                Store (0x00, WLBN) /* \WLBN */
+                If (LEqual (Local1, 0x02))
                 {
-                    DerefOf (Local0 [0x02]) [0x00] = 0x9A
-                    DerefOf (Local0 [0x02]) [0x01] = 0x21
+                    Store (0x9A, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x21, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                 }
 
-                If ((Local1 == 0x03))
+                If (LEqual (Local1, 0x03))
                 {
-                    Local2 = \_SB.PCI0.LPCB.EC0.TP
-                    DerefOf (Local0 [0x02]) [0x00] = 0xA9
-                    DerefOf (Local0 [0x02]) [0x01] = 0x21
-                    DerefOf (Local0 [0x02]) [0x02] = Local2
-                    DerefOf (Local0 [0x02]) [0x03] = 0x00
+                    Store (\_SB.PCI0.LPCB.EC0.TP, Local2)
+                    Store (0xA9, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x21, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                    Store (Local2, Index (DerefOf (Index (Local0, 0x02)), 0x02))
+                    Store (0x00, Index (DerefOf (Index (Local0, 0x02)), 0x03))
                 }
 
                 Return (Local0)
@@ -27727,15 +27727,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GSAS, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                Local1 = \_SB.PCI0.LPCB.EC0.GPID ()
-                Local1 += 0x01
-                DerefOf (Local0 [0x02]) [0x00] = Local1
+                    }, Local0)
+                Store (\_SB.PCI0.LPCB.EC0.GPID (), Local1)
+                Add (Local1, 0x01, Local1)
+                Store (Local1, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                 Return (Local0)
             }
 
@@ -27772,17 +27772,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (SWPT, 1, NotSerialized)
             {
                 \_SB.SSMI (0xEA75, 0x02, 0x14, 0x574D4953, 0x00)
-                Local1 = WFDA ()
+                Store (WFDA (), Local1)
                 HWWB ()
                 Return (Local1)
             }
 
             Method (HWWB, 0, NotSerialized)
             {
-                Local0 = BT0P /* \_SB_.BT0P */
-                If ((Local0 != 0x1F))
+                Store (BT0P, Local0)
+                If (LNotEqual (Local0, 0x1F))
                 {
-                    Local0 = 0x00
+                    Store (0x00, Local0)
                 }
 
                 \_SB.SSMI (0xEA3A, 0x00, Local0, 0x00, 0x00)
@@ -27834,25 +27834,25 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (STMM, 1, NotSerialized)
             {
-                Debug = "SetThermalStatus"
+                Store ("SetThermalStatus", Debug)
                 CreateByteField (Arg0, 0x00, IDTA)
-                If (((IDTA >= 0x10) && (IDTA <= 0x15)))
+                If (LAnd (LGreaterEqual (IDTA, 0x10), LLessEqual (IDTA, 0x15)))
                 {
                     \_SB.SSMI (0xEA75, 0x02, 0x28, 0x574D4953, 0x00)
                     Return (WFDA ())
                 }
 
-                Local0 = Package (0x02)
+                Store (Package (0x02)
                     {
                         0x00, 
                         0x00
-                    }
-                If (((IDTA >= 0x20) && (IDTA <= 0x24)))
+                    }, Local0)
+                If (LAnd (LGreaterEqual (IDTA, 0x20), LLessEqual (IDTA, 0x24)))
                 {
-                    Local7 = (IDTA - 0x20)
-                    Local1 = DerefOf (Arg0 [0x01])
-                    Local2 = DerefOf (Arg0 [0x02])
-                    If ((Local1 != DerefOf (THCT [Local7])))
+                    Subtract (IDTA, 0x20, Local7)
+                    Store (DerefOf (Index (Arg0, 0x01)), Local1)
+                    Store (DerefOf (Index (Arg0, 0x02)), Local2)
+                    If (LNotEqual (Local1, DerefOf (Index (THCT, Local7))))
                     {
                         Return (Package (0x02)
                         {
@@ -27861,7 +27861,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    If ((Local1 == 0x00))
+                    If (LEqual (Local1, 0x00))
                     {
                         Return (Local0)
                     }
@@ -27869,84 +27869,84 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     If (\_SB.PCI0.LPCB.EC0.ECRG)
                     {
                         Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                        If (((Local7 < 0x03) || (Local7 == 0x04)))
+                        If (LOr (LLess (Local7, 0x03), LEqual (Local7, 0x04)))
                         {
-                            \_SB.PCI0.LPCB.EC0.CRZN = (0x01 + Local7)
-                            If ((Local2 == 0xFF))
+                            Store (Add (0x01, Local7), \_SB.PCI0.LPCB.EC0.CRZN)
+                            If (LEqual (Local2, 0xFF))
                             {
-                                Local2 = 0x00
+                                Store (0x00, Local2)
                             }
 
-                            \_SB.PCI0.LPCB.EC0.TEMP = Local2
-                            If ((Local7 == 0x02))
+                            Store (Local2, \_SB.PCI0.LPCB.EC0.TEMP)
+                            If (LEqual (Local7, 0x02))
                             {
-                                Local2 = DerefOf (Arg0 [0x03])
-                                \_SB.PCI0.LPCB.EC0.CRZN = 0x04
-                                If ((Local2 == 0xFF))
+                                Store (DerefOf (Index (Arg0, 0x03)), Local2)
+                                Store (0x04, \_SB.PCI0.LPCB.EC0.CRZN)
+                                If (LEqual (Local2, 0xFF))
                                 {
-                                    Local2 = 0x00
+                                    Store (0x00, Local2)
                                 }
 
-                                \_SB.PCI0.LPCB.EC0.TEMP = Local2
+                                Store (Local2, \_SB.PCI0.LPCB.EC0.TEMP)
                             }
                         }
                         Else
                         {
-                            If ((Local2 != 0xFF))
+                            If (LNotEqual (Local2, 0xFF))
                             {
-                                Local2 = \_TZ.CTCT (Local2)
+                                Store (\_TZ.CTCT (Local2), Local2)
                             }
 
-                            \_SB.PCI0.LPCB.EC0.FTGC = Local2
+                            Store (Local2, \_SB.PCI0.LPCB.EC0.FTGC)
                         }
 
                         Release (\_SB.PCI0.LPCB.EC0.ECMX)
                     }
 
-                    Local6 = 0x00
-                    While ((Local6 < Local1))
+                    Store (0x00, Local6)
+                    While (LLess (Local6, Local1))
                     {
-                        DerefOf (TSTV [Local7]) [Local6] = DerefOf (Arg0 [
-                            (Local6 + 0x02)])
-                        Local6++
+                        Store (DerefOf (Index (Arg0, Add (Local6, 0x02))), Index (DerefOf (Index (
+                            TSTV, Local7)), Local6))
+                        Increment (Local6)
                     }
 
-                    TSTM = 0x01
+                    Store (0x01, TSTM) /* \_SB_.WMID.TSTM */
                     Return (Local0)
                 }
 
-                If ((IDTA == 0xAA))
+                If (LEqual (IDTA, 0xAA))
                 {
-                    Local1 = 0x00
-                    While ((Local1 < SizeOf (TSTV)))
+                    Store (0x00, Local1)
+                    While (LLess (Local1, SizeOf (TSTV)))
                     {
-                        Local2 = 0x00
-                        Local3 = DerefOf (THCT [Local1])
-                        While ((Local2 < Local3))
+                        Store (0x00, Local2)
+                        Store (DerefOf (Index (THCT, Local1)), Local3)
+                        While (LLess (Local2, Local3))
                         {
-                            DerefOf (TSTV [Local1]) [Local2] = 0xFF
-                            Local2++
+                            Store (0xFF, Index (DerefOf (Index (TSTV, Local1)), Local2))
+                            Increment (Local2)
                         }
 
-                        Local1++
+                        Increment (Local1)
                     }
 
                     If (\_SB.PCI0.LPCB.EC0.ECRG)
                     {
                         Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                        Local1 = 0x01
-                        While ((Local1 <= 0x05))
+                        Store (0x01, Local1)
+                        While (LLessEqual (Local1, 0x05))
                         {
-                            \_SB.PCI0.LPCB.EC0.CRZN = Local1
-                            \_SB.PCI0.LPCB.EC0.TEMP = 0x00
-                            Local1++
+                            Store (Local1, \_SB.PCI0.LPCB.EC0.CRZN)
+                            Store (0x00, \_SB.PCI0.LPCB.EC0.TEMP)
+                            Increment (Local1)
                         }
 
-                        \_SB.PCI0.LPCB.EC0.FTGC = 0xFF
+                        Store (0xFF, \_SB.PCI0.LPCB.EC0.FTGC)
                         Release (\_SB.PCI0.LPCB.EC0.ECMX)
                     }
 
-                    TSTM = 0x00
+                    Store (0x00, TSTM) /* \_SB_.WMID.TSTM */
                     Return (Local0)
                 }
 
@@ -27959,118 +27959,118 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GTMS, 1, NotSerialized)
             {
-                Debug = "GetThermalStatus"
-                Debug = Arg0
-                Local0 = Package (0x03)
+                Store ("GetThermalStatus", Debug)
+                Store (Arg0, Debug)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x80, 
                         Buffer (0x80){}
-                    }
+                    }, Local0)
                 CreateByteField (Arg0, 0x00, IDTA)
-                If (((IDTA >= 0x00) && (IDTA <= 0x04)))
+                If (LAnd (LGreaterEqual (IDTA, 0x00), LLessEqual (IDTA, 0x04)))
                 {
-                    Local2 = DerefOf (THCT [IDTA])
-                    DerefOf (Local0 [0x02]) [0x00] = Local2
-                    If ((Local2 == 0x00))
+                    Store (DerefOf (Index (THCT, IDTA)), Local2)
+                    Store (Local2, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    If (LEqual (Local2, 0x00))
                     {
                         Return (Local0)
                     }
 
-                    If (((IDTA < 0x03) || (IDTA == 0x04)))
+                    If (LOr (LLess (IDTA, 0x03), LEqual (IDTA, 0x04)))
                     {
                         If (\_SB.PCI0.LPCB.EC0.ECRG)
                         {
                             Acquire (\_SB.PCI0.LPCB.EC0.ECMX, 0xFFFF)
-                            \_SB.PCI0.LPCB.EC0.CRZN = (0x01 + IDTA)
-                            DerefOf (Local0 [0x02]) [0x01] = \_SB.PCI0.LPCB.EC0.DTMP
-                            If ((IDTA == 0x02))
+                            Store (Add (0x01, IDTA), \_SB.PCI0.LPCB.EC0.CRZN)
+                            Store (\_SB.PCI0.LPCB.EC0.DTMP, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                            If (LEqual (IDTA, 0x02))
                             {
-                                \_SB.PCI0.LPCB.EC0.CRZN = 0x04
-                                DerefOf (Local0 [0x02]) [0x02] = \_SB.PCI0.LPCB.EC0.DTMP
+                                Store (0x04, \_SB.PCI0.LPCB.EC0.CRZN)
+                                Store (\_SB.PCI0.LPCB.EC0.DTMP, Index (DerefOf (Index (Local0, 0x02)), 0x02))
                             }
 
                             Release (\_SB.PCI0.LPCB.EC0.ECMX)
                         }
 
-                        If ((IDTA == 0x02))
+                        If (LEqual (IDTA, 0x02))
                         {
-                            DerefOf (Local0 [0x02]) [0x03] = PCHT /* \PCHT */
+                            Store (PCHT, Index (DerefOf (Index (Local0, 0x02)), 0x03))
                         }
                     }
 
-                    If ((IDTA == 0x03))
+                    If (LEqual (IDTA, 0x03))
                     {
-                        Local1 = \_TZ.GFSD ()
-                        DerefOf (Local0 [0x02]) [0x01] = Local1
+                        Store (\_TZ.GFSD (), Local1)
+                        Store (Local1, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                     }
 
                     Return (Local0)
                 }
 
-                If ((IDTA == 0x06))
+                If (LEqual (IDTA, 0x06))
                 {
                     If (TRCN)
                     {
-                        Local1 = 0x01
+                        Store (0x01, Local1)
                     }
                     Else
                     {
-                        Local1 = 0x00
+                        Store (0x00, Local1)
                     }
 
-                    TRCN = 0x00
-                    DerefOf (Local0 [0x02]) [0x00] = 0x01
-                    DerefOf (Local0 [0x02]) [0x01] = Local1
+                    Store (0x00, TRCN) /* \TRCN */
+                    Store (0x01, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (Local1, Index (DerefOf (Index (Local0, 0x02)), 0x01))
                     Return (Local0)
                 }
 
-                If (((IDTA >= 0x10) && (IDTA <= 0x15)))
+                If (LAnd (LGreaterEqual (IDTA, 0x10), LLessEqual (IDTA, 0x15)))
                 {
                     \_SB.SSMI (0xEA75, 0x01, 0x28, 0x574D4953, 0x00)
-                    If ((EBX == 0x00))
+                    If (LEqual (EBX, 0x00))
                     {
-                        Local1 = ASMB /* \ASMB */
+                        Store (ASMB, Local1)
                     }
                     Else
                     {
                         Return (Local0)
                     }
 
-                    Local7 = (IDTA - 0x10)
-                    Local2 = DerefOf (THCT [Local7])
-                    DerefOf (Local0 [0x02]) [0x00] = Local2
-                    Local4 = DerefOf (PRFI [Local7])
-                    Local3 = 0x00
-                    While ((Local3 < Local2))
+                    Subtract (IDTA, 0x10, Local7)
+                    Store (DerefOf (Index (THCT, Local7)), Local2)
+                    Store (Local2, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (DerefOf (Index (PRFI, Local7)), Local4)
+                    Store (0x00, Local3)
+                    While (LLess (Local3, Local2))
                     {
-                        DerefOf (Local0 [0x02]) [(Local3 + 0x01)] = 
-                            DerefOf (Local1 [(Local3 + Local4)])
-                        Local3++
+                        Store (DerefOf (Index (Local1, Add (Local3, Local4))), Index (DerefOf (Index (
+                            Local0, 0x02)), Add (Local3, 0x01)))
+                        Increment (Local3)
                     }
 
                     Return (Local0)
                 }
 
-                If (((IDTA >= 0x20) && (IDTA <= 0x25)))
+                If (LAnd (LGreaterEqual (IDTA, 0x20), LLessEqual (IDTA, 0x25)))
                 {
-                    Local7 = (IDTA - 0x20)
-                    Local2 = DerefOf (THCT [Local7])
-                    DerefOf (Local0 [0x02]) [0x00] = Local2
-                    Local3 = 0x00
-                    While ((Local3 < Local2))
+                    Subtract (IDTA, 0x20, Local7)
+                    Store (DerefOf (Index (THCT, Local7)), Local2)
+                    Store (Local2, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                    Store (0x00, Local3)
+                    While (LLess (Local3, Local2))
                     {
-                        DerefOf (Local0 [0x02]) [(Local3 + 0x01)] = 
-                            DerefOf (DerefOf (TSTV [Local7]) [Local3])
-                        Local3++
+                        Store (DerefOf (Index (DerefOf (Index (TSTV, Local7)), Local3)), Index (DerefOf (
+                            Index (Local0, 0x02)), Add (Local3, 0x01)))
+                        Increment (Local3)
                     }
 
                     Return (Local0)
                 }
 
-                If ((IDTA == 0xAA))
+                If (LEqual (IDTA, 0xAA))
                 {
-                    DerefOf (Local0 [0x02]) [0x00] = TSTM /* \_SB_.WMID.TSTM */
+                    Store (TSTM, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                     Return (Local0)
                 }
 
@@ -28095,10 +28095,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GPMC, 1, NotSerialized)
             {
-                Local0 = Buffer (0x80){}
-                Local0 [0x00] = 0x01
-                Local0 [0x01] = 0x00
-                If ((PMCS == 0x01))
+                Store (Buffer (0x80){}, Local0)
+                Store (0x01, Index (Local0, 0x00))
+                Store (0x00, Index (Local0, 0x01))
+                If (LEqual (PMCS, 0x01))
                 {
                     If (\_SB.PCI0.LPCB.EC0.ECRG)
                     {
@@ -28111,152 +28111,152 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         CreateWordField (Local0, 0x0E, BI2)
                         CreateWordField (Local0, 0x10, E1)
                         CreateWordField (Local0, 0x12, E2)
-                        Local1 = \_SB.PCI0.LPCB.EC0.S0FL
-                        Local2 = 0x01
-                        If (((Local1 & 0x10) == 0x00))
+                        Store (\_SB.PCI0.LPCB.EC0.S0FL, Local1)
+                        Store (0x01, Local2)
+                        If (LEqual (And (Local1, 0x10), 0x00))
                         {
-                            Local2 |= 0x02
+                            Or (Local2, 0x02, Local2)
                         }
 
-                        SYS = Local2
-                        If ((Arg0 == 0x01))
+                        Store (Local2, SYS) /* \_SB_.WMID.GPMC.SYS_ */
+                        If (LEqual (Arg0, 0x01))
                         {
-                            \_SB.PCI0.LPCB.EC0.CIDX = 0x00
-                            P1 = \_SB.PCI0.LPCB.EC0.CPWR
-                            BV1 = \_SB.PCI0.LPCB.EC0.CVLT
-                            BI1 = \_SB.PCI0.LPCB.EC0.CCUR
-                            \_SB.PCI0.LPCB.EC0.CIDX = 0x01
-                            P2 = \_SB.PCI0.LPCB.EC0.CPWR
-                            BV2 = \_SB.PCI0.LPCB.EC0.CVLT
-                            BI2 = \_SB.PCI0.LPCB.EC0.CCUR
+                            Store (0x00, \_SB.PCI0.LPCB.EC0.CIDX)
+                            Store (\_SB.PCI0.LPCB.EC0.CPWR, P1) /* \_SB_.WMID.GPMC.P1__ */
+                            Store (\_SB.PCI0.LPCB.EC0.CVLT, BV1) /* \_SB_.WMID.GPMC.BV1_ */
+                            Store (\_SB.PCI0.LPCB.EC0.CCUR, BI1) /* \_SB_.WMID.GPMC.BI1_ */
+                            Store (0x01, \_SB.PCI0.LPCB.EC0.CIDX)
+                            Store (\_SB.PCI0.LPCB.EC0.CPWR, P2) /* \_SB_.WMID.GPMC.P2__ */
+                            Store (\_SB.PCI0.LPCB.EC0.CVLT, BV2) /* \_SB_.WMID.GPMC.BV2_ */
+                            Store (\_SB.PCI0.LPCB.EC0.CCUR, BI2) /* \_SB_.WMID.GPMC.BI2_ */
                         }
                         Else
                         {
-                            Local2 = ASMB /* \ASMB */
-                            Local2 [0x10] = 0x00
-                            ASMB = Local2
+                            Store (ASMB, Local2)
+                            Store (0x00, Index (Local2, 0x10))
+                            Store (Local2, ASMB) /* \ASMB */
                             \_SB.SSMI (0xEA75, 0x01, 0x1C, 0x574D4953, 0x00)
-                            If ((EBX == 0x00))
+                            If (LEqual (EBX, 0x00))
                             {
-                                Local1 = ASMB /* \ASMB */
-                                Local2 = 0x00
-                                While ((Local2 < 0x0C))
+                                Store (ASMB, Local1)
+                                Store (0x00, Local2)
+                                While (LLess (Local2, 0x0C))
                                 {
-                                    Local0 [(Local2 + 0x04)] = DerefOf (Local1 [Local2]
-                                        )
-                                    Local2++
+                                    Store (DerefOf (Index (Local1, Local2)), Index (Local0, Add (Local2, 0x04)
+                                        ))
+                                    Increment (Local2)
                                 }
 
-                                SYS &= ~0x02
+                                And (SYS, Not (0x02), SYS) /* \_SB_.WMID.GPMC.SYS_ */
                             }
-                            ElseIf ((SYS & 0x02))
+                            ElseIf (And (SYS, 0x02))
                             {
-                                P1 = 0x011C
-                                BV1 = 0x2E18
-                                BI1 = 0x0F50
-                                P2 = 0x55
-                                BV2 = 0x3264
-                                BI2 = 0x0432
+                                Store (0x011C, P1) /* \_SB_.WMID.GPMC.P1__ */
+                                Store (0x2E18, BV1) /* \_SB_.WMID.GPMC.BV1_ */
+                                Store (0x0F50, BI1) /* \_SB_.WMID.GPMC.BI1_ */
+                                Store (0x55, P2) /* \_SB_.WMID.GPMC.P2__ */
+                                Store (0x3264, BV2) /* \_SB_.WMID.GPMC.BV2_ */
+                                Store (0x0432, BI2) /* \_SB_.WMID.GPMC.BI2_ */
                             }
                             Else
                             {
-                                \_SB.PCI0.LPCB.EC0.CIDX = 0x00
-                                P1 = \_SB.PCI0.LPCB.EC0.CPWR
-                                BV1 = \_SB.PCI0.LPCB.EC0.CVLT
-                                BI1 = \_SB.PCI0.LPCB.EC0.CCUR
-                                \_SB.PCI0.LPCB.EC0.CIDX = 0x01
-                                P2 = \_SB.PCI0.LPCB.EC0.CPWR
-                                BV2 = \_SB.PCI0.LPCB.EC0.CVLT
-                                BI2 = \_SB.PCI0.LPCB.EC0.CCUR
-                                Local1 = 0x00
-                                If (((P1 > 0x0202) || (P1 < 0x80)))
+                                Store (0x00, \_SB.PCI0.LPCB.EC0.CIDX)
+                                Store (\_SB.PCI0.LPCB.EC0.CPWR, P1) /* \_SB_.WMID.GPMC.P1__ */
+                                Store (\_SB.PCI0.LPCB.EC0.CVLT, BV1) /* \_SB_.WMID.GPMC.BV1_ */
+                                Store (\_SB.PCI0.LPCB.EC0.CCUR, BI1) /* \_SB_.WMID.GPMC.BI1_ */
+                                Store (0x01, \_SB.PCI0.LPCB.EC0.CIDX)
+                                Store (\_SB.PCI0.LPCB.EC0.CPWR, P2) /* \_SB_.WMID.GPMC.P2__ */
+                                Store (\_SB.PCI0.LPCB.EC0.CVLT, BV2) /* \_SB_.WMID.GPMC.BV2_ */
+                                Store (\_SB.PCI0.LPCB.EC0.CCUR, BI2) /* \_SB_.WMID.GPMC.BI2_ */
+                                Store (0x00, Local1)
+                                If (LOr (LGreater (P1, 0x0202), LLess (P1, 0x80)))
                                 {
-                                    Local1 = 0x01
+                                    Store (0x01, Local1)
                                 }
 
-                                If (((P2 > 0x8D) || (P2 < 0x46)))
+                                If (LOr (LGreater (P2, 0x8D), LLess (P2, 0x46)))
                                 {
-                                    Local1 = 0x01
+                                    Store (0x01, Local1)
                                 }
 
-                                If ((BV1 < 0x36B0))
+                                If (LLess (BV1, 0x36B0))
                                 {
-                                    If (((BV1 > 0x3390) || (BV1 < 0x2CEC)))
+                                    If (LOr (LGreater (BV1, 0x3390), LLess (BV1, 0x2CEC)))
                                     {
-                                        Local1 = 0x01
+                                        Store (0x01, Local1)
                                     }
 
-                                    If (((BV2 > 0x3390) || (BV2 < 0x2CEC)))
+                                    If (LOr (LGreater (BV2, 0x3390), LLess (BV2, 0x2CEC)))
                                     {
-                                        Local1 = 0x01
+                                        Store (0x01, Local1)
                                     }
 
-                                    If (((BI1 > 0x1068) || (BI1 < 0x06A4)))
+                                    If (LOr (LGreater (BI1, 0x1068), LLess (BI1, 0x06A4)))
                                     {
-                                        Local1 = 0x01
+                                        Store (0x01, Local1)
                                     }
 
-                                    If (((BI2 > 0x04B0) || (BI2 < 0x0384)))
+                                    If (LOr (LGreater (BI2, 0x04B0), LLess (BI2, 0x0384)))
                                     {
-                                        Local1 = 0x01
+                                        Store (0x01, Local1)
                                     }
-                                }
-                                Else
-                                {
-                                    If (((BV1 > 0x445C) || (BV1 < 0x3C28)))
-                                    {
-                                        Local1 = 0x01
-                                    }
-
-                                    If (((BV2 > 0x445C) || (BV2 < 0x3C28)))
-                                    {
-                                        Local1 = 0x01
-                                    }
-
-                                    If (((BI1 > 0x1068) || (BI1 < 0x06A4)))
-                                    {
-                                        Local1 = 0x01
-                                    }
-
-                                    If (((BI2 > 0x04B0) || (BI2 < 0x0384)))
-                                    {
-                                        Local1 = 0x01
-                                    }
-                                }
-
-                                If ((Local1 == 0x01))
-                                {
-                                    \_SB.PCI0.LPCB.EC0.S0FL = 0x00
-                                    P1 = 0x011C
-                                    BV1 = 0x2E18
-                                    BI1 = 0x0F50
-                                    P2 = 0x55
-                                    BV2 = 0x3264
-                                    BI2 = 0x0432
-                                    SYS |= 0x02
                                 }
                                 Else
                                 {
-                                    Local2 = ASMB /* \ASMB */
+                                    If (LOr (LGreater (BV1, 0x445C), LLess (BV1, 0x3C28)))
+                                    {
+                                        Store (0x01, Local1)
+                                    }
+
+                                    If (LOr (LGreater (BV2, 0x445C), LLess (BV2, 0x3C28)))
+                                    {
+                                        Store (0x01, Local1)
+                                    }
+
+                                    If (LOr (LGreater (BI1, 0x1068), LLess (BI1, 0x06A4)))
+                                    {
+                                        Store (0x01, Local1)
+                                    }
+
+                                    If (LOr (LGreater (BI2, 0x04B0), LLess (BI2, 0x0384)))
+                                    {
+                                        Store (0x01, Local1)
+                                    }
+                                }
+
+                                If (LEqual (Local1, 0x01))
+                                {
+                                    Store (0x00, \_SB.PCI0.LPCB.EC0.S0FL)
+                                    Store (0x011C, P1) /* \_SB_.WMID.GPMC.P1__ */
+                                    Store (0x2E18, BV1) /* \_SB_.WMID.GPMC.BV1_ */
+                                    Store (0x0F50, BI1) /* \_SB_.WMID.GPMC.BI1_ */
+                                    Store (0x55, P2) /* \_SB_.WMID.GPMC.P2__ */
+                                    Store (0x3264, BV2) /* \_SB_.WMID.GPMC.BV2_ */
+                                    Store (0x0432, BI2) /* \_SB_.WMID.GPMC.BI2_ */
+                                    Or (SYS, 0x02, SYS) /* \_SB_.WMID.GPMC.SYS_ */
+                                }
+                                Else
+                                {
+                                    Store (ASMB, Local2)
                                     CreateField (Local0, 0x20, 0x60, CDAT)
                                     CreateField (Local2, 0xA0, 0x60, BDAT)
-                                    BDAT = CDAT /* \_SB_.WMID.GPMC.CDAT */
-                                    Local2 [0x10] = 0x01
-                                    ASMB = Local2
+                                    Store (CDAT, BDAT) /* \_SB_.WMID.GPMC.BDAT */
+                                    Store (0x01, Index (Local2, 0x10))
+                                    Store (Local2, ASMB) /* \ASMB */
                                     \_SB.SSMI (0xEA75, 0x01, 0x1C, 0x574D4953, 0x00)
                                 }
                             }
                         }
 
-                        If ((BV2 > 0x3A98))
+                        If (LGreater (BV2, 0x3A98))
                         {
-                            E1 = 0x03B6
-                            E2 = 0x03B6
+                            Store (0x03B6, E1) /* \_SB_.WMID.GPMC.E1__ */
+                            Store (0x03B6, E2) /* \_SB_.WMID.GPMC.E2__ */
                         }
                         Else
                         {
-                            E1 = 0x0398
-                            E2 = 0x0398
+                            Store (0x0398, E1) /* \_SB_.WMID.GPMC.E1__ */
+                            Store (0x0398, E2) /* \_SB_.WMID.GPMC.E2__ */
                         }
                     }
                     Else
@@ -28269,23 +28269,23 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                 }
 
-                Local1 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x80, 
                         Buffer (0x80){}
-                    }
-                Local1 [0x02] = Local0
+                    }, Local1)
+                Store (Local0, Index (Local1, 0x02))
                 Return (Local1)
             }
 
             Method (CPMC, 0, NotSerialized)
             {
-                If ((PMCS == 0x01))
+                If (LEqual (PMCS, 0x01))
                 {
                     If (\_SB.PCI0.LPCB.EC0.ECRG)
                     {
-                        \_SB.PCI0.LPCB.EC0.S0FL = 0x00
+                        Store (0x00, \_SB.PCI0.LPCB.EC0.S0FL)
                         Return (Package (0x02)
                         {
                             0x00, 
@@ -28344,7 +28344,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Method (SFCC, 1, NotSerialized)
             {
                 \_SB.SSMI (0xEA75, 0x02, 0x29, 0x574D4953, 0x00)
-                Local1 = WFDA ()
+                Store (WFDA (), Local1)
                 If (EDX)
                 {
                     HWWB ()
@@ -28367,14 +28367,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (GLID, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                DerefOf (Local0 [0x02]) [0x00] = (\_SB.LID._LID () + 0x01
-                    )
+                    }, Local0)
+                Store (Add (\_SB.LID._LID (), 0x01), Index (DerefOf (Index (Local0, 0x02)), 0x00
+                    ))
                 Return (Local0)
             }
 
@@ -28434,7 +28434,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FSEC, 3, Serialized)
             {
-                If ((^FGLC () != 0x00))
+                If (LNotEqual (^FGLC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -28447,7 +28447,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Case (0x00)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
                         Return (Package (0x02)
                         {
                             0x00, 
@@ -28456,7 +28456,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x01)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
                         Return (Package (0x02)
                         {
                             0x00, 
@@ -28465,7 +28465,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x02)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
                         Return (Package (0x02)
                         {
                             0x00, 
@@ -28474,14 +28474,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x07)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
-                        Local2 = 0x11
-                        Local3 = 0x01
-                        While ((Local3 != Arg1))
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
+                        Store (0x11, Local2)
+                        Store (0x01, Local3)
+                        While (LNotEqual (Local3, Arg1))
                         {
-                            \_SB.PCI0.LPCB.EC0.FBID = DerefOf (Arg0 [Local2])
-                            Local2++
-                            Local3++
+                            Store (DerefOf (Index (Arg0, Local2)), \_SB.PCI0.LPCB.EC0.FBID)
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Package (0x02)
@@ -28492,14 +28492,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x08)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
-                        Local2 = 0x11
-                        Local3 = 0x01
-                        While ((Local3 != Arg1))
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
+                        Store (0x11, Local2)
+                        Store (0x01, Local3)
+                        While (LNotEqual (Local3, Arg1))
                         {
-                            \_SB.PCI0.LPCB.EC0.FBID = DerefOf (Arg0 [Local2])
-                            Local2++
-                            Local3++
+                            Store (DerefOf (Index (Arg0, Local2)), \_SB.PCI0.LPCB.EC0.FBID)
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Package (0x02)
@@ -28510,14 +28510,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x0A)
                     {
-                        \_SB.PCI0.LPCB.EC0.FBCM = Arg2
-                        Local2 = 0x11
-                        Local3 = 0x01
-                        While ((Local3 != Arg1))
+                        Store (Arg2, \_SB.PCI0.LPCB.EC0.FBCM)
+                        Store (0x11, Local2)
+                        Store (0x01, Local3)
+                        While (LNotEqual (Local3, Arg1))
                         {
-                            \_SB.PCI0.LPCB.EC0.FBID = DerefOf (Arg0 [Local2])
-                            Local2++
-                            Local3++
+                            Store (DerefOf (Index (Arg0, Local2)), \_SB.PCI0.LPCB.EC0.FBID)
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Package (0x02)
@@ -28540,7 +28540,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FGIF, 1, Serialized)
             {
-                If ((^FGLC () != 0x00))
+                If (LNotEqual (^FGLC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -28553,14 +28553,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 {
                     Case (0x00)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x04, 
                                 Buffer (0x04){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x00
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x00, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28569,20 +28569,20 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local1 = \_SB.PCI0.LPCB.EC0.FBGI
-                        DerefOf (Local0 [0x02]) [0x00] = Local1
+                        Store (\_SB.PCI0.LPCB.EC0.FBGI, Local1)
+                        Store (Local1, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                         Return (Local0)
                     }
                     Case (0x01)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x01
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x01, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28591,27 +28591,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x20))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x20))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x02)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x02
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x02, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28620,27 +28620,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x20))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x20))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x03)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x03
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x03, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28649,27 +28649,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x20))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x20))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x04)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x04
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x04, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28678,27 +28678,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x20))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x20))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x05)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x05
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x05, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28707,27 +28707,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x20))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x20))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x06)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x0400, 
                                 Buffer (0x0400){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x06
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x06, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28736,13 +28736,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x0100))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x0100))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
@@ -28754,14 +28754,14 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                     Case (0x08)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x1000, 
                                 Buffer (0x1000){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x08
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x08, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28770,27 +28770,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x1000))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x1000))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x09)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x1000, 
                                 Buffer (0x1000){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x09
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x09, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28799,27 +28799,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x1000))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x1000))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x0A)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x80, 
                                 Buffer (0x80){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x0A
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x0A, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28828,47 +28828,47 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x06))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x06))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x0B)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x04, 
                                 Buffer (0x04){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x0B
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x01))
+                            }, Local0)
+                        Store (0x0B, \_SB.PCI0.LPCB.EC0.FBGI)
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x01))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x0C)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x04, 
                                 Buffer (0x04){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x0C
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x0C, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28877,27 +28877,27 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x01))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x01))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
                     }
                     Case (0x0F)
                     {
-                        Local0 = Package (0x03)
+                        Store (Package (0x03)
                             {
                                 0x00, 
                                 0x04, 
                                 Buffer (0x04){}
-                            }
-                        \_SB.PCI0.LPCB.EC0.FBGI = 0x0F
-                        If ((^FLCC () == 0x00))
+                            }, Local0)
+                        Store (0x0F, \_SB.PCI0.LPCB.EC0.FBGI)
+                        If (LEqual (^FLCC (), 0x00))
                         {
                             Return (Package (0x02)
                             {
@@ -28906,13 +28906,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             })
                         }
 
-                        Local3 = 0x00
-                        Local2 = 0x00
-                        While ((Local3 != 0x04))
+                        Store (0x00, Local3)
+                        Store (0x00, Local2)
+                        While (LNotEqual (Local3, 0x04))
                         {
-                            DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBGI
-                            Local2++
-                            Local3++
+                            Store (\_SB.PCI0.LPCB.EC0.FBGI, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                            Increment (Local2)
+                            Increment (Local3)
                         }
 
                         Return (Local0)
@@ -28931,7 +28931,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FGAE, 1, Serialized)
             {
-                If ((^FGLC () != 0x00))
+                If (LNotEqual (^FGLC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -28940,16 +28940,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                If ((Arg0 < 0x0100))
+                If (LLess (Arg0, 0x0100))
                 {
-                    Local0 = Package (0x03)
+                    Store (Package (0x03)
                         {
                             0x00, 
                             0x80, 
                             Buffer (0x80){}
-                        }
-                    \_SB.PCI0.LPCB.EC0.FBAE = Arg0
-                    If ((^FLCC () == 0x00))
+                        }, Local0)
+                    Store (Arg0, \_SB.PCI0.LPCB.EC0.FBAE)
+                    If (LEqual (^FLCC (), 0x00))
                     {
                         Return (Package (0x02)
                         {
@@ -28958,13 +28958,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    Local3 = 0x00
-                    Local2 = 0x00
-                    While ((Local3 != 0x10))
+                    Store (0x00, Local3)
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local3, 0x10))
                     {
-                        DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FBAE
-                        Local2++
-                        Local3++
+                        Store (\_SB.PCI0.LPCB.EC0.FBAE, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                        Increment (Local2)
+                        Increment (Local3)
                     }
 
                     Return (Local0)
@@ -28981,7 +28981,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FGAU, 1, Serialized)
             {
-                If ((^FGLC () != 0x00))
+                If (LNotEqual (^FGLC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -28990,16 +28990,16 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                If ((Arg0 < 0x0100))
+                If (LLess (Arg0, 0x0100))
                 {
-                    Local0 = Package (0x03)
+                    Store (Package (0x03)
                         {
                             0x00, 
                             0x80, 
                             Buffer (0x80){}
-                        }
-                    \_SB.PCI0.LPCB.EC0.FUAE = Arg0
-                    If ((^FLCC () == 0x00))
+                        }, Local0)
+                    Store (Arg0, \_SB.PCI0.LPCB.EC0.FUAE)
+                    If (LEqual (^FLCC (), 0x00))
                     {
                         Return (Package (0x02)
                         {
@@ -29008,13 +29008,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    Local3 = 0x00
-                    Local2 = 0x00
-                    While ((Local3 != 0x10))
+                    Store (0x00, Local3)
+                    Store (0x00, Local2)
+                    While (LNotEqual (Local3, 0x10))
                     {
-                        DerefOf (Local0 [0x02]) [Local2] = \_SB.PCI0.LPCB.EC0.FUAE
-                        Local2++
-                        Local3++
+                        Store (\_SB.PCI0.LPCB.EC0.FUAE, Index (DerefOf (Index (Local0, 0x02)), Local2))
+                        Increment (Local2)
+                        Increment (Local3)
                     }
 
                     Return (Local0)
@@ -29031,46 +29031,46 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FGFS, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                DerefOf (Local0 [0x02]) [0x00] = \_SB.PCI0.LPCB.EC0.FBCB
-                DerefOf (Local0 [0x02]) [0x01] = \_SB.PCI0.LPCB.EC0.FBW1
-                DerefOf (Local0 [0x02]) [0x02] = \_SB.PCI0.LPCB.EC0.FBW2
+                    }, Local0)
+                Store (\_SB.PCI0.LPCB.EC0.FBCB, Index (DerefOf (Index (Local0, 0x02)), 0x00))
+                Store (\_SB.PCI0.LPCB.EC0.FBW1, Index (DerefOf (Index (Local0, 0x02)), 0x01))
+                Store (\_SB.PCI0.LPCB.EC0.FBW2, Index (DerefOf (Index (Local0, 0x02)), 0x02))
                 Return (Local0)
             }
 
             Method (FGLC, 0, NotSerialized)
             {
-                Local0 = \_SB.PCI0.LPCB.EC0.FBCM
+                Store (\_SB.PCI0.LPCB.EC0.FBCM, Local0)
                 Return (Local0)
             }
 
             Method (FGLW, 0, NotSerialized)
             {
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                DerefOf (Local0 [0x02]) [0x00] = \_SB.PCI0.LPCB.EC0.FBCM
+                    }, Local0)
+                Store (\_SB.PCI0.LPCB.EC0.FBCM, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                 Return (Local0)
             }
 
             Method (FLCC, 0, NotSerialized)
             {
-                Local0 = 0x00
-                While (((Local0 != 0x64) & (^FGLC () == 0x01)))
+                Store (0x00, Local0)
+                While (And (LNotEqual (Local0, 0x64), LEqual (^FGLC (), 0x01)))
                 {
                     Sleep (0x64)
-                    Local0++
+                    Increment (Local0)
                 }
 
-                If ((Local0 >= 0x64))
+                If (LGreaterEqual (Local0, 0x64))
                 {
                     Return (0x00)
                 }
@@ -29082,7 +29082,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (FBPS, 1, Serialized)
             {
-                If ((^FGLC () != 0x00))
+                If (LNotEqual (^FGLC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -29091,17 +29091,17 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                Local0 = Package (0x03)
+                Store (Package (0x03)
                     {
                         0x00, 
                         0x04, 
                         Buffer (0x04){}
-                    }
-                \_SB.PCI0.LPCB.EC0.FRPS = DerefOf (Arg0 [0x10])
-                \_SB.PCI0.LPCB.EC0.FRPS = DerefOf (Arg0 [0x11])
-                \_SB.PCI0.LPCB.EC0.FRPS = DerefOf (Arg0 [0x12])
-                \_SB.PCI0.LPCB.EC0.FRPS = DerefOf (Arg0 [0x13])
-                If ((^FLCC () == 0x00))
+                    }, Local0)
+                Store (DerefOf (Index (Arg0, 0x10)), \_SB.PCI0.LPCB.EC0.FRPS)
+                Store (DerefOf (Index (Arg0, 0x11)), \_SB.PCI0.LPCB.EC0.FRPS)
+                Store (DerefOf (Index (Arg0, 0x12)), \_SB.PCI0.LPCB.EC0.FRPS)
+                Store (DerefOf (Index (Arg0, 0x13)), \_SB.PCI0.LPCB.EC0.FRPS)
+                If (LEqual (^FLCC (), 0x00))
                 {
                     Return (Package (0x02)
                     {
@@ -29110,7 +29110,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                DerefOf (Local0 [0x02]) [0x00] = \_SB.PCI0.LPCB.EC0.FRPS
+                Store (\_SB.PCI0.LPCB.EC0.FRPS, Index (DerefOf (Index (Local0, 0x02)), 0x00))
                 Return (Local0)
             }
 
@@ -29194,124 +29194,124 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 If (IWPN)
                 {
                     Name (TYPS, Buffer (0x0D){})
-                    Local0 = 0x00
-                    While ((Local0 < 0x0D))
+                    Store (0x00, Local0)
+                    While (LLess (Local0, 0x0D))
                     {
-                        TYPS [Local0] = 0x00
-                        Local0++
+                        Store (0x00, Index (TYPS, Local0))
+                        Increment (Local0)
                     }
 
-                    Local4 = SizeOf (DYEN)
-                    Local0 = 0x00
-                    While ((Local0 < Local4))
+                    Store (SizeOf (DYEN), Local4)
+                    Store (0x00, Local0)
+                    While (LLess (Local0, Local4))
                     {
-                        Local7 = DerefOf (DYEN [Local0])
-                        If (((Local7 > 0x00) && (Local7 < 0x0D)))
+                        Store (DerefOf (Index (DYEN, Local0)), Local7)
+                        If (LAnd (LGreater (Local7, 0x00), LLess (Local7, 0x0D)))
                         {
-                            Local1 = DerefOf (TYPS [Local7])
-                            TYPS [Local7] = (Local1 + 0x01)
+                            Store (DerefOf (Index (TYPS, Local7)), Local1)
+                            Add (Local1, 0x01, Index (TYPS, Local7))
                         }
 
-                        Local0 += 0x02
+                        Add (Local0, 0x02, Local0)
                     }
 
-                    Local0 = 0x01
-                    Local1 = (FWSF >> 0x01)
-                    While ((Local0 < 0x0D))
+                    Store (0x01, Local0)
+                    ShiftRight (FWSF, 0x01, Local1)
+                    While (LLess (Local0, 0x0D))
                     {
-                        If (((Local1 & 0x01) == 0x00))
+                        If (LEqual (And (Local1, 0x01), 0x00))
                         {
-                            TYPS [Local0] = 0x00
+                            Store (0x00, Index (TYPS, Local0))
                         }
 
-                        Local1 >>= 0x01
-                        Local0++
+                        ShiftRight (Local1, 0x01, Local1)
+                        Increment (Local0)
                     }
 
-                    Local0 = 0x00
-                    While ((Local0 < 0xFA))
+                    Store (0x00, Local0)
+                    While (LLess (Local0, 0xFA))
                     {
-                        Local6 = DerefOf (DerefOf (BISE [Local0]) [0x00])
-                        Local2 = 0x00
-                        While ((Local2 < Local4))
+                        Store (DerefOf (Index (DerefOf (Index (BISE, Local0)), 0x00)), Local6)
+                        Store (0x00, Local2)
+                        While (LLess (Local2, Local4))
                         {
-                            Local7 = DerefOf (DYEN [Local2])
-                            If (((Local7 > 0x00) && (Local7 < 0x0D)))
+                            Store (DerefOf (Index (DYEN, Local2)), Local7)
+                            If (LAnd (LGreater (Local7, 0x00), LLess (Local7, 0x0D)))
                             {
-                                If (DerefOf (TYPS [Local7]))
+                                If (DerefOf (Index (TYPS, Local7)))
                                 {
-                                    Local5 = DerefOf (DerefOf (DYEN [(Local2 + 0x01)]) [
-                                        0x00])
+                                    Store (DerefOf (Index (DerefOf (Index (DYEN, Add (Local2, 0x01))), 0x00
+                                        )), Local5)
                                     If (\SRCP (Local6, Local5))
                                     {
-                                        DYEN [Local2] = 0x00
-                                        BISE [Local0] = DerefOf (DYEN [(Local2 + 0x01)]
-                                            )
-                                        Local1 = DerefOf (TYPS [Local7])
-                                        TYPS [Local7] = (Local1 - 0x01)
+                                        Store (0x00, Index (DYEN, Local2))
+                                        Store (DerefOf (Index (DYEN, Add (Local2, 0x01))), Index (BISE, Local0
+                                            ))
+                                        Store (DerefOf (Index (TYPS, Local7)), Local1)
+                                        Subtract (Local1, 0x01, Index (TYPS, Local7))
                                         Break
                                     }
                                 }
                             }
 
-                            Local2 += 0x02
+                            Add (Local2, 0x02, Local2)
                         }
 
-                        Local0++
+                        Increment (Local0)
                     }
 
-                    IWPN = 0x00
+                    Store (0x00, IWPN) /* \_SB_.WMID.IWPN */
                 }
             }
 
             Method (_WED, 1, NotSerialized)  // _Wxx: Wake Event, xx=0x00-0xFF
             {
-                If ((Arg0 == 0xA0))
+                If (LEqual (Arg0, 0xA0))
                 {
-                    If ((DerefOf (ETYP [0x00]) == 0x00))
+                    If (LEqual (DerefOf (Index (ETYP, 0x00)), 0x00))
                     {
-                        BF2S = ST01 /* \_SB_.ST01 */
-                        DerefOf (EVNT [0x00]) [0x01] = BF2S /* \_SB_.BF2S */
-                        Return (DerefOf (EVNT [0x00]))
+                        Store (ST01, BF2S) /* \_SB_.BF2S */
+                        Store (BF2S, Index (DerefOf (Index (EVNT, 0x00)), 0x01))
+                        Return (DerefOf (Index (EVNT, 0x00)))
                     }
 
-                    If ((DerefOf (ETYP [0x00]) == 0x01))
+                    If (LEqual (DerefOf (Index (ETYP, 0x00)), 0x01))
                     {
-                        Return (DerefOf (EVNT [0x01]))
+                        Return (DerefOf (Index (EVNT, 0x01)))
                     }
                     Else
                     {
-                        Return (DerefOf (EVNT [0x02]))
+                        Return (DerefOf (Index (EVNT, 0x02)))
                     }
                 }
                 Else
                 {
-                    Local0 = Buffer (0x08)
+                    Store (Buffer (0x08)
                         {
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
-                        }
+                        }, Local0)
                     CreateDWordField (Local0, 0x00, EVID)
                     CreateDWordField (Local0, 0x04, EVDA)
-                    EVID = WEI1 /* \_SB_.WMID.WEI1 */
-                    EVDA = WED1 /* \_SB_.WMID.WED1 */
-                    If ((WEI2 != 0x00))
+                    Store (WEI1, EVID) /* \_SB_.WMID._WED.EVID */
+                    Store (WED1, EVDA) /* \_SB_.WMID._WED.EVDA */
+                    If (LNotEqual (WEI2, 0x00))
                     {
-                        WEI1 = WEI2 /* \_SB_.WMID.WEI2 */
-                        WED1 = WED2 /* \_SB_.WMID.WED2 */
-                        EVID = WEI1 /* \_SB_.WMID.WEI1 */
-                        EVDA = WED1 /* \_SB_.WMID.WED1 */
-                        WEI2 = 0x00
-                        WED2 = 0x00
-                        If ((WEVT == 0x00))
+                        Store (WEI2, WEI1) /* \_SB_.WMID.WEI1 */
+                        Store (WED2, WED1) /* \_SB_.WMID.WED1 */
+                        Store (WEI1, EVID) /* \_SB_.WMID._WED.EVID */
+                        Store (WED1, EVDA) /* \_SB_.WMID._WED.EVDA */
+                        Store (0x00, WEI2) /* \_SB_.WMID.WEI2 */
+                        Store (0x00, WED2) /* \_SB_.WMID.WED2 */
+                        If (LEqual (WEVT, 0x00))
                         {
-                            WEVT = 0x01
+                            Store (0x01, WEVT) /* \_SB_.WMID.WEVT */
                             Notify (\_SB.WMID, 0x80) // Status Change
                         }
                     }
                     Else
                     {
-                        WEI1 = 0x00
-                        WED1 = 0x00
+                        Store (0x00, WEI1) /* \_SB_.WMID.WEI1 */
+                        Store (0x00, WED1) /* \_SB_.WMID.WED1 */
                     }
 
                     Return (Local0)
@@ -30319,8 +30319,8 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Method (ODBG, 1, NotSerialized)
         {
             Acquire (LDPS, 0xFFFF)
-            LLPD = Arg0
-            LPDG = Arg0
+            Store (Arg0, LLPD) /* \_SB_.LLPD */
+            Store (Arg0, LPDG) /* \_SB_.LPDG */
             Release (LDPS)
             Return (0x00)
         }
@@ -30328,7 +30328,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Method (ODG1, 1, NotSerialized)
         {
             Acquire (LDPS, 0xFFFF)
-            LUPD = Arg0
+            Store (Arg0, LUPD) /* \_SB_.LUPD */
             Release (LDPS)
             Return (0x00)
         }
@@ -30336,9 +30336,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         Method (ODGW, 1, NotSerialized)
         {
             Acquire (LDPS, 0xFFFF)
-            LLPD = (Arg0 & 0xFF)
-            LUPD = ((Arg0 >> 0x08) & 0xFF)
-            LPDG = (Arg0 & 0xFF)
+            Store (And (Arg0, 0xFF), LLPD) /* \_SB_.LLPD */
+            Store (And (ShiftRight (Arg0, 0x08), 0xFF), LUPD) /* \_SB_.LUPD */
+            Store (And (Arg0, 0xFF), LPDG) /* \_SB_.LPDG */
             Release (LDPS)
             Return (0x00)
         }
@@ -30409,7 +30409,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If ((TPMX == 0x00))
+                If (LEqual (TPMX, 0x00))
                 {
                     Return (0x00)
                 }
@@ -30424,7 +30424,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         {
             Method (_HID, 0, Serialized)  // _HID: Hardware ID
             {
-                If ((TVID == 0x15D1))
+                If (LEqual (TVID, 0x15D1))
                 {
                     Return (0x0201D824)
                 }
@@ -30463,11 +30463,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If ((ACCS == 0xFF))
+                If (LEqual (ACCS, 0xFF))
                 {
                     Return (0x00)
                 }
-                ElseIf ((TPMX == 0x01))
+                ElseIf (LEqual (TPMX, 0x01))
                 {
                     Return (0x00)
                 }
@@ -30486,13 +30486,13 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             Name (MUID, ToUUID ("376054ed-cc13-4675-901c-4756d7f2d45d") /* Unknown UUID */)
             Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
             {
-                Local0 = Arg0
-                If ((\SRCP (Local0, PUID) == 0x01))
+                Store (Arg0, Local0)
+                If (LEqual (\SRCP (Local0, PUID), 0x01))
                 {
                     Return (HPPI (Arg0, Arg1, Arg2, Arg3))
                 }
 
-                If ((\SRCP (Local0, MUID) == 0x01))
+                If (LEqual (\SRCP (Local0, MUID), 0x01))
                 {
                     Return (HMOR (Arg0, Arg1, Arg2, Arg3))
                 }
@@ -30502,7 +30502,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (HPPI, 4, NotSerialized)
             {
-                If ((Arg1 != 0x01))
+                If (LNotEqual (Arg1, 0x01))
                 {
                     Return (Buffer (0x01)
                     {
@@ -30510,9 +30510,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     })
                 }
 
-                If ((Arg2 <= 0x08))
+                If (LLessEqual (Arg2, 0x08))
                 {
-                    If ((Arg2 == 0x00))
+                    If (LEqual (Arg2, 0x00))
                     {
                         Return (Buffer (0x02)
                         {
@@ -30520,52 +30520,52 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    If ((Arg2 == 0x01))
+                    If (LEqual (Arg2, 0x01))
                     {
                         Return (REV1) /* \_SB_.GTPM.REV1 */
                     }
 
-                    If ((Arg2 == 0x02))
+                    If (LEqual (Arg2, 0x02))
                     {
-                        Local0 = DerefOf (Arg3 [0x00])
-                        Debug = "TPM Func 2"
-                        Debug = Local0
-                        If ((Local0 <= 0x16))
+                        Store (DerefOf (Index (Arg3, 0x00)), Local0)
+                        Store ("TPM Func 2", Debug)
+                        Store (Local0, Debug)
+                        If (LLessEqual (Local0, 0x16))
                         {
-                            If ((Local0 == 0x0D))
+                            If (LEqual (Local0, 0x0D))
                             {
                                 Return (0x01)
                             }
-                            ElseIf (((Local0 == 0x13) || (Local0 == 0x14)))
+                            ElseIf (LOr (LEqual (Local0, 0x13), LEqual (Local0, 0x14)))
                             {
                                 Return (0x01)
                             }
                             Else
                             {
-                                Local2 = 0x02
+                                Store (0x02, Local2)
                                 \_SB.SSMI (0xEA7D, 0x05, 0x00, 0x00, 0x00)
-                                Local1 = ECX /* \ECX_ */
-                                If (((Local1 & 0x01) == 0x01))
+                                Store (ECX, Local1)
+                                If (LEqual (And (Local1, 0x01), 0x01))
                                 {
-                                    If (((Local1 & 0x02) == 0x00))
+                                    If (LEqual (And (Local1, 0x02), 0x00))
                                     {
-                                        If (((Local0 == 0x05) || (Local0 == 0x0E)))
+                                        If (LOr (LEqual (Local0, 0x05), LEqual (Local0, 0x0E)))
                                         {
                                             Return (Local2)
                                         }
-                                        ElseIf (((Local0 == 0x15) || (Local0 == 0x16)))
+                                        ElseIf (LOr (LEqual (Local0, 0x15), LEqual (Local0, 0x16)))
                                         {
                                             Return (Local2)
                                         }
                                     }
 
                                     \_SB.SSMI (0xEA7E, 0x00, Local0, 0x00, 0x01)
-                                    Debug = EAX /* \EAX_ */
-                                    Debug = EBX /* \EBX_ */
-                                    Debug = ECX /* \ECX_ */
-                                    If ((EBX == 0x00))
+                                    Store (EAX, Debug)
+                                    Store (EBX, Debug)
+                                    Store (ECX, Debug)
+                                    If (LEqual (EBX, 0x00))
                                     {
-                                        Local2 = 0x00
+                                        Store (0x00, Local2)
                                     }
                                 }
 
@@ -30578,41 +30578,41 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         }
                     }
 
-                    If ((Arg2 == 0x03))
+                    If (LEqual (Arg2, 0x03))
                     {
-                        Debug = "TPM Func 3"
+                        Store ("TPM Func 3", Debug)
                         \_SB.SSMI (0xEA7D, 0x00, 0x00, 0x00, 0x01)
-                        Debug = EAX /* \EAX_ */
-                        Debug = EBX /* \EBX_ */
-                        Debug = ECX /* \ECX_ */
+                        Store (EAX, Debug)
+                        Store (EBX, Debug)
+                        Store (ECX, Debug)
                         Name (DSMB, Package (0x02)
                         {
                             0x01, 
                             0x00
                         })
-                        If ((EBX == 0x00))
+                        If (LEqual (EBX, 0x00))
                         {
-                            DSMB [0x00] = 0x00
-                            DSMB [0x01] = 0x00
-                            Local0 = ECX /* \ECX_ */
-                            If ((Local0 <= 0x16))
+                            Store (0x00, Index (DSMB, 0x00))
+                            Store (0x00, Index (DSMB, 0x01))
+                            Store (ECX, Local0)
+                            If (LLessEqual (Local0, 0x16))
                             {
-                                DSMB [0x00] = 0x00
-                                DSMB [0x01] = Local0
+                                Store (0x00, Index (DSMB, 0x00))
+                                Store (Local0, Index (DSMB, 0x01))
                             }
                         }
 
                         Return (DSMB) /* \_SB_.GTPM.HPPI.DSMB */
                     }
 
-                    If ((Arg2 == 0x04))
+                    If (LEqual (Arg2, 0x04))
                     {
                         Return (0x02)
                     }
 
-                    If ((Arg2 == 0x05))
+                    If (LEqual (Arg2, 0x05))
                     {
-                        Debug = "TPM Func 5"
+                        Store ("TPM Func 5", Debug)
                         \_SB.SSMI (0xEA7D, 0x01, 0x00, 0x00, 0x01)
                         Name (DSMC, Package (0x03)
                         {
@@ -30620,67 +30620,67 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             0x00, 
                             0x00
                         })
-                        Debug = EAX /* \EAX_ */
-                        Debug = EBX /* \EBX_ */
-                        Debug = ECX /* \ECX_ */
-                        If ((EBX == 0x00))
+                        Store (EAX, Debug)
+                        Store (EBX, Debug)
+                        Store (ECX, Debug)
+                        If (LEqual (EBX, 0x00))
                         {
-                            DSMC [0x00] = 0x00
-                            DSMC [0x01] = ECX /* \ECX_ */
+                            Store (0x00, Index (DSMC, 0x00))
+                            Store (ECX, Index (DSMC, 0x01))
                             \_SB.SSMI (0xEA7D, 0x02, 0x00, 0x00, 0x01)
-                            DSMC [0x02] = ECX /* \ECX_ */
+                            Store (ECX, Index (DSMC, 0x02))
                         }
 
                         Return (DSMC) /* \_SB_.GTPM.HPPI.DSMC */
                     }
 
-                    If ((Arg2 == 0x06))
+                    If (LEqual (Arg2, 0x06))
                     {
-                        Debug = "TPM Func 6"
+                        Store ("TPM Func 6", Debug)
                         Return (0x03)
                     }
 
-                    If ((Arg2 == 0x07))
+                    If (LEqual (Arg2, 0x07))
                     {
-                        Local0 = DerefOf (Arg3 [0x00])
-                        Debug = "TPM Func 7"
-                        Debug = Local0
-                        If ((Local0 <= 0x16))
+                        Store (DerefOf (Index (Arg3, 0x00)), Local0)
+                        Store ("TPM Func 7", Debug)
+                        Store (Local0, Debug)
+                        If (LLessEqual (Local0, 0x16))
                         {
-                            If ((Local0 == 0x0D))
+                            If (LEqual (Local0, 0x0D))
                             {
                                 Return (0x01)
                             }
-                            ElseIf (((Local0 == 0x13) || (Local0 == 0x14)))
+                            ElseIf (LOr (LEqual (Local0, 0x13), LEqual (Local0, 0x14)))
                             {
                                 Return (0x01)
                             }
                             Else
                             {
-                                Local2 = 0x02
+                                Store (0x02, Local2)
                                 \_SB.SSMI (0xEA7D, 0x05, 0x00, 0x00, 0x00)
-                                Local1 = ECX /* \ECX_ */
-                                If (((Local1 & 0x01) == 0x01))
+                                Store (ECX, Local1)
+                                If (LEqual (And (Local1, 0x01), 0x01))
                                 {
-                                    If (((Local1 & 0x02) == 0x00))
+                                    If (LEqual (And (Local1, 0x02), 0x00))
                                     {
-                                        If (((Local0 == 0x05) || (Local0 == 0x0E)))
+                                        If (LOr (LEqual (Local0, 0x05), LEqual (Local0, 0x0E)))
                                         {
                                             Return (0x03)
                                         }
-                                        ElseIf (((Local0 == 0x15) || (Local0 == 0x16)))
+                                        ElseIf (LOr (LEqual (Local0, 0x15), LEqual (Local0, 0x16)))
                                         {
                                             Return (0x03)
                                         }
                                     }
 
                                     \_SB.SSMI (0xEA7E, 0x00, Local0, 0x00, 0x01)
-                                    Debug = EAX /* \EAX_ */
-                                    Debug = EBX /* \EBX_ */
-                                    Debug = ECX /* \ECX_ */
-                                    If ((EBX == 0x00))
+                                    Store (EAX, Debug)
+                                    Store (EBX, Debug)
+                                    Store (ECX, Debug)
+                                    If (LEqual (EBX, 0x00))
                                     {
-                                        Local2 = 0x00
+                                        Store (0x00, Local2)
                                     }
                                 }
 
@@ -30693,36 +30693,36 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         }
                     }
 
-                    If ((Arg2 == 0x08))
+                    If (LEqual (Arg2, 0x08))
                     {
-                        Local0 = DerefOf (Arg3 [0x00])
-                        Debug = "TPM Func 8"
-                        Debug = Local0
-                        If ((Local0 <= 0x16))
+                        Store (DerefOf (Index (Arg3, 0x00)), Local0)
+                        Store ("TPM Func 8", Debug)
+                        Store (Local0, Debug)
+                        If (LLessEqual (Local0, 0x16))
                         {
-                            If ((Local0 == 0x0D))
+                            If (LEqual (Local0, 0x0D))
                             {
                                 Return (0x00)
                             }
-                            ElseIf (((Local0 == 0x13) || (Local0 == 0x14)))
+                            ElseIf (LOr (LEqual (Local0, 0x13), LEqual (Local0, 0x14)))
                             {
                                 Return (0x00)
                             }
                             Else
                             {
                                 \_SB.SSMI (0xEA7D, 0x06, 0x00, Local0, 0x01)
-                                Debug = EAX /* \EAX_ */
-                                Debug = EBX /* \EBX_ */
-                                Debug = ECX /* \ECX_ */
-                                If ((EBX == 0x00))
+                                Store (EAX, Debug)
+                                Store (EBX, Debug)
+                                Store (ECX, Debug)
+                                If (LEqual (EBX, 0x00))
                                 {
-                                    If ((ECX == 0x00))
+                                    If (LEqual (ECX, 0x00))
                                     {
-                                        Local2 = 0x03
+                                        Store (0x03, Local2)
                                     }
                                     Else
                                     {
-                                        Local2 = 0x04
+                                        Store (0x04, Local2)
                                     }
                                 }
 
@@ -30744,22 +30744,22 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (HMOR, 4, NotSerialized)
             {
-                If ((Arg1 != 0x01))
+                If (LNotEqual (Arg1, 0x01))
                 {
                     Return (0x01)
                 }
 
-                If ((Arg2 != 0x01))
+                If (LNotEqual (Arg2, 0x01))
                 {
                     Return (0x01)
                 }
 
-                Local0 = DerefOf (Arg3 [0x00])
+                Store (DerefOf (Index (Arg3, 0x00)), Local0)
                 \_SB.SSMI (0xEA7F, Local0, 0x00, 0x00, 0x01)
-                Local0 = 0x00
-                If ((EBX != 0x00))
+                Store (0x00, Local0)
+                If (LNotEqual (EBX, 0x00))
                 {
-                    Local0 = 0x01
+                    Store (0x01, Local0)
                 }
 
                 Return (Local0)
@@ -30769,10 +30769,10 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.DCKD, 0, Serialized)
     {
-        Local0 = 0x01
-        If ((\_SB.GLVR (0x29) == 0x01))
+        Store (0x01, Local0)
+        If (LEqual (\_SB.GLVR (0x29), 0x01))
         {
-            Local0 = 0x00
+            Store (0x00, Local0)
         }
 
         Return (Local0)
@@ -30785,7 +30785,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_GPE.DKET, 0, Serialized)
     {
-        If ((ICPT == 0x00))
+        If (LEqual (ICPT, 0x00))
         {
             If (\_SB.DCKD ())
             {
@@ -30812,7 +30812,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GRFS, 0, Serialized)
     {
-        Local0 = \_SB.PCI0.LPCB.EC0.KRFS ()
+        Store (\_SB.PCI0.LPCB.EC0.KRFS (), Local0)
         Return (Local0)
     }
 
@@ -30827,9 +30827,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GLVR, 1, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -30840,11 +30840,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 TEM2,   1
             }
 
-            If ((GPIM == 0x01))
+            If (LEqual (GPIM, 0x01))
             {
                 Return (TEM1) /* \_SB_.GLVR.TEM1 */
             }
-            ElseIf ((GPIM == 0x00))
+            ElseIf (LEqual (GPIM, 0x00))
             {
                 Return (TEM2) /* \_SB_.GLVR.TEM2 */
             }
@@ -30853,9 +30853,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GLVW, 2, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -30866,9 +30866,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 TEM2,   1
             }
 
-            If ((GPIM == 0x00))
+            If (LEqual (GPIM, 0x00))
             {
-                TEM2 = Arg1
+                Store (Arg1, TEM2) /* \_SB_.GLVW.TEM2 */
             }
         }
 
@@ -30877,9 +30877,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GISR, 1, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -30896,9 +30896,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GISW, 2, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -30909,7 +30909,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 TEM2,   1
             }
 
-            GPIM = Arg1
+            Store (Arg1, GPIM) /* \_SB_.GISW.GPIM */
         }
 
         Return (0x01)
@@ -30917,7 +30917,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GOWW, 2, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
             OperationRegion (LGPW, SystemIO, 0x0800, 0x0C)
             Field (LGPW, AnyAcc, NoLock, Preserve)
@@ -30927,28 +30927,28 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 GOW3,   32
             }
 
-            If ((Arg0 <= 0x1F))
+            If (LLessEqual (Arg0, 0x1F))
             {
-                Local0 = (Arg1 << Arg0)
-                Local1 = (0x01 << Arg0)
-                Local2 = (GOW1 & ~Local1)
-                GOW1 = (Local2 | Local0)
+                ShiftLeft (Arg1, Arg0, Local0)
+                ShiftLeft (0x01, Arg0, Local1)
+                And (GOW1, Not (Local1), Local2)
+                Or (Local2, Local0, GOW1) /* \_SB_.GOWW.GOW1 */
             }
-            ElseIf ((Arg0 <= 0x3F))
+            ElseIf (LLessEqual (Arg0, 0x3F))
             {
-                Local3 = (Arg0 - 0x20)
-                Local0 = (Arg1 << Local3)
-                Local1 = (0x01 << Local3)
-                Local2 = (GOW2 & ~Local1)
-                GOW2 = (Local2 | Local0)
+                Subtract (Arg0, 0x20, Local3)
+                ShiftLeft (Arg1, Local3, Local0)
+                ShiftLeft (0x01, Local3, Local1)
+                And (GOW2, Not (Local1), Local2)
+                Or (Local2, Local0, GOW2) /* \_SB_.GOWW.GOW2 */
             }
             Else
             {
-                Local3 = (Arg0 - 0x40)
-                Local0 = (Arg1 << Local3)
-                Local1 = (0x01 << Local3)
-                Local2 = (GOW3 & ~Local1)
-                GOW3 = (Local2 | Local0)
+                Subtract (Arg0, 0x40, Local3)
+                ShiftLeft (Arg1, Local3, Local0)
+                ShiftLeft (0x01, Local3, Local1)
+                And (GOW3, Not (Local1), Local2)
+                Or (Local2, Local0, GOW3) /* \_SB_.GOWW.GOW3 */
             }
         }
 
@@ -30957,7 +30957,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GESC, 1, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
             Field (PMLP, ByteAcc, NoLock, WriteAsZeros)
             {
@@ -30966,22 +30966,22 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 GE02,   32
             }
 
-            If ((Arg0 <= 0x1F))
+            If (LLessEqual (Arg0, 0x1F))
             {
-                Local0 = (0x01 << Arg0)
-                GE00 |= Local0
+                ShiftLeft (0x01, Arg0, Local0)
+                Or (GE00, Local0, GE00) /* \_SB_.GESC.GE00 */
             }
-            ElseIf ((Arg0 <= 0x3F))
+            ElseIf (LLessEqual (Arg0, 0x3F))
             {
-                Local3 = (Arg0 - 0x20)
-                Local0 = (0x01 << Local3)
-                GE01 |= Local0
+                Subtract (Arg0, 0x20, Local3)
+                ShiftLeft (0x01, Local3, Local0)
+                Or (GE01, Local0, GE01) /* \_SB_.GESC.GE01 */
             }
             Else
             {
-                Local3 = (Arg0 - 0x40)
-                Local0 = (0x01 << Local3)
-                GE02 |= Local0
+                Subtract (Arg0, 0x40, Local3)
+                ShiftLeft (0x01, Local3, Local0)
+                Or (GE02, Local0, GE02) /* \_SB_.GESC.GE02 */
             }
         }
 
@@ -30990,9 +30990,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GINR, 1, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -31010,9 +31010,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (\_SB.GINW, 2, Serialized)
     {
-        If ((Arg0 <= 0x5E))
+        If (LLessEqual (Arg0, 0x5E))
         {
-            Local0 = ((0x0800 + 0x0100) + (Arg0 * 0x08))
+            Store (Add (Add (0x0800, 0x0100), Multiply (Arg0, 0x08)), Local0)
             OperationRegion (LGPI, SystemIO, Local0, 0x04)
             Field (LGPI, AnyAcc, NoLock, Preserve)
             {
@@ -31024,7 +31024,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                 TEM2,   1
             }
 
-            GINV = Arg1
+            Store (Arg1, GINV) /* \_SB_.GINW.GINV */
         }
 
         Return (0x01)
@@ -31032,31 +31032,31 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
     Method (PPTS, 1, Serialized)
     {
-        Local0 = 0x00
+        Store (0x00, Local0)
     }
 
     Method (PWAK, 1, Serialized)
     {
         Notify (\_SB.PCI0.LPCB.SIO.COM1, 0x00) // Bus Check
         Notify (\_SB.PCI0.EHC1, 0x00) // Bus Check
-        If (((Arg0 == 0x04) || (Arg0 == 0x03)))
+        If (LOr (LEqual (Arg0, 0x04), LEqual (Arg0, 0x03)))
         {
-            \_SB.PCI0.RP02.D3FG = 0x00
+            Store (0x00, \_SB.PCI0.RP02.D3FG)
         }
 
-        If ((Arg0 == 0x03))
+        If (LEqual (Arg0, 0x03))
         {
             Notify (\_SB.PCI0.RP02, 0x00) // Bus Check
         }
 
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        If (LOr (LEqual (Arg0, 0x03), LEqual (Arg0, 0x04)))
         {
             \_SB.PCI0.XHC.XWAK ()
         }
 
-        If ((SGME != 0x00))
+        If (LNotEqual (SGME, 0x00))
         {
-            \_SB.PCI0.RP05.DGFX.OMPR = 0x02
+            Store (0x02, \_SB.PCI0.RP05.DGFX.OMPR) /* External reference */
         }
     }
 
@@ -31066,63 +31066,63 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
         {
             Case (0x10)
             {
-                Local1 = 0x01302E4F
+                Store (0x01302E4F, Local1)
             }
             Case (0x20)
             {
-                Local1 = 0x02302E4F
+                Store (0x02302E4F, Local1)
             }
             Case (0x30)
             {
-                Local1 = 0x03302E4F
+                Store (0x03302E4F, Local1)
             }
             Case (0x40)
             {
-                Local1 = 0x04302E4F
+                Store (0x04302E4F, Local1)
             }
             Case (0x50)
             {
-                Local1 = 0x21302E4F
+                Store (0x21302E4F, Local1)
             }
             Case (0x52)
             {
-                Local1 = 0x15302E4F
+                Store (0x15302E4F, Local1)
             }
             Case (0x53)
             {
-                Local1 = 0x25302E4F
+                Store (0x25302E4F, Local1)
             }
             Case (0x60)
             {
-                Local1 = 0x08302E4F
+                Store (0x08302E4F, Local1)
             }
             Case (0x61)
             {
-                Local1 = 0x09302E4F
+                Store (0x09302E4F, Local1)
             }
             Case (0x62)
             {
-                Local1 = 0x0A302E4F
+                Store (0x0A302E4F, Local1)
             }
             Case (0x63)
             {
-                Local1 = 0x0B302E4F
+                Store (0x0B302E4F, Local1)
             }
             Case (0x70)
             {
-                Local1 = 0x0C302E4F
+                Store (0x0C302E4F, Local1)
             }
             Case (0xA0)
             {
-                Local1 = 0x0D302E4F
+                Store (0x0D302E4F, Local1)
             }
             Case (0xC0)
             {
-                Local1 = 0x27302E4F
+                Store (0x27302E4F, Local1)
             }
             Default
             {
-                Local1 = 0x65012E4F
+                Store (0x65012E4F, Local1)
             }
 
         }
@@ -31134,7 +31134,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31152,7 +31152,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If (((S0ID == 0x01) && ((PEPC & 0x03) != 0x00)))
+            If (LAnd (LEqual (S0ID, 0x01), LNotEqual (And (PEPC, 0x03), 0x00)))
             {
                 Return (Package (0x01)
                 {
@@ -31170,7 +31170,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31188,7 +31188,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31206,7 +31206,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31224,7 +31224,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31242,7 +31242,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31260,7 +31260,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31278,7 +31278,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31296,7 +31296,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31314,7 +31314,7 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
         {
-            If ((S0ID == 0x01))
+            If (LEqual (S0ID, 0x01))
             {
                 Return (Package (0x01)
                 {
@@ -31819,11 +31819,11 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
             })
             Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If ((OSYS >= 0x07DC))
+                If (LGreaterEqual (OSYS, 0x07DC))
                 {
-                    If (((CDID & 0xF000) == 0x9000))
+                    If (LEqual (And (CDID, 0xF000), 0x9000))
                     {
-                        If ((S0ID == 0x01))
+                        If (LEqual (S0ID, 0x01))
                         {
                             Return (0x0F)
                         }
@@ -31835,9 +31835,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 
             Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
             {
-                If ((Arg0 == ToUUID ("b8febfe0-baf8-454b-aecd-49fb91137b21") /* Unknown UUID */))
+                If (LEqual (Arg0, ToUUID ("b8febfe0-baf8-454b-aecd-49fb91137b21") /* Unknown UUID */))
                 {
-                    If ((Arg2 == Zero))
+                    If (LEqual (Arg2, Zero))
                     {
                         Return (Buffer (One)
                         {
@@ -31845,15 +31845,15 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    If ((Arg2 == One))
+                    If (LEqual (Arg2, One))
                     {
-                        PEPP = 0x01
+                        Store (0x01, PEPP) /* \_SB_.PEPD.PEPP */
                         Return (0x0F)
                     }
 
-                    If ((Arg2 == 0x02))
+                    If (LEqual (Arg2, 0x02))
                     {
-                        If ((Arg1 == Zero))
+                        If (LEqual (Arg1, Zero))
                         {
                             Switch (PEPY)
                             {
@@ -31894,46 +31894,46 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             }
                         }
 
-                        If ((Arg1 == One))
+                        If (LEqual (Arg1, One))
                         {
-                            If (!(PEPY & 0x01))
+                            If (LNot (And (PEPY, 0x01)))
                             {
-                                DerefOf (DEVX [0x00]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x00)), 0x01))
                             }
 
-                            If (!(PEPY & 0x02))
+                            If (LNot (And (PEPY, 0x02)))
                             {
-                                DerefOf (DEVX [0x01]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x01)), 0x01))
                             }
 
-                            If (!(PEPY & 0x04))
+                            If (LNot (And (PEPY, 0x04)))
                             {
-                                DerefOf (DEVX [0x02]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x02)), 0x01))
                             }
 
-                            If (!(PEPY & 0x08))
+                            If (LNot (And (PEPY, 0x08)))
                             {
-                                DerefOf (DEVX [0x03]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x03)), 0x01))
                             }
 
-                            If (!(PEPY & 0x10))
+                            If (LNot (And (PEPY, 0x10)))
                             {
-                                DerefOf (DEVX [0x04]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x04)), 0x01))
                             }
 
-                            If (!(PEPY & 0x20))
+                            If (LNot (And (PEPY, 0x20)))
                             {
-                                DerefOf (DEVX [0x05]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x05)), 0x01))
                             }
 
-                            If (!(PEPY & 0x40))
+                            If (LNot (And (PEPY, 0x40)))
                             {
-                                DerefOf (DEVX [0x06]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x06)), 0x01))
                             }
 
-                            If (!(PEPY & 0x80))
+                            If (LNot (And (PEPY, 0x80)))
                             {
-                                DerefOf (DEVX [0x07]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVX, 0x07)), 0x01))
                             }
 
                             Return (DEVX) /* \_SB_.PEPD.DEVX */
@@ -31941,9 +31941,9 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                     }
                 }
 
-                If ((Arg0 == ToUUID ("c4eb40a0-6cd2-11e2-bcfd-0800200c9a66") /* Unknown UUID */))
+                If (LEqual (Arg0, ToUUID ("c4eb40a0-6cd2-11e2-bcfd-0800200c9a66") /* Unknown UUID */))
                 {
-                    If ((Arg2 == Zero))
+                    If (LEqual (Arg2, Zero))
                     {
                         Return (Buffer (One)
                         {
@@ -31951,84 +31951,84 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                         })
                     }
 
-                    If ((Arg2 == One))
+                    If (LEqual (Arg2, One))
                     {
-                        If (((PEPC & 0x03) != 0x01))
+                        If (LNotEqual (And (PEPC, 0x03), 0x01))
                         {
-                            DerefOf (DEVY [0x06]) [0x01] = 0x00
-                            DerefOf (DEVY [0x07]) [0x01] = 0x00
-                            DerefOf (DEVY [0x08]) [0x01] = 0x00
-                            DerefOf (DEVY [0x09]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x06)), 0x01))
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x07)), 0x01))
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x08)), 0x01))
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x09)), 0x01))
                         }
 
-                        If (((PEPC & 0x03) != 0x02))
+                        If (LNotEqual (And (PEPC, 0x03), 0x02))
                         {
-                            DerefOf (DEVY [0x05]) [0x01] = 0x00
-                            If (!(SPST & 0x01))
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x05)), 0x01))
+                            If (LNot (And (SPST, 0x01)))
                             {
-                                DerefOf (DEVY [0x06]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVY, 0x06)), 0x01))
                             }
 
-                            If (!(SPST & 0x02))
+                            If (LNot (And (SPST, 0x02)))
                             {
-                                DerefOf (DEVY [0x07]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVY, 0x07)), 0x01))
                             }
 
-                            If (!(SPST & 0x04))
+                            If (LNot (And (SPST, 0x04)))
                             {
-                                DerefOf (DEVY [0x08]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVY, 0x08)), 0x01))
                             }
 
-                            If (!(SPST & 0x08))
+                            If (LNot (And (SPST, 0x08)))
                             {
-                                DerefOf (DEVY [0x09]) [0x01] = 0x00
+                                Store (0x00, Index (DerefOf (Index (DEVY, 0x09)), 0x01))
                             }
                         }
 
-                        If (((PEPC & 0x04) == 0x00))
+                        If (LEqual (And (PEPC, 0x04), 0x00))
                         {
-                            DerefOf (DEVY [0x0A]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0A)), 0x01))
                         }
 
-                        If (((PEPC & 0x08) == 0x00))
+                        If (LEqual (And (PEPC, 0x08), 0x00))
                         {
-                            DerefOf (DEVY [0x0B]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0B)), 0x01))
                         }
 
-                        If (((PEPC & 0x10) == 0x00))
+                        If (LEqual (And (PEPC, 0x10), 0x00))
                         {
-                            DerefOf (DEVY [0x0C]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0C)), 0x01))
                         }
 
-                        If (((PEPC & 0x20) == 0x00))
+                        If (LEqual (And (PEPC, 0x20), 0x00))
                         {
-                            DerefOf (DEVY [0x0D]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0D)), 0x01))
                         }
 
-                        If (((PEPC & 0x40) == 0x00))
+                        If (LEqual (And (PEPC, 0x40), 0x00))
                         {
-                            DerefOf (DEVY [0x0E]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0E)), 0x01))
                         }
 
-                        If (((PEPC & 0x80) == 0x00))
+                        If (LEqual (And (PEPC, 0x80), 0x00))
                         {
-                            DerefOf (DEVY [0x0F]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x0F)), 0x01))
                         }
 
-                        If (((PEPC & 0x0100) == 0x00))
+                        If (LEqual (And (PEPC, 0x0100), 0x00))
                         {
-                            DerefOf (DEVY [0x10]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x10)), 0x01))
                         }
 
-                        If (((PEPC & 0x0200) == 0x00))
+                        If (LEqual (And (PEPC, 0x0200), 0x00))
                         {
-                            DerefOf (DEVY [0x11]) [0x01] = 0x00
+                            Store (0x00, Index (DerefOf (Index (DEVY, 0x11)), 0x01))
                         }
 
                         Return (DEVY) /* \_SB_.PEPD.DEVY */
                     }
 
-                    If ((Arg2 == 0x02))
+                    If (LEqual (Arg2, 0x02))
                     {
                         Return (BCCD) /* \_SB_.PEPD.BCCD */
                     }
