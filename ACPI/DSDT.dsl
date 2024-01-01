@@ -5,7 +5,7 @@
  * 
  * Disassembling to symbolic ASL+ operators
  *
- * Disassembly of DSDT.aml, Mon Jan  1 16:27:29 2024
+ * Disassembly of DSDT.aml, Mon Jan  1 16:33:53 2024
  *
  * Original Table Header:
  *     Signature        "DSDT"
@@ -22,19 +22,12 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
 {
     /*
      * iASL Warning: There were 19 external control methods found during
-     * disassembly, but only 0 were resolved (19 unresolved). Additional
+     * disassembly, but only 6 were resolved (13 unresolved). Additional
      * ACPI tables may be required to properly disassemble the code. This
      * resulting disassembler output file may not compile because the
      * disassembler did not know how many arguments to assign to the
      * unresolved methods. Note: SSDTs can be dynamically loaded at
      * runtime and may or may not be available via the host OS.
-     *
-     * To specify the tables needed to resolve external control method
-     * references, the -e option can be used to specify the filenames.
-     * Example iASL invocations:
-     *     iasl -e ssdt1.aml ssdt2.aml ssdt3.aml -d dsdt.aml
-     *     iasl -e dsdt.aml ssdt2.aml -d ssdt1.aml
-     *     iasl -e ssdt*.aml -d dsdt.aml
      *
      * In addition, the -fe option can be used to specify a file containing
      * control method external declarations with the associated method
@@ -48,21 +41,21 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
      * required for each:
      */
     External (_GPE.VHOV, MethodObj)    // Warning: Unknown method, guessing 2 arguments
-    External (_PR_.CFGD, UnknownObj)
-    External (_PR_.CPPC, IntObj)
+    External (_PR_.CFGD, FieldUnitObj)
+    External (_PR_.CPPC, FieldUnitObj)
     External (_PR_.CPU0._PPC, IntObj)
-    External (_PR_.CPU0._PSS, IntObj)
+    External (_PR_.CPU0._PSS, PkgObj)
     External (_SB_.IFFS.FFRU, UnknownObj)
     External (_SB_.ISCT, UnknownObj)
     External (_SB_.ISCT.ASCT, UnknownObj)
     External (_SB_.ISCT.SAOS, MethodObj)    // Warning: Unknown method, guessing 1 arguments
     External (_SB_.ISCT.WKRS, UnknownObj)
-    External (_SB_.PCI0.B0D3.ABWA, MethodObj)    // Warning: Unknown method, guessing 1 arguments
-    External (_SB_.PCI0.B0D3.AINI, MethodObj)    // Warning: Unknown method, guessing 3 arguments
-    External (_SB_.PCI0.B0D3.ARST, MethodObj)    // Warning: Unknown method, guessing 5 arguments
-    External (_SB_.PCI0.B0D3.ASTR, MethodObj)    // Warning: Unknown method, guessing 4 arguments
-    External (_SB_.PCI0.B0D3.CXDC, MethodObj)    // Warning: Unknown method, guessing 2 arguments
-    External (_SB_.PCI0.B0D3.DCCC, MethodObj)    // Warning: Unknown method, guessing 1 arguments
+    External (_SB_.PCI0.B0D3.ABWA, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.B0D3.AINI, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.B0D3.ARST, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.B0D3.ASTR, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.B0D3.CXDC, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.B0D3.DCCC, MethodObj)    // 1 Arguments
     External (_SB_.PCI0.CTCD, MethodObj)    // Warning: Unknown method, guessing 0 arguments
     External (_SB_.PCI0.CTCL, UnknownObj)
     External (_SB_.PCI0.CTCN, MethodObj)    // Warning: Unknown method, guessing 0 arguments
@@ -78,22 +71,22 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
     External (_SB_.PCI0.XHC_.RHUB.PS0X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
     External (_SB_.PCI0.XHC_.RHUB.PS2X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
     External (_SB_.PCI0.XHC_.RHUB.PS3X, MethodObj)    // Warning: Unknown method, guessing 0 arguments
-    External (GSMI, UnknownObj)
-    External (HVCO, UnknownObj)
-    External (IDMS, UnknownObj)
-    External (IGDS, IntObj)
-    External (LTRA, IntObj)
-    External (OBFA, IntObj)
-    External (PDC0, UnknownObj)
-    External (PDC1, UnknownObj)
-    External (PDC2, UnknownObj)
-    External (PDC3, UnknownObj)
-    External (PDC4, UnknownObj)
-    External (PDC5, UnknownObj)
-    External (PDC6, UnknownObj)
-    External (PDC7, UnknownObj)
-    External (SMSL, UnknownObj)
-    External (SNSL, UnknownObj)
+    External (GSMI, FieldUnitObj)
+    External (HVCO, FieldUnitObj)
+    External (IDMS, FieldUnitObj)
+    External (IGDS, FieldUnitObj)
+    External (LTRA, FieldUnitObj)
+    External (OBFA, FieldUnitObj)
+    External (PDC0, IntObj)
+    External (PDC1, IntObj)
+    External (PDC2, IntObj)
+    External (PDC3, IntObj)
+    External (PDC4, IntObj)
+    External (PDC5, IntObj)
+    External (PDC6, IntObj)
+    External (PDC7, IntObj)
+    External (SMSL, FieldUnitObj)
+    External (SNSL, FieldUnitObj)
     External (WMAB, MethodObj)    // Warning: Unknown method, guessing 1 arguments
 
     Name (FMBL, 0x01)
@@ -4398,21 +4391,35 @@ DefinitionBlock ("", "DSDT", 2, "HPQOEM", "2216    ", 0x00000001)
                             {
                                 \_SB.PCI0.AUDE |= 0x20
                                 \_SB.PCI0.B0D3.ABWA (0x01)
-                                \_SB.PCI0.B0D3.ARST (\_SB.PCI0.B0D3.ASTR (\_SB.PCI0.B0D3.AINI (\_SB.PCI0.B0D3.CXDC (\_SB.PCI0.B0D3.ABWA (0x00), Notify (\_SB.PCI0, 0x00) // Bus Check), If ((PARM == 
-                                    0x00))
-                                            {
-                                                \_SB.PCI0.AUDE &= 0xDF
-                                                Notify (\_SB.PCI0, 0x00) // Bus Check
-                                            }, GESF = Zero), PARM = Zero, Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */, If (
-                                                    (GESF == 0x16))
-                                        {
-                                            Local0 = (PARM & 0x03)
-                                            \_SB.PCI0.B0D3.DCCC (Local0)
-                                            GESF = Zero
-                                            Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
-                                        }), GESF = Zero, Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */)
+                                \_SB.PCI0.B0D3.ARST ()
+                                \_SB.PCI0.B0D3.ASTR ()
+                                \_SB.PCI0.B0D3.AINI ()
+                                \_SB.PCI0.B0D3.CXDC ()
+                                \_SB.PCI0.B0D3.ABWA (0x00)
+                                Notify (\_SB.PCI0, 0x00) // Bus Check
                             }
+
+                            If ((PARM == 0x00))
+                            {
+                                \_SB.PCI0.AUDE &= 0xDF
+                                Notify (\_SB.PCI0, 0x00) // Bus Check
+                            }
+
+                            GESF = Zero
+                            PARM = Zero
+                            Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                         }
+
+                        If ((GESF == 0x16))
+                        {
+                            Local0 = (PARM & 0x03)
+                            \_SB.PCI0.B0D3.DCCC (Local0)
+                            GESF = Zero
+                            Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
+                        }
+
+                        GESF = Zero
+                        Return (SUCC) /* \_SB_.PCI0.GFX0.SUCC */
                     }
 
                     If ((GEFC == 0x04))
