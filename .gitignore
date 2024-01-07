@@ -6,3 +6,4 @@ EFI/Microsoft/Recovery/BCD.LOG
 ._*
 EFI-*/
 .DS_Store
+opencore-*
