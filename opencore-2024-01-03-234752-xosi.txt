@@ -1,0 +1,815 @@
+00:000 00:000 BS: Starting OpenCore application...
+00:000 00:000 BS: Booter path - \EFI\Boot\Bootx64.efi
+00:000 00:000 OCFS: Trying to locate filesystem on 880C4B18 87CB8618
+00:000 00:000 OCFS: Filesystem DP - \EFI\Boot\Bootx64.efi
+00:000 00:000 BS: Trying to load OpenCore image...
+00:000 00:000 BS: Relative path - EFI
+00:000 00:000 BS: Startup path - EFI\OpenCore.efi (0)
+00:000 00:000 BS: Fallback to absolute path - EFI\OC\OpenCore.efi
+00:000 00:000 BS: Read OpenCore image of 839680 bytes
+00:000 00:000 OCM: Loaded image at 88660598 handle
+00:000 00:000 OCM: Loaded image has DeviceHandle 880C4B18 FilePath 886D7898 ours DevicePath 87ED2918
+00:000 00:000 OCCPU: Failed to get FSBFrequency data using Apple Platform Info - Not Found
+00:000 00:000 OC: Starting OpenCore...
+00:000 00:000 OC: Booter path - EFI\OC\OpenCore.efi
+00:000 00:000 OCFS: Trying to locate filesystem on 880C4B18 886D7898
+00:000 00:000 OCFS: Filesystem DP - EFI\OC\OpenCore.efi
+00:000 00:000 OC: Absolute booter path - EFI\OC\OpenCore.efi
+00:000 00:000 OC: Storage root EFI\OC\OpenCore.efi
+00:000 00:000 OCST: Missing vault data, ignoring...
+00:000 00:000 OC: OcMiscEarlyInit...
+00:000 00:000 OC: Loaded configuration of 34719 bytes
+00:000 00:000 OC: Got 3 drivers
+00:000 00:000 OC: Watchdog status is 0
+00:101 00:101 OC: OpenCore DBG-097-2023-12-11 is loading in Optional mode (0/0)...
+00:152 00:050 OC: Boot timestamp - 2024.01.03 23:47:52
+00:195 00:042 OCCPU: MP services threads 4 (enabled 4) - Success
+00:238 00:042 OCCPU: MP services Pkg 1 Cores 2 Threads 2 - Success
+00:281 00:043 OCCPU: Found Intel(R) Core(TM) i5-5300U CPU @ 2.30GHz
+00:324 00:043 OCCPU: Signature 306D4 Stepping 4 Model 3D Family 6 Type 0 ExtModel 3 ExtFamily 0 uCode 2F CPUID MAX (14/80000008)
+00:889 00:565 OCCPU: EIST CFG Lock 1
+00:932 00:042 OCCPU: Timer address is 1808 from LPC
+00:974 00:042 OCCPU: Failed to get FSBFrequency data using Apple Platform Info - Not Found
+01:117 00:142 OCCPU: Intel TSC:  2294688945Hz,  2294MHz; FSB:    99769084Hz,    99MHz; MaxBusRatio: 23
+01:159 00:042 OCCPU: Detected Apple Processor Type: 06 -> 0606
+01:201 00:041 OCCPU: CPUFrequencyFromTSC  2294688945Hz  2294MHz
+01:251 00:050 OCCPU: CPUFrequency  2294688945Hz  2294MHz
+01:294 00:042 OCCPU: FSBFrequency    99769084Hz    99MHz
+01:337 00:042 OCCPU: Pkg 1 Cores 2 Threads 4
+01:379 00:042 OC: OcLoadNvramSupport...
+01:937 00:558 OCVAR: Locate emulated NVRAM protocol - Not Found
+01:979 00:041 OC: Deleting NVRAM 4D1EDE05-38C7-4A6A-9CC6-4BCCA8B38C14:DefaultBackgroundColor - Not Found
+02:029 00:050 OC: Not deleting NVRAM 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:rtc-blacklist, matches add
+02:072 00:042 OC: Not deleting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:boot-args, matches add
+02:115 00:042 OC: Not deleting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:ForceDisplayRotationInEFI, matches add
+02:169 00:054 OCVAR: Setting NVRAM 4D1EDE05-38C7-4A6A-9CC6-4BCCA8B38C14:DefaultBackgroundColor - Success
+02:212 00:042 OCVAR: Setting NVRAM 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:rtc-blacklist - Not Found
+02:263 00:050 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:ForceDisplayRotationInEFI - ignored, exists
+02:305 00:042 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:SystemAudioVolume - ignored, exists
+02:348 00:042 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:boot-args - ignored, exists
+02:391 00:042 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:csr-active-config - ignored, exists
+02:433 00:042 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:prev-lang:kbd - ignored, exists
+02:476 00:042 OCVAR: Setting NVRAM 7C436110-AB2A-4BBB-A880-FE41995C9F82:run-efi-updater - ignored, exists
+02:526 00:050 OC: Current version is DBG-097-2023-12-11
+02:568 00:041 OC: OcMiscMiddleInit...
+02:610 00:041 OC: StorageHandle 880C4B18 with Disabled LauncherOption pointing to Default
+02:651 00:041 OC: OcLoadUefiSupport...
+02:692 00:041 OCAU: OcAudioInstallProtocols (0, 0)
+02:734 00:041 OCAU: 4B228577-6274-4A48-82AE-0713A1171987 protocol - Not Found
+02:783 00:049 OCAU: C32332DF-FC56-4FE1-9358-BA0D529B24CD protocol - Not Found
+02:825 00:041 OCAU: F4CB0B78-243B-11E7-A524-B8E8562CBAFA protocol - Not Found
+03:382 00:556 OCAU: 3224B169-EC34-46D2-B779-E1B1687F525F protocol - Not Found
+03:423 00:041 OC: Failed to install cpuio/pcirootbridgeio overrides
+03:465 00:041 OCAE: Builtin installed
+03:507 00:041 OCRTC: Wake log is 0x00 0x00   0 0x00
+03:557 00:050 OCEG: Discovered rotate NVRAM override to 0
+03:599 00:042 OC: Automatic SB model x86legacy from model MacBookPro12,1
+03:642 00:042 OC: Loading Apple Secure Boot with x86legacy (level 1)
+03:684 00:042 OC: Discovered x86legacy with zero ECID, using system-id
+03:726 00:042 OC: Grabbed SB uuid 63FC03EF-510C-3A47-A28E-DA8FFE673DEF from auto config - Success
+03:776 00:050 OC: ApECID 4199414291205194735 from system-id
+03:819 00:042 OCII: AIFTimerBoostInit Current timer is 549254
+03:862 00:042 OCII: AIFTimerBoostInit changed period 549254 to 50000
+03:905 00:042 OC: Installing KeySupport...
+03:947 00:042 OCII: AmiEfiKeycodeProtocol is unavailable on gST->ConsoleHandle - Unsupported
+03:990 00:042 OCII: EfiSimpleTextInputExProtocol is unavailable on gST->ConsoleHandle - Unsupported
+04:041 00:051 OCII: gST->ConIn 7FF6A9E0 vs found 7FF6A9E0
+04:085 00:043 AIK: Using 5 (50ms)
+04:128 00:043 OCABC: ALRBL 0 RTDFRG 1 DEVMMIO 0 NOSU 1 NOVRWR 0 NOSB 0 FBSIG 0 NOHBMAP 0 SMSLIDE 1 WRUNPROT 1
+04:171 00:043 OCABC: FEXITBS 0 PRMRG 0 CSLIDE 1 MSLIDE 0 PRSRV 0 RBMAP 0 VMAP 1 APPLOS 0 RTPERMS 0 ARBAR -1 RBIO 0
+04:215 00:043 OCABC: Firmware has 4013547 free pages (542187 in lower 4 GB)
+04:259 00:043 OCABC: Awaiting rendezvous with OpenRuntime r12
+04:317 00:058 OC: RequestBootVarRouting 1
+04:359 00:042 OCDM: Found 0x2001F/0x2001F UEFI version (376 bytes, 0 rebuilding to 376) gST 8B47EF18 gBS 802EDBC0 gBS->CreateEventEx 802E7DD0 &gBS 7FAB9310
+04:402 00:042 OC: AVX enabled - 1
+04:444 00:041 OC: Got 3 drivers
+04:485 00:041 OC: Driver HfsPlus.efi at 0 (HfsPlus.efi) is being loaded...
+04:537 00:051 OCABC: EfiBootRt candidate - <nil>
+04:594 00:056 OCABC: IsEfiBootRt 0 (BP 1, Apple 0)
+04:636 00:042 OCB: Arch filtering 0(37892)->867C8018(37892) caps 0 - Success
+04:679 00:042 OC: Driver HfsPlus.efi at 0 is successfully loaded!
+04:722 00:042 OC: Driver HfsPlus.efi at 0 needs connection.
+04:764 00:042 OC: Driver OpenRuntime.efi at 1 (OpenRuntime.efi) is being loaded...
+04:820 00:056 OCABC: EfiBootRt candidate - <nil>
+04:864 00:043 OCABC: IsEfiBootRt 0 (BP 1, Apple 0)
+04:906 00:042 OCB: Arch filtering 0(36864)->867C8018(36864) caps 0 - Success
+04:950 00:043 OCABC: Got rendezvous with OpenRuntime r12
+04:993 00:043 OCABC: MAT support is 0
+05:036 00:043 OC: Driver OpenRuntime.efi at 1 is successfully loaded!
+05:087 00:051 OC: Driver ResetNvramEntry.efi at 2 (ResetNvramEntry.efi) is being loaded...
+05:136 00:049 OCABC: EfiBootRt candidate - <nil>
+05:180 00:043 OCABC: IsEfiBootRt 0 (BP 1, Apple 0)
+05:224 00:043 OCB: Arch filtering 0(57344)->867C3018(57344) caps 0 - Success
+05:275 00:051 OCCPU: Failed to get FSBFrequency data using Apple Platform Info - Not Found
+05:319 00:043 OC: Driver ResetNvramEntry.efi at 2 is successfully loaded!
+05:370 00:050 OC: Connecting drivers...
+05:435 00:064 OC: Connecting drivers done...
+05:477 00:042 OC: Found 2 pointer devices - Success
+05:519 00:041 OCJS: PartitionInfo is Not Found
+05:565 00:046 OCJS: Got APFS super block for EBF545F8-4CA3-3441-A1EC-EF78F9F5670C
+05:616 00:051 OCJS: Block (P:1|F:0) read req 830A68 -> 4185340 of 1000 (mask 0, mul 8) - Success
+05:673 00:056 OCJS: APFS driver 1934141002700002/20230922 found for EBF545F8-4CA3-3441-A1EC-EF78F9F5670C, required >= 1600000000000000/20210101, allow
+05:716 00:042 OCJS: Connecting normally with disconnection APFS driver on handle 880B3898
+05:957 00:241 OCC: GOP exists on ConsoleOutHandle and has 4 modes
+05:999 00:042 OC: Requested resolution is 0x0@0 (max: 1, force: 0) from Max
+06:041 00:042 OCC: Requesting 0x0@0 (max: 1) resolution, curr 0, total 4
+06:092 00:050 OCC: Current FB at 0xB0000000 (0x57E400), format 1, res 1600x900 scan 1600
+06:134 00:042 OCC: Mode 0 - 1600x900:1
+06:177 00:042 OCC: Mode 1 - 640x480:1
+06:220 00:042 OCC: Mode 2 - 800x600:1
+06:262 00:042 OCC: Mode 3 - 1024x768:1
+06:305 00:042 OCC: Current mode matches desired mode 0
+06:356 00:050 OC: Changed resolution to 0x0@0 (max: 1, force: 0) from Max - Already started
+06:398 00:042 OC: Selected UIScale 1 based on 1600x900 resolution
+06:450 00:051 OC: Setting UIScale to 1 - Success
+06:493 00:043 OCC: Using builtin text renderer with 1 scale
+06:569 00:076 OCC: Install console control (7FAA6F18/817BCF60/0), current - Success
+06:654 00:085 OCC: Setup ASCII Output - Success
+06:697 00:042 OC: Requested console mode is 0x0 (max: 0) from 
+06:739 00:042 OC: Requested not to use audio
+06:781 00:041 OC: OcMiscLoadSystemReport...
+06:822 00:041 OC: OcLoadAcpiSupport...
+06:864 00:041 OCA: Found 17 ACPI tables
+06:914 00:049 OCA: Detected table FACP (50434146) (OEM 2020202036313232) at 8BFFB000 of 268 bytes at index 0
+06:956 00:042 OCA: Detected DSDT at 8BFCF000 of 156957 bytes at index 0
+06:999 00:042 OCA: Detected table HPET (54455048) (OEM 2020202036313232) at 8BFFA000 of 56 bytes at index 1
+07:042 00:042 OCA: Detected table APIC (43495041) (OEM 2020202036313232) at 8BFF9000 of 188 bytes at index 2
+07:084 00:042 OCA: Detected table MCFG (4746434D) (OEM 2020202036313232) at 8BFF8000 of 60 bytes at index 3
+07:127 00:042 OCA: Detected table TCPA (41504354) (OEM 2020202036313232) at 8BFF6000 of 50 bytes at index 4
+07:177 00:050 OCA: Detected table SSDT (54445353) (OEM 6963684161746153) at 8BFCC000 of 729 bytes at index 5
+07:219 00:042 OCA: Detected table SSDT (54445353) (OEM 6376654464697450) at 8BFCB000 of 1162 bytes at index 6
+07:262 00:042 OCA: Detected table SLIC (43494C53) (OEM 43504D2D43494C53) at 8BFCA000 of 374 bytes at index 7
+07:304 00:042 OCA: Detected table MSDM (4D44534D) (OEM 43504D2D43494C53) at 8BFC9000 of 85 bytes at index 8
+07:346 00:042 OCA: Detected table FPDT (54445046) (OEM 2020202036313232) at 8BFC8000 of 68 bytes at index 9
+07:397 00:050 OCA: Detected table BGRT (54524742) (OEM 2020202036313232) at 8BFC7000 of 56 bytes at index 10
+07:448 00:050 OCA: Detected table SSDT (54445353) (OEM 000043324943464E) at 8BFC5000 of 463 bytes at index 11
+07:491 00:042 OCA: Detected table SSDT (54445353) (OEM 0074734930757043) at 8BFC3000 of 1348 bytes at index 12
+07:534 00:043 OCA: Detected table SSDT (54445353) (OEM 0074647353757043) at 8BFC2000 of 2959 bytes at index 13
+07:577 00:043 OCA: Detected table SSDT (54445353) (OEM 796E6954656B614C) at 8BFC1000 of 469 bytes at index 14
+07:621 00:043 OCA: Detected table SSDT (54445353) (OEM 0020746473536153) at 8BFC0000 of 2348 bytes at index 15
+07:672 00:051 OCA: Detected table ASF! (21465341) (OEM 2020202036313232) at 8BFF7000 of 165 bytes at index 16
+07:715 00:042 OCA: FACS signature is 0 (0)
+07:758 00:042 OC: Applying 7 byte ACPI patch (EC0 _STA to XSTA Rename) at 0, skip 0, count 0
+07:801 00:043 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+07:844 00:043 OCA: Refreshed DSDT checksum to 27
+07:887 00:043 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+07:938 00:050 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+07:980 00:042 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+08:023 00:042 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+08:065 00:042 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+08:107 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+08:150 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+08:201 00:050 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+08:244 00:042 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+08:287 00:043 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+08:330 00:043 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+08:381 00:050 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+08:432 00:051 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+08:475 00:042 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+08:518 00:042 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+08:561 00:043 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+08:604 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+08:647 00:043 OC: Applying 5 byte ACPI patch (HPET _STA to XSTA Rename) at 1, skip 0, count 0
+08:698 00:050 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+08:740 00:042 OCA: Refreshed DSDT checksum to 2E
+08:783 00:042 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+08:825 00:042 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+08:866 00:041 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+08:908 00:041 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+08:958 00:049 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+09:000 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+09:043 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+09:085 00:042 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+09:127 00:041 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+09:177 00:050 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+09:219 00:042 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+09:261 00:042 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+09:312 00:050 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+09:354 00:042 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+09:396 00:042 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+09:446 00:050 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+09:489 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+09:531 00:042 OC: Applying 6 byte ACPI patch (HPET _CRS to XCRS Rename) at 2, skip 0, count 0
+09:575 00:043 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+09:618 00:043 OCA: Refreshed DSDT checksum to 35
+09:661 00:043 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+09:712 00:051 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+09:755 00:042 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+09:797 00:042 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+09:840 00:042 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+09:883 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+09:926 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+09:976 00:050 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+10:018 00:041 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+10:060 00:042 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+10:103 00:042 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+10:144 00:041 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+10:195 00:050 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+10:245 00:050 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+10:287 00:042 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+10:330 00:042 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+10:373 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+10:416 00:042 OC: Applying 5 byte ACPI patch (IPIC IRQ 2 Patch) at 3, skip 0, count 0
+10:468 00:051 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+10:510 00:042 OCA: Refreshed DSDT checksum to 39
+10:554 00:043 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+10:597 00:043 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+10:640 00:043 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+10:683 00:043 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+10:734 00:050 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+10:776 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+10:818 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+10:860 00:041 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+10:902 00:041 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+10:944 00:041 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+10:994 00:050 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+11:036 00:042 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+11:079 00:042 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+11:121 00:042 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+11:171 00:050 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+11:222 00:050 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+11:264 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+11:307 00:042 OC: Applying 5 byte ACPI patch (RTC IRQ 8 Patch) at 4, skip 0, count 0
+11:350 00:043 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+11:393 00:042 OCA: Refreshed DSDT checksum to 3A
+11:436 00:042 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+11:487 00:051 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+11:530 00:042 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+11:573 00:042 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+11:616 00:043 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+11:659 00:043 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+11:703 00:043 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+11:753 00:050 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+11:795 00:042 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+11:837 00:042 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+11:879 00:041 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+11:921 00:041 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+11:971 00:049 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+12:013 00:042 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+12:056 00:042 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+12:106 00:050 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+12:149 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+12:191 00:042 OC: Applying 5 byte ACPI patch (TIMR IRQ 0 Patch) at 5, skip 0, count 0
+12:241 00:050 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+12:284 00:042 OCA: Refreshed DSDT checksum to 3B
+12:327 00:042 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+12:370 00:042 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+12:413 00:043 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+12:456 00:043 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+12:508 00:051 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+12:551 00:043 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+12:594 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+12:637 00:043 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+12:680 00:043 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+12:723 00:043 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+12:774 00:050 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+12:817 00:042 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+12:859 00:042 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+12:902 00:042 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+12:944 00:042 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+12:994 00:050 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+13:044 00:050 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+13:086 00:042 OC: Applying 4 byte ACPI patch (Change _OSI to XOSI) at 6, skip 0, count 0
+13:129 00:042 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 22 of 0
+13:171 00:042 OCA: Refreshed DSDT checksum to D5
+13:213 00:041 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+13:263 00:050 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+13:306 00:042 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+13:348 00:042 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+13:391 00:042 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+13:434 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+13:477 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+13:528 00:050 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+13:570 00:042 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+13:613 00:042 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+13:656 00:042 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+13:699 00:042 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+13:742 00:043 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+13:792 00:050 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+13:834 00:041 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+13:876 00:041 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+13:917 00:041 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+13:967 00:049 OC: Applying 4 byte ACPI patch (_PTS to ZPTS) at 7, skip 0, count 0
+14:017 00:050 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 1 of 0
+14:059 00:042 OCA: Refreshed DSDT checksum to DA
+14:102 00:042 OCA: Patching FACP (50434146) (OEM 2020202036313232) of 268 bytes with 2020202036313232 ID at 0 replaced 0 of 0
+14:144 00:042 OCA: Patching HPET (54455048) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 1 replaced 0 of 0
+14:187 00:042 OCA: Patching APIC (43495041) (OEM 2020202036313232) of 188 bytes with 2020202036313232 ID at 2 replaced 0 of 0
+14:229 00:042 OCA: Patching MCFG (4746434D) (OEM 2020202036313232) of 60 bytes with 2020202036313232 ID at 3 replaced 0 of 0
+14:280 00:050 OCA: Patching TCPA (41504354) (OEM 2020202036313232) of 50 bytes with 2020202036313232 ID at 4 replaced 0 of 0
+14:322 00:042 OCA: Patching SSDT (54445353) (OEM 6963684161746153) of 729 bytes with 6963684161746153 ID at 5 replaced 0 of 0
+14:364 00:042 OCA: Patching SSDT (54445353) (OEM 6376654464697450) of 1162 bytes with 6376654464697450 ID at 6 replaced 0 of 0
+14:407 00:042 OCA: Patching SLIC (43494C53) (OEM 43504D2D43494C53) of 374 bytes with 43504D2D43494C53 ID at 7 replaced 0 of 0
+14:449 00:042 OCA: Patching MSDM (4D44534D) (OEM 43504D2D43494C53) of 85 bytes with 43504D2D43494C53 ID at 8 replaced 0 of 0
+14:492 00:042 OCA: Patching FPDT (54445046) (OEM 2020202036313232) of 68 bytes with 2020202036313232 ID at 9 replaced 0 of 0
+14:543 00:050 OCA: Patching BGRT (54524742) (OEM 2020202036313232) of 56 bytes with 2020202036313232 ID at 10 replaced 0 of 0
+14:586 00:043 OCA: Patching SSDT (54445353) (OEM 000043324943464E) of 463 bytes with 000043324943464E ID at 11 replaced 0 of 0
+14:628 00:042 OCA: Patching SSDT (54445353) (OEM 0074734930757043) of 1348 bytes with 0074734930757043 ID at 12 replaced 0 of 0
+14:672 00:043 OCA: Patching SSDT (54445353) (OEM 0074647353757043) of 2959 bytes with 0074647353757043 ID at 13 replaced 0 of 0
+14:715 00:043 OCA: Patching SSDT (54445353) (OEM 796E6954656B614C) of 469 bytes with 796E6954656B614C ID at 14 replaced 0 of 0
+14:766 00:051 OCA: Patching SSDT (54445353) (OEM 0020746473536153) of 2348 bytes with 0020746473536153 ID at 15 replaced 0 of 0
+14:809 00:042 OCA: Patching ASF! (21465341) (OEM 2020202036313232) of 165 bytes with 2020202036313232 ID at 16 replaced 0 of 0
+14:852 00:042 OC: Applying 4 byte ACPI patch (Rename EHC1 to EH01 (USB)) at 8, skip 0, count 0
+14:904 00:051 OCA: Patching DSDT of 156957 bytes with 0000000000000000 ID replaced 7 of 0
+14:947 00:043 OCA: Refreshed DSDT checksum to 5F
+14:990 00:043 OCA: Allocated new table SSDT at 8BF5A000
+15:041 00:050 OCA: Inserted table SSDT (54445353) (OEM 000000005354505A) of 152 bytes into ACPI at index 17
+15:083 00:042 OCA: Allocated new table SSDT at 8BF59000
+15:125 00:042 OCA: Inserted table SSDT (54445353) (OEM 0000434574647353) of 125 bytes into ACPI at index 18
+15:168 00:042 OCA: Allocated new table SSDT at 8BF58000
+15:210 00:042 OCA: Inserted table SSDT (54445353) (OEM 0000000054455048) of 318 bytes into ACPI at index 19
+15:252 00:042 OCA: Allocated new table SSDT at 8BF57000
+15:303 00:050 OCA: Inserted table SSDT (54445353) (OEM 0067756C50757043) of 112 bytes into ACPI at index 20
+15:346 00:042 OCA: Allocated new table SSDT at 8BF56000
+15:388 00:042 OCA: Inserted table SSDT (54445353) (OEM 00000000464C4E50) of 1110 bytes into ACPI at index 21
+15:431 00:043 OCA: Allocated new table SSDT at 8BF55000
+15:474 00:043 OCA: Inserted table SSDT (54445353) (OEM 7465736552627355) of 243 bytes into ACPI at index 22
+15:518 00:043 OCA: Allocated new table SSDT at 8BF54000
+15:569 00:051 OCA: Inserted table SSDT (54445353) (OEM 0000000049534F58) of 287 bytes into ACPI at index 23
+15:612 00:042 OCA: Exposing XSDT table table FACP (50434146) (OEM 2020202036313232) at 8BFFB000 of 268 bytes at index 0
+15:655 00:043 OCA: Exposing XSDT table table HPET (54455048) (OEM 2020202036313232) at 8BFFA000 of 56 bytes at index 1
+15:698 00:043 OCA: Exposing XSDT table table APIC (43495041) (OEM 2020202036313232) at 8BFF9000 of 188 bytes at index 2
+15:741 00:043 OCA: Exposing XSDT table table MCFG (4746434D) (OEM 2020202036313232) at 8BFF8000 of 60 bytes at index 3
+15:793 00:051 OCA: Exposing XSDT table table TCPA (41504354) (OEM 2020202036313232) at 8BFF6000 of 50 bytes at index 4
+15:843 00:050 OCA: Exposing XSDT table table SSDT (54445353) (OEM 6963684161746153) at 8BFCC000 of 729 bytes at index 5
+15:885 00:041 OCA: Exposing XSDT table table SSDT (54445353) (OEM 6376654464697450) at 8BFCB000 of 1162 bytes at index 6
+15:927 00:042 OCA: Exposing XSDT table table SLIC (43494C53) (OEM 43504D2D43494C53) at 8BFCA000 of 374 bytes at index 7
+15:969 00:041 OCA: Exposing XSDT table table MSDM (4D44534D) (OEM 43504D2D43494C53) at 8BFC9000 of 85 bytes at index 8
+16:011 00:041 OCA: Exposing XSDT table table FPDT (54445046) (OEM 2020202036313232) at 8BFC8000 of 68 bytes at index 9
+16:060 00:049 OCA: Exposing XSDT table table BGRT (54524742) (OEM 2020202036313232) at 8BFC7000 of 56 bytes at index 10
+16:102 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 000043324943464E) at 8BFC5000 of 463 bytes at index 11
+16:144 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0074734930757043) at 8BFC3000 of 1348 bytes at index 12
+16:187 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0074647353757043) at 8BFC2000 of 2959 bytes at index 13
+16:229 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 796E6954656B614C) at 8BFC1000 of 469 bytes at index 14
+16:271 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0020746473536153) at 8BFC0000 of 2348 bytes at index 15
+16:322 00:050 OCA: Exposing XSDT table table ASF! (21465341) (OEM 2020202036313232) at 8BFF7000 of 165 bytes at index 16
+16:364 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 000000005354505A) at 8BF5A000 of 152 bytes at index 17
+16:406 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0000434574647353) at 8BF59000 of 125 bytes at index 18
+16:448 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0000000054455048) at 8BF58000 of 318 bytes at index 19
+16:491 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0067756C50757043) at 8BF57000 of 112 bytes at index 20
+16:533 00:041 OCA: Exposing XSDT table table SSDT (54445353) (OEM 00000000464C4E50) at 8BF56000 of 1110 bytes at index 21
+16:583 00:050 OCA: Exposing XSDT table table SSDT (54445353) (OEM 7465736552627355) at 8BF55000 of 243 bytes at index 22
+16:626 00:042 OCA: Exposing XSDT table table SSDT (54445353) (OEM 0000000049534F58) at 8BF54000 of 287 bytes at index 23
+16:669 00:042 OCA: Exposing RSDT table table FACP (50434146) (OEM 2020202036313232) at 8BFFB000 of 268 bytes at index 0
+16:712 00:042 OCA: Exposing RSDT table table HPET (54455048) (OEM 2020202036313232) at 8BFFA000 of 56 bytes at index 1
+16:763 00:050 OCA: Exposing RSDT table table APIC (43495041) (OEM 2020202036313232) at 8BFF9000 of 188 bytes at index 2
+16:814 00:050 OCA: Exposing RSDT table table MCFG (4746434D) (OEM 2020202036313232) at 8BFF8000 of 60 bytes at index 3
+16:856 00:042 OCA: Exposing RSDT table table TCPA (41504354) (OEM 2020202036313232) at 8BFF6000 of 50 bytes at index 4
+16:899 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 6963684161746153) at 8BFCC000 of 729 bytes at index 5
+16:942 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 6376654464697450) at 8BFCB000 of 1162 bytes at index 6
+16:985 00:042 OCA: Exposing RSDT table table SLIC (43494C53) (OEM 43504D2D43494C53) at 8BFCA000 of 374 bytes at index 7
+17:028 00:043 OCA: Exposing RSDT table table MSDM (4D44534D) (OEM 43504D2D43494C53) at 8BFC9000 of 85 bytes at index 8
+17:078 00:050 OCA: Exposing RSDT table table FPDT (54445046) (OEM 2020202036313232) at 8BFC8000 of 68 bytes at index 9
+17:120 00:041 OCA: Exposing RSDT table table BGRT (54524742) (OEM 2020202036313232) at 8BFC7000 of 56 bytes at index 10
+17:163 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 000043324943464E) at 8BFC5000 of 463 bytes at index 11
+17:205 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0074734930757043) at 8BFC3000 of 1348 bytes at index 12
+17:247 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0074647353757043) at 8BFC2000 of 2959 bytes at index 13
+17:289 00:041 OCA: Exposing RSDT table table SSDT (54445353) (OEM 796E6954656B614C) at 8BFC1000 of 469 bytes at index 14
+17:339 00:050 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0020746473536153) at 8BFC0000 of 2348 bytes at index 15
+17:382 00:042 OCA: Exposing RSDT table table ASF! (21465341) (OEM 2020202036313232) at 8BFF7000 of 165 bytes at index 16
+17:424 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 000000005354505A) at 8BF5A000 of 152 bytes at index 17
+17:467 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0000434574647353) at 8BF59000 of 125 bytes at index 18
+17:509 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0000000054455048) at 8BF58000 of 318 bytes at index 19
+17:560 00:050 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0067756C50757043) at 8BF57000 of 112 bytes at index 20
+17:603 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 00000000464C4E50) at 8BF56000 of 1110 bytes at index 21
+17:645 00:042 OCA: Exposing RSDT table table SSDT (54445353) (OEM 7465736552627355) at 8BF55000 of 243 bytes at index 22
+17:696 00:051 OCA: Exposing RSDT table table SSDT (54445353) (OEM 0000000049534F58) at 8BF54000 of 287 bytes at index 23
+17:739 00:042 OC: OcLoadPlatformSupport...
+17:782 00:043 OCSMB: SmbiosLookupHost failed to lookup SMBIOSv3 - Not Found
+17:833 00:050 OCSMB: Found DMI Anchor 8B333318 v2.7 Table Address 8BE3F000 Length 068E
+17:875 00:041 OCSMB: Current SMBIOS HP EliteBook 840 G2 (2216 made by Hewlett-Packard)
+17:917 00:041 OC: PlatformInfo auto 1 OEM SN 0 OEM UUID 0 OEM MLB 0 OEM ROM 0 - Success
+17:959 00:042 OC: New SMBIOS: Acidanthera model MacBookPro12,1
+18:001 00:041 OCSMB: Post-override BIOS vendor Acidanthera 0
+18:043 00:041 OCSMB: Number of CPU cache entries is 4
+18:093 00:050 OCSMB: Number of CPU cache entries is 4
+18:136 00:042 OCSMB: Number of CPU cache entries is 4
+18:178 00:042 OCSMB: CPU1 display frequency is 2300MHz
+18:220 00:042 OCSMB: Applying 1469 (1) prev 8B333318 (1678/31), 0 (0/0)
+18:263 00:042 OCSMB: Patched 8BD21000 v3.2 Table Address 8BDFE000 Length 05BD 1E E
+18:305 00:042 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:name (9) - Success
+18:355 00:050 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:Model (30) - Success
+18:398 00:042 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:SystemSerialNumber (26) - Success
+18:441 00:042 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:system-id (16) - Success
+18:484 00:042 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:board-id (21) - Success
+18:527 00:043 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:StartupPowerEvents (8) - Success
+18:578 00:051 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:InitialTSC (8) - Success
+18:629 00:050 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:FSBFrequency (8) - Success
+18:672 00:042 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:DevicePathsSupported (4) - Success
+18:715 00:043 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:REV (6) - Success
+18:758 00:043 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:RBr (8) - Success
+18:802 00:043 OCDH: Setting DataHub 64517CC8-6561-4051-B03C-5964B60F4C7A:RPlt (8) - Success
+18:854 00:052 OC: Setting HW_BID Mac-E43C1C25D4880AD6 - Success
+18:897 00:042 OC: Setting HW_ROM 60:57:C8:26:34:E6 - Success
+18:939 00:042 OC: Setting ROM 60:57:C8:26:34:E6 - Success
+18:982 00:042 OC: Setting HW_MLB C02533404GUGDVVA8 - Success
+19:024 00:042 OC: Setting MLB C02533404GUGDVVA8 - Success
+19:066 00:041 OC: Setting HW_SSN C02Q73Y7H1DP - Success
+19:116 00:050 OC: Setting SSN C02Q73Y7H1DP - Success
+19:158 00:042 OC: Setting system-id 63FC03EF-510C-3A47-A28E-DA8FFE673DEF - Success
+19:201 00:042 OC: Setting FirmwareFeatures FD0FF576 - Success
+19:244 00:042 OC: Setting ExtendedFirmwareFeatures 00000008FD0FF576 - Success
+19:286 00:042 OC: Setting FirmwareFeaturesMask FF1FFF7F - Success
+19:329 00:042 OC: Setting ExtendedFirmwareFeaturesMask 00000008FF1FFF7F - Success
+19:379 00:050 OC: OcLoadDevPropsSupport...
+19:422 00:042 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):AAPL,ig-platform-id - Success
+19:465 00:042 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):AAPL,slot-name - Success
+19:508 00:042 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):device-id - Success
+19:559 00:050 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):device_type - Success
+19:610 00:051 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):framebuffer-fbmem - Success
+19:653 00:043 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):framebuffer-patch-enable - Success
+19:696 00:042 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):framebuffer-stolenmem - Success
+19:739 00:043 OC: Setting devprop PciRoot(0x0)/Pci(0x2,0x0):model - Success
+19:782 00:043 OC: OcMiscLateInit...
+19:825 00:043 OC: Translated HibernateMode None to 0
+19:876 00:050 OC: Hibernation activation - Invalid Parameter, hibernation wake - no
+19:918 00:042 OC: Panic log does not exist
+19:960 00:042 OC: OcLoadKernelSupport...
+20:002 00:041 OC: All green, starting boot management...
+20:044 00:041 OC: Ready for takeoff in 0 us
+20:085 00:041 OCB: Adding fs 880C4B18 (E:1|L:1|P:Success) - PciRoot(0x0)/Pci(0x14,0x0)/USB(0x2,0x0)/USB(0x2,0x0)/HD(1,GPT,16CC7EE6-7971-4E39-9CD2-3288A03DBBBA,0x28,0x64000)
+20:136 00:050 OCB: Adding fs 880BB418 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)
+20:178 00:042 OCB: Adding fs 880B3A98 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(1,GPT,2DDE752E-D896-4B63-82B9-CE260256FE01,0x28,0x64000)
+20:221 00:042 OCB: Adding fs 88538A18 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)
+20:263 00:042 OCB: Adding fs 88545498 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,CFF2584F16837943909528284CC022C3)
+20:306 00:042 OCB: Adding fs 88545018 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,04EF127483482C43B909CB1807ECFF6C)
+20:356 00:050 OCB: Adding fs 87D5DC18 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,66EA97CD0F49E74F88D8D93E92B27D57)
+20:399 00:043 OCB: Adding fs 87E70118 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,D27E83D4A93F5C47B6B272D8AA13D95A)
+20:442 00:042 OCB: Adding fs 87EA1918 (E:0|L:0|P:Success) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,6225C3BFB1264247A82CCF40BB5B3B82)
+20:493 00:050 OCB: Found 9 potentially bootable filesystems
+20:536 00:042 OCB: Found 2 BootOrder entries with BootNext excluded
+20:578 00:042 OCB: efi-boot-device-data = PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+20:629 00:050 OCB: efi-boot-next-data - Not Found
+20:672 00:042 OCB: efi-backup-boot-device-data = PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+20:715 00:042 OCB: efi-apple-recovery-data = PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(1,GPT,2DDE752E-D896-4B63-82B9-CE260256FE01,0x28,0x64000)/\EFI\APPLE\FIRMWARE\MBP121.fd
+20:758 00:042 OCB: Dumping BootOrder
+20:801 00:043 OCB: 0 -> Boot0080 = PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+20:844 00:043 OCB: 1 -> Boot0000 = HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)/\EFI\Microsoft\Boot\bootmgfw.efi
+20:894 00:050 OCB: Parsing predefined list...
+20:937 00:042 OCB: 0 -> Boot0080 = PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+20:979 00:042 OCB: 1 -> Boot0081 = VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0F52AE9C6912604B9966719CD412F815)/\81381531-CD52-48FD-8A35-E098C505F379\System\Library\CoreServices\boot.efi
+21:021 00:041 OCB: Adding fs 2007C5F5 for 1 custom entries and BEP (aux hidden)
+21:063 00:041 OCB: Building entry from Boot0080
+21:104 00:041 OCB: Assuming DP is full-form or lacks suffix
+21:154 00:049 OCB: Expanded DP - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+21:196 00:041 OCB: Expanded DP remainder - \4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+21:238 00:042 OCB: Matched fs 88538A18
+21:285 00:046 OCB: Adding entry type (T:2|F:0|G:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+21:327 00:042 OCB: Get visibility for boot entry 4F58F2CF-8316-4379-9095-28284CC022C3\ - Not Found
+21:378 00:051 OCB: Registering entry macOS [Apple] (T:2|F:0|G:0|E:0|B:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+21:429 00:050 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)
+21:471 00:042 OCBP: APFS Volume Info - 87D5DD98 (131072, 07AA7200-D0B1-4840-BFA9-58D3901B8A15, 16)
+21:514 00:042 OCBP: APFS Container Info - 87E5C018 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+21:557 00:042 OCBP: BlessedFileHEX (1/5 264) - 02 01 0C 00 D0 41 03 0A 00 00 00 00 01 01 06 00 02 1F 03 12 0A 00 03 00 00 00 00 00 04 01 2A 00 02 00 00 00 28 40 06 00 00 00 00 00 60 82 E1 0E 00 00 00 00 BE 91 74 90 53 B4 DB 41 9D C4 C4 61
+21:600 00:043 OCBP: BlessedFileHEX (2/5 264) - 87 D4 DD 84 02 02 04 03 24 00 F7 FC 74 BE 7C 0B F3 49 91 47 01 F4 04 2E 68 42 00 72 AA 07 B1 D0 40 48 BF A9 58 D3 90 1B 8A 15 04 04 9A 00 5C 00 34 00 46 00 35 00 38 00 46 00 32 00 43 00 46 00
+21:651 00:050 OCBP: BlessedFileHEX (3/5 264) - 2D 00 38 00 33 00 31 00 36 00 2D 00 34 00 33 00 37 00 39 00 2D 00 39 00 30 00 39 00 35 00 2D 00 32 00 38 00 32 00 38 00 34 00 43 00 43 00 30 00 32 00 32 00 43 00 33 00 5C 00 53 00 79 00 73 00
+21:694 00:042 OCBP: BlessedFileHEX (4/5 264) - 74 00 65 00 6D 00 5C 00 4C 00 69 00 62 00 72 00 61 00 72 00 79 00 5C 00 43 00 6F 00 72 00 65 00 53 00 65 00 72 00 76 00 69 00 63 00 65 00 73 00 5C 00 62 00 6F 00 6F 00 74 00 2E 00 65 00 66 00
+21:737 00:043 OCBP: BlessedFileHEX (5/5 264) - 69 00 00 00 7F FF 04 00
+21:780 00:043 OCBP: BlessedFileDP - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+21:823 00:043 OCBP: Blessed file is valid
+21:867 00:043 OCBP: 9 filesystems for APFS - Success
+21:917 00:050 OCBP: APFS Volume Info - 87D5DE18 (131072, 07AA7200-D0B1-4840-BFA9-58D3901B8A15, 16)
+21:959 00:042 OCBP: APFS Container Info - 87E5C118 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+22:002 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 4 of 9 - 1
+22:044 00:041 OCBP: Missing partition 07AA7200-D0B1-4840-BFA9-58D3901B8A15 on preboot - Not Found
+22:085 00:041 OCBP: No APFS booter 4 of 9 for 07AA7200-D0B1-4840-BFA9-58D3901B8A15 - Not Found
+22:127 00:041 OCBP: APFS Volume Info - 87D5DA98 (131072, 4F58F2CF-8316-4379-9095-28284CC022C3, 64)
+22:177 00:050 OCBP: APFS Container Info - 87E5CB18 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+22:219 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 5 of 9 - 1
+22:262 00:042 OCBP: Found partition 4F58F2CF-8316-4379-9095-28284CC022C3 on preboot
+22:305 00:042 OCBP: Want predefined list for APFS 16 at 4F58F2CF-8316-4379-9095-28284CC022C3
+22:355 00:050 OCBP: Predefined 4F58F2CF-8316-4379-9095-28284CC022C3 \System\Library\CoreServices\boot.efi was found
+22:405 00:050 OCBP: Found APFS booter 5 of 9 for 4F58F2CF-8316-4379-9095-28284CC022C3 (817BCF20)
+22:448 00:042 OCBP: APFS Volume Info - 87E5CB18 (131072, 7412EF04-4883-432C-B909-CB1807ECFF6C, 4)
+22:491 00:042 OCBP: APFS Container Info - 87D5DA98 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+22:533 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 6 of 9 - 1
+22:576 00:042 OCBP: Missing partition 7412EF04-4883-432C-B909-CB1807ECFF6C on preboot - Not Found
+22:619 00:042 OCBP: No APFS booter 6 of 9 for 7412EF04-4883-432C-B909-CB1807ECFF6C - Not Found
+22:670 00:050 OCBP: APFS Volume Info - 87D5DB98 (131072, CD97EA66-490F-4FE7-88D8-D93E92B27D57, 8)
+22:713 00:042 OCBP: APFS Container Info - 87D4E418 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+22:756 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 7 of 9 - 1
+22:799 00:043 OCBP: Missing partition CD97EA66-490F-4FE7-88D8-D93E92B27D57 on preboot - Not Found
+22:842 00:043 OCBP: No APFS booter 7 of 9 for CD97EA66-490F-4FE7-88D8-D93E92B27D57 - Not Found
+22:885 00:043 OCBP: APFS Volume Info - 87D4E418 (131072, D4837ED2-3FA9-475C-B6B2-72D8AA13D95A, 1)
+22:935 00:050 OCBP: APFS Container Info - 87D4E398 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+22:977 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 8 of 9 - 1
+23:019 00:042 OCBP: Missing partition D4837ED2-3FA9-475C-B6B2-72D8AA13D95A on preboot - Not Found
+23:061 00:041 OCBP: No APFS booter 8 of 9 for D4837ED2-3FA9-475C-B6B2-72D8AA13D95A - Not Found
+23:103 00:041 OCBP: APFS Volume Info - 87D5D798 (131072, BFC32562-26B1-4742-A82C-CF40BB5B3B82, 192)
+23:153 00:049 OCBP: APFS Container Info - 87D5DE98 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+23:195 00:042 OCBP: APFS match container F845F5EB-A34C-4134-A1EC-EF78F9F5670C vs F845F5EB-A34C-4134-A1EC-EF78F9F5670C for 9 of 9 - 1
+23:237 00:042 OCBP: Missing partition BFC32562-26B1-4742-A82C-CF40BB5B3B82 on preboot - Not Found
+23:288 00:050 OCBP: No APFS booter 9 of 9 for BFC32562-26B1-4742-A82C-CF40BB5B3B82 - Not Found
+23:330 00:042 OCBP: APFS bless for F845F5EB-A34C-4134-A1EC-EF78F9F5670C:<null string> is Success
+23:372 00:042 OCB: Adding entry type (T:2|F:0|G:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+23:422 00:050 OCB: Get visibility for boot entry 4F58F2CF-8316-4379-9095-28284CC022C3\ - Not Found
+23:465 00:042 OCB: Discarding already present DP
+23:507 00:042 OCB: Building entry from Boot0000
+23:550 00:042 OCB: Assuming DP is short-form (prefix)
+23:593 00:043 OCB: Expanded DP - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)/\EFI\Microsoft\Boot\bootmgfw.efi
+23:636 00:042 OCB: Expanded DP remainder - \EFI\Microsoft\Boot\bootmgfw.efi
+23:687 00:050 OCB: Matched fs 880BB418
+23:730 00:042 OCB: Adding entry type (T:32|F:0|G:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)/\EFI\Microsoft\Boot\bootmgfw.efi
+23:774 00:044 OCB: Get visibility for boot entry <null string> - Not Found
+23:817 00:042 OCB: Registering entry Windows [Windows] (T:32|F:0|G:0|E:0|B:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)/\EFI\Microsoft\Boot\bootmgfw.efi
+23:860 00:042 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)
+23:903 00:043 OCBP: Blessed file is missing
+23:953 00:049 OCBP: Blessed folder is missing
+23:995 00:041 OCBP: Predefined <nil> \System\Library\CoreServices\boot.efi is missing - Not Found
+24:037 00:041 OCBP: Predefined <nil> \EFI\Microsoft\Boot\bootmgfw.efi was found
+24:079 00:041 OCB: Adding entry type (T:32|F:0|G:0) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x1,0x0,0x0)/HD(1,GPT,1783C77A-D24E-4CE8-B9DF-DFFE767181C4,0x800,0x32000)/\EFI\Microsoft\Boot\bootmgfw.efi
+24:120 00:041 OCB: Get visibility for boot entry <null string> - Not Found
+24:169 00:049 OCB: Discarding already present DP
+24:219 00:050 OCB: Processing blessed list
+24:265 00:045 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x14,0x0)/USB(0x2,0x0)/USB(0x2,0x0)/HD(1,GPT,16CC7EE6-7971-4E39-9CD2-3288A03DBBBA,0x28,0x64000)
+24:308 00:043 OCBP: Blessed file is missing
+24:350 00:042 OCBP: Blessed folder is missing
+24:392 00:042 OCBP: Predefined <nil> \System\Library\CoreServices\boot.efi is missing - Not Found
+24:443 00:050 OCBP: Predefined <nil> \EFI\Microsoft\Boot\bootmgfw.efi is missing - Not Found
+24:486 00:042 OCBP: Predefined <nil> \EFI\BOOT\BOOTX64.EFI was found
+24:529 00:043 OCB: Adding entry type (T:1|F:0|G:1) - PciRoot(0x0)/Pci(0x14,0x0)/USB(0x2,0x0)/USB(0x2,0x0)/HD(1,GPT,16CC7EE6-7971-4E39-9CD2-3288A03DBBBA,0x28,0x64000)/\EFI\BOOT\BOOTX64.EFI
+24:572 00:042 OCB: Get visibility for boot entry - Success
+24:615 00:043 OCB: Discarding disabled entry by visibility
+24:660 00:045 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(1,GPT,2DDE752E-D896-4B63-82B9-CE260256FE01,0x28,0x64000)
+24:711 00:051 OCBP: Blessed file is missing
+24:754 00:043 OCBP: Blessed folder is missing
+24:797 00:042 OCBP: Predefined <nil> \System\Library\CoreServices\boot.efi is missing - Not Found
+24:841 00:043 OCBP: Predefined <nil> \EFI\Microsoft\Boot\bootmgfw.efi is missing - Not Found
+24:884 00:043 OCBP: Predefined <nil> \EFI\BOOT\BOOTX64.EFI was found
+24:927 00:043 OCB: Adding entry type (T:1|F:0|G:1) - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(1,GPT,2DDE752E-D896-4B63-82B9-CE260256FE01,0x28,0x64000)/\EFI\BOOT\BOOTX64.EFI
+24:979 00:051 OCB: Get visibility for boot entry - Success
+25:021 00:042 OCB: Discarding disabled entry by visibility
+25:063 00:042 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,CFF2584F16837943909528284CC022C3)
+25:105 00:041 OCBP: APFS Volume Info - 886D7E98 (131072, 4F58F2CF-8316-4379-9095-28284CC022C3, 64)
+25:155 00:049 OCBP: APFS Container Info - 886D7E18 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+25:205 00:050 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,04EF127483482C43B909CB1807ECFF6C)
+25:248 00:042 OCBP: APFS Volume Info - 886D7E18 (131072, 7412EF04-4883-432C-B909-CB1807ECFF6C, 4)
+25:291 00:042 OCBP: APFS Container Info - 886D7C98 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+25:334 00:043 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,66EA97CD0F49E74F88D8D93E92B27D57)
+25:377 00:042 OCBP: APFS Volume Info - 886D7C98 (131072, CD97EA66-490F-4FE7-88D8-D93E92B27D57, 8)
+25:420 00:043 OCBP: APFS Container Info - 886D7E98 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+25:470 00:050 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,D27E83D4A93F5C47B6B272D8AA13D95A)
+25:513 00:042 OCBP: APFS Volume Info - 886D7E98 (131072, D4837ED2-3FA9-475C-B6B2-72D8AA13D95A, 1)
+25:555 00:042 OCBP: APFS Container Info - 886D7E18 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+25:598 00:042 OCB: Adding bless entry on disk - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,6225C3BFB1264247A82CCF40BB5B3B82)
+25:640 00:042 OCBP: APFS Volume Info - 886D7E18 (131072, BFC32562-26B1-4742-A82C-CF40BB5B3B82, 192)
+25:683 00:042 OCBP: APFS Container Info - 886D7C98 (1, F845F5EB-A34C-4134-A1EC-EF78F9F5670C)
+25:733 00:050 OCB: Not adding hidden auxiliary entry OpenShell.efi (tool|B:0) -> OpenShell.efi
+25:775 00:042 BEP: Reset NVRAM entry, preserve boot 0, apple 0
+25:818 00:042 OCB: Not adding hidden auxiliary entry Reset NVRAM (os|B:1) -> <null string>
+25:860 00:041 OCB: Showing menu... 
+25:902 00:042 OCHK: InitHotKeys
+25:952 00:050 OCKM: Allocated key repeat context 886D7E18 886D7E98 886D7F18
+26:153 00:200 OCAE: Set screen resolution to 1600x900 - Success
+26:196 00:043 OCTY: Registered handler
+28:332 02:136 OCHK: FreeHotKeys
+28:376 00:043 OCTY: Unregistered handler
+28:428 00:052 OCKM: Freeing key repeat context 886D7E18 886D7E98 886D7F18
+28:479 00:050 OCB: Should boot from 2. macOS (T:2|F:0|G:0|E:0|DEF:0)
+28:521 00:042 OCB: Saved mode 0/0/0 - Success
+28:563 00:042 OCB: Perform boot macOS to dp PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi (0/0)
+28:606 00:042 OCABC: EfiBootRt candidate - PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x3,0x0,0x0)/HD(2,GPT,907491BE-B453-41DB-9DC4-C46187D4DD84,0x64028,0xEE18260)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842,0072AA07B1D04048BFA958D3901B8A15)/\4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+28:648 00:042 OCABC: IsEfiBootRt 0 (BP 1, Apple 0)
+28:698 00:049 OCI4: Verifying digest 48 (674E5FC9) override 0 48 (00000000)
+28:751 00:052 OCSB: Verified IMG4 without issues
+28:794 00:042 OCB: Arch filtering 865C3018(723512)->865C3018(723512) caps 0 - Success
+28:836 00:042 OCB: Matching <>/0[0] args on type 2
+28:880 00:043 OCABC: VMware Mac installed on 88651E18 - Success
+28:924 00:044 OCABC: Patching safe mode sur-2 at off 1F0B
+28:967 00:043 OCABC: All slides are usable! You can disable ProvideCustomSlide!
+29:018 00:050 AAPL: #[EB.H.IS|!] Err(0xE) <- RT.GV boot-signature 7C436110-AB2A-4BBB-A880-FE41995C9F82
+29:061 00:042 AAPL: #[EB.H.IS|!] Err(0xE) <- RT.GV boot-image-key 7C436110-AB2A-4BBB-A880-FE41995C9F82
+29:104 00:042 AAPL: #[EB|H:IS] 0
+29:147 00:043 AAPL: #[EB|LOG:INIT] 2024-01-03T23:48:21
+29:191 00:043 AAPL: #[EB|VERSION] <"boot.efi 540.120.3~37 (Official), built 2023-08-17T08:10:57-0700">
+29:242 00:050 AAPL: #[EB|BUILD] <"BUILD-INFO[300]:{"DisplayName":"boot.efi","DisplayVersion":"540.120.3~37","RecordUuid":"14C8980F-AAB0-433E-8DCE-78C62A0C5BA5","BuildTime":"2023-08-17T08:10:57-0700","ProjectName":"efiboot","ProductName":"boot.efi","SourceVersion":"540.120.3","BuildVersion":"37","BuildConfiguration":"Release","BuildType":"Official"}">
+29:292 00:049 AAPL: #[EB.CFG.DEV|!] Err(0xE) <- RT.GV booter-strict-xmlparser 7C436110-AB2A-4BBB-A880-FE41995C9F82
+29:334 00:042 AAPL: #[EB|CFG:DEV] r5 0x0 0x0
+29:376 00:042 AAPL: #[EB|H:IS] 0
+29:418 00:041 AAPL: #[EB|WL:MODE] 0
+29:460 00:041 AAPL: #[EB|CFG:ARG] boot-save-log 0x0000000000000002 (0x0000000000000002 < 0xFFFFFFFFFFFFFFFF) default
+29:510 00:050 AAPL: #[EB|CFG:ARG] wake-save-log 0x0000000000000002 (0x0000000000000002 < 0x0000000000000002) default
+29:552 00:042 AAPL: #[EB|CFG:ARG] console       0x0000000000000001 (0x0000000000000001 < 0x0000000000000001) default
+29:594 00:042 AAPL: #[EB|CFG:ARG] serial        0x0000000000000001 (0x0000000000000001 < 0x0000000000000000) default
+29:636 00:042 AAPL: #[EB|CFG:ARG] preoslog      0x0000000000000001 (0x0000000000000001 < 0xFFFFFFFFFFFFFFFF) default
+29:678 00:042 AAPL: #[EB|CFG:ARG] timestamps    0x0000000000000000 (0x0000000000000000 < 0xFFFFFFFFFFFFFFFF) default
+29:721 00:042 AAPL: #[EB|CFG:ARG] log-level     0x0000000000000001 (0x0000000000000001 & 0x0000000000000021) default
+29:771 00:049 AAPL: #[EB|CFG:ARG] breakpoint    0x0000000000000000 (0x0000000000000000 & 0x0000000000000000) default
+29:813 00:042 AAPL: #[EB|CFG:ARG] kc-read-size  0x0000000000100000 (0x0000000000100000 < 0xFFFFFFFFFFFFFFFF) default
+29:855 00:042 AAPL: #[EB|H:IS] 0
+29:897 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01   0 0x00
+29:939 00:042 AAPL: #[EB|BRD:NV] Mac-E43C1C25D4880AD6
+29:989 00:050 OCOS: OS set: <null> macOS 11.0
+30:032 00:042 OCOS: OS set: Apple Inc. macOS 11.0
+30:075 00:042 AAPL: #[EB|B:VAw]
+30:117 00:042 AAPL: #[EB|B:IAw]
+30:160 00:043 AAPL: #[EB|WL] 0 0 0x01 0x01   2 0x00
+30:211 00:051 AAPL: #[EB.BST.IDT|+]
+30:263 00:051 AAPL: #[EB|BM] X86LEGACYAP
+30:307 00:044 AAPL: #[EB.BST.IDT|-]
+30:349 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01   3 0x00
+30:392 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01   4 0x00
+30:435 00:042 AAPL: #[EB|BRD:NV] Mac-E43C1C25D4880AD6
+30:478 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01   5 0x00
+30:529 00:050 AAPL: #[EB.H.CHK|BM] 0x0000000000000000
+30:572 00:042 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.GV boot-signature 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:614 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01  23 0x0E
+30:657 00:043 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.GV boot-image-key 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:700 00:042 AAPL: #[EB|WL] 0 0 0x01 0x01  24 0x0E
+30:743 00:042 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.GV boot-image 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:795 00:051 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.SV- boot-signature 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:837 00:042 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.SV- boot-image-key 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:879 00:042 AAPL: #[EB.H.LV|!] Err(0xE) <- RT.SV- boot-image 7C436110-AB2A-4BBB-A880-FE41995C9F82
+30:921 00:041 AAPL: #[EB|H:NOT]
+30:963 00:041 AAPL: #[EB|SB:P] 0x1
+31:013 00:049 AAPL: #[EB.B.MN|BM:+SB]
+31:055 00:042 AAPL: #[EB|LIMG:DP] Acpi(PNP0A03,0)/Pci(1F|2)/SATA(3,0)/HD(Part2,Sig907491BE-B453-41DB-9DC4-C46187D4DD84)/VenMedia(BE74FCF7-0B7C-49F3-9147-01F4042E6842)
+31:098 00:042 AAPL: #[EB|LIMG:FP] \4F58F2CF-8316-4379-9095-28284CC022C3\System\Library\CoreServices\boot.efi
+31:148 00:050 AAPL: #[EB|LIMG:OPT] 
+31:190 00:041 AAPL: #[EB.OPT.LXF|F] <"\\4F58F2CF-8316-4379-9095-28284CC022C3\\System\\Library\\CoreServices\\com.apple.Boot.plist">
+31:231 00:041 AAPL: #[EB.LD.LF|IN] 0 1 <"\\4F58F2CF-8316-4379-9095-28284CC022C3\\System\\Library\\CoreServices\\com.apple.Boot.plist"> <"0">
+31:281 00:049 AAPL: #[EB.LD.OFS|OPEN!] Err(0xE) <"\\4F58F2CF-8316-4379-9095-28284CC022C3\\System\\Library\\CoreServices\\com.apple.Boot.plist">
+31:324 00:042 AAPL: #[EB.OPT.LXF|LF!] Err(0xE)
+31:367 00:042 AAPL: #[EB.OPT.LXF|F] <"Library\\Preferences\\SystemConfiguration\\com.apple.Boot.plist">
+31:410 00:042 AAPL: #[EB.LD.LF|IN] 0 1 <"Library\\Preferences\\SystemConfiguration\\com.apple.Boot.plist"> <"0">
+31:457 00:047 AAPL: #[EB|KF] <"">
+31:500 00:043 AAPL: #[EB|MBA:CL] <"">
+31:551 00:050 AAPL: #[EB|MBA:NV] <"-v keepsyms=1 debug=0x100 alcid=4">
+31:594 00:042 AAPL: #[EB|MBA:KF] <"">
+31:636 00:042 AAPL: #[EB|MBA:OUT] <"-v keepsyms=1 debug=0x100 alcid=4 chunklist-security-epoch=0 -chunklist-no-rev2-dev">
+31:679 00:043 AAPL: #[EB|LOG:VERBOSE] 2024-01-03T23:48:24
+31:722 00:042 AAPL: #[EB|OPT:BM] 0x280182
+31:765 00:042 AAPL: #[EB.OPT.LXF|F] <"\\4F58F2CF-8316-4379-9095-28284CC022C3\\System\\Library\\CoreServices\\PlatformSupport.plist">
+31:815 00:050 AAPL: #[EB.LD.LF|IN] 0 1 <"\\4F58F2CF-8316-4379-9095-28284CC022C3\\System\\Library\\CoreServices\\PlatformSupport.plist"> <"0">
+31:859 00:043 AAPL: #[EB|P:CPR] N
+31:902 00:042 AAPL: #[EB|P:MPI] N
+31:945 00:043 AAPL: #[EB|P:BPI] N
+31:988 00:043 AAPL: #[EB|KMR] 212066304
+32:039 00:050 AAPL: #[EB.CS.CSKSD|+]
+32:089 00:049 AAPL: #[EB.CS.CSKSD|!] Err(0xE) <- RT.GV boot-info-payload 8D63D4FE-BD3C-4AAD-881D-86FD974BC1DF
+32:130 00:041 AAPL: #[EB|WL] 0 0 0x01 0x01   6 0x0E
+32:172 00:041 AAPL: #[EB.CS.LFC|+]
+32:214 00:041 AAPL: #[EB.LD.LF|IN] 0 1 <"System\\Library\\Caches\\com.apple.corestorage\\EncryptedRoot.plist.wipekey"> <"0">
+32:264 00:050 AAPL: #[EB.FS.AGSVH|PU] 4F58F2CF-8316-4379-9095-28284CC022C3
+32:314 00:049 AAPL: #[EB.FS.AGSVH|!] Err(0xE) <- BS.LocHB 59D76AE4-37E3-55A7-B460-EF13D46E6020
+32:356 00:042 AAPL: #[EB.G.CS|-?] Ok(0)
+32:399 00:042 AAPL: #[EB.LD.LF|IN] 0 1 <"<null string>"> <"1">
+32:444 00:044 AAPL: #[EB.B.SBS|SZ] 723512
+32:496 00:052 AAPL: #[EB|B:SHA] <2f6731e4f076c2a93e64369d99727d311a921500>
+32:540 00:043 AAPL: #[EB.WL.PWLFNV|!] Err(0xE) <- RT.GV wake-failure 7C436110-AB2A-4BBB-A880-FE41995C9F82
+32:591 00:050 AAPL: #[EB.WL.DT|!] Err(0xE) <- EB.WL.PWLFNV
+32:634 00:042 AAPL: #[EB.WL.PWLFRTC|NONE]
+32:676 00:042 AAPL: #[EB.WL.DT|!] Err(0xE) <- EB.WL.PWLFRTC
+32:720 00:043 AAPL: #[EB.LD.LKC|D] <"boot\System\Library\KernelCollections\BootKernelExtensions.kc.development">
+32:763 00:043 AAPL: #[EB.LD.LF|IN] 0 1 <"boot\\System\\Library\\KernelCollections\\BootKernelExtensions.kc.development"> <"0">
+32:816 00:053 AAPL: #[EB.LD.OFS|OPEN!] Err(0xE) <"boot\\System\\Library\\KernelCollections\\BootKernelExtensions.kc.development">
+32:859 00:043 AAPL: #[EB.LD.LKC|R.2] <"boot\System\Library\KernelCollections\BootKernelExtensions.kc">
+32:902 00:043 AAPL: #[EB.LD.LF|IN] 0 1 <"boot\\System\\Library\\KernelCollections\\BootKernelExtensions.kc"> <"0">
+35:269 02:366 OC: Kext reservation size info 589000 exe 1BBB000
+35:325 00:056 OC: Trying 64-bit XNU hook on boot\System\Library\KernelCollections\BootKernelExtensions.kc
+36:008 00:682 OC: Result of 64-bit XNU hook on boot\System\Library\KernelCollections\BootKernelExtensions.kc (5C5FE380) is Success
+36:072 00:064 OCAK: Read kernel version 21.6.0 (210600)
+36:116 00:044 OCAK: Zeroing _xcpm_core_scope_msrs 0xE2 applicable CPUs (76)
+36:158 00:042 OCAK: Zeroing _xcpm_core_scope_msrs 0xE2 applicable CPUs (406416)
+36:200 00:042 OCAK: Zeroing _xcpm_core_scope_msrs 0xE2 applicable CPUs (16384)
+36:244 00:043 OCAK: 64-bit XcpmCfgLockRel replace count - 2
+36:286 00:042 OCAK: [OK] Success XcpmCfgLock patch
+36:367 00:081 OCAK: 64-bit PanicKextDump replace count - 1
+36:410 00:042 OCAK: [OK] Patch success kext dump
+36:453 00:043 OCAK: 64-bit LapicKernelPanic replace count - 1
+36:494 00:041 OCAK: [OK] Patch success lapic
+36:537 00:042 OCAK: 64-bit LapicKernelPanicMaster replace count - 1
+36:587 00:050 OCAK: [OK] Patch success extended modern lapic
+36:630 00:043 OCAK: 64-bit PowerStateTimeout replace count - 1
+36:673 00:042 OCAK: [OK] Patch success inline power state
+36:718 00:044 OCAK: [OK] Found jettisoning fileset
+36:826 00:108 OCAK: Patching invalid size 146000 with 222F000 for com.apple.iokit.IO80211FamilyLegacy
+36:871 00:044 OCAK: Patching invalid size 23000 with 28BB000 for com.apple.driver.AppleMobileFileIntegrity
+36:925 00:054 OCAK: Patching invalid size 81000 with BA7000 for com.apple.kec.corecrypto
+36:970 00:044 OCAK: Patching invalid size 9000 with 24BD000 for com.apple.kext.CoreTrust
+37:014 00:043 OCAK: Patching invalid size 19000 with 2A1D000 for com.apple.security.AppleImage4
+37:070 00:056 OCAK: Patching invalid size 1A000 with BCD000 for com.apple.driver.corecapture
+37:122 00:052 OCAK: Patching invalid size 8000 with 2598000 for com.apple.iokit.CoreAnalyticsFamily
+37:169 00:047 OCAK: Patching invalid size 17000 with 16D3000 for com.apple.iokit.IONetworkingFamily
+37:230 00:060 OCAK: Patching invalid size 4B000 with 1355000 for com.apple.iokit.IOSkywalkFamily
+37:275 00:045 OCAK: Patching invalid size 5000 with 143C000 for com.apple.driver.mDNSOffloadUserClient
+37:363 00:088 OCAK: Patching invalid size 2D000 with 1435000 for com.apple.iokit.IOPCIFamily
+37:453 00:090 OCAK: Local relocs 2712 on FFFFFF800426C000
+37:506 00:052 OC: Prelinked injection AirportItlwm.kext (AirportItlwm.kext) - Success
+37:557 00:051 OC: Prelinked injection AirportItlwm.kext v2.2.0
+37:604 00:046 OCAK: Patching invalid size 92000 with 10B0000 for com.apple.iokit.IOUSBHostFamily
+37:646 00:042 OCAK: Patching invalid size 4000 with 2B93000 for com.apple.driver.AppleBusPowerController
+37:690 00:043 OCAK: Patching invalid size 19000 with 27FC000 for com.apple.driver.AppleSMC
+37:735 00:045 OCAK: Patching invalid size 3000 with AEF000 for com.apple.driver.watchdog
+37:781 00:045 OCAK: Patching invalid size 2000 with 18DE000 for com.apple.iokit.IOACPIFamily
+37:838 00:057 OCAK: Patching invalid size 4000 with 2688000 for com.apple.driver.usb.AppleUSBCommon
+37:886 00:047 OCAK: Dependency com.apple.driver.usb.AppleUSBHostPlatformProperties was not found for kext com.apple.iokit.IOUSBHostFamily
+37:977 00:090 OCAK: Local relocs 729 on FFFFFF80051BD000
+38:023 00:046 OC: Prelinked injection IntelBluetoothFirmware.kext (IntelBluetoothFirmware.kext) - Success
+38:066 00:043 OC: Prelinked injection IntelBluetoothFirmware.kext v2.3.0
+38:124 00:058 OCAK: Local relocs 669 on FFFFFF8005914000
+38:178 00:053 OC: Prelinked injection IntelMausi.kext (IntelMausi.kext) - Success
+38:229 00:050 OC: Prelinked injection IntelMausi.kext v1.0.7
+38:285 00:055 OCAK: Local relocs 852 on FFFFFF8005953000
+38:330 00:044 OC: Prelinked injection Lilu.kext (Lilu.kext) - Success
+38:373 00:042 OC: Prelinked injection Lilu.kext v1.6.7
+38:436 00:063 OCAK: Local relocs 311 on FFFFFF80059DD000
+38:480 00:043 OC: Prelinked injection RestrictEvents.kext (RestrictEvents.kext) - Success
+38:522 00:042 OC: Prelinked injection RestrictEvents.kext v1.1.3
+38:574 00:052 OCAK: Local relocs 303 on FFFFFF80059EE000
+38:618 00:043 OC: Prelinked injection RTCMemoryFixup.kext (RTCMemoryFixup.kext) - Success
+38:659 00:041 OC: Prelinked injection RTCMemoryFixup.kext v1.0.7
+38:713 00:053 OCAK: Patching invalid size 1000 with FAB000 for com.apple.driver.AppleUSBHostMergeProperties
+38:766 00:053 OCAK: Local relocs 309 on FFFFFF80059F8000
+38:810 00:043 OC: Prelinked injection USBToolBox.kext (USBToolBox.kext) - Success
+38:852 00:042 OC: Prelinked injection USBToolBox.kext v1.1.1
+38:895 00:042 OC: Prelinked injection UTBMap.kext (UTBMap.kext) - Success
+38:937 00:042 OC: Prelinked injection UTBMap.kext v1.1
+39:003 00:065 OCAK: Local relocs 504 on FFFFFF8005A04000
+39:048 00:045 OC: Prelinked injection VirtualSMC.kext (VirtualSMC.kext) - Success
+39:091 00:042 OC: Prelinked injection VirtualSMC.kext v1.3.2
+39:149 00:057 OCAK: Local relocs 1579 on FFFFFF8005A2D000
+39:199 00:050 OC: Prelinked injection VoodooPS2Controller.kext (VoodooPS2Controller.kext) - Success
+39:258 00:058 OC: Prelinked injection VoodooPS2Controller.kext v2.3.5
+39:328 00:070 OCAK: Local relocs 3869 on FFFFFF8005A46000
+39:390 00:061 OC: Prelinked injection VoodooRMI.kext (VoodooRMI.kext) - Success
+39:432 00:042 OC: Prelinked injection VoodooRMI.kext v1.3.5
+39:487 00:054 OCAK: Local relocs 899 on FFFFFF8005A87000
+39:534 00:047 OC: Prelinked injection VoodooSMBus.kext (VoodooSMBus.kext) - Success
+39:584 00:050 OC: Prelinked injection VoodooSMBus.kext v3.0
+39:645 00:060 OCAK: Local relocs 2091 on FFFFFF8005AA1000
+39:697 00:052 OC: Prelinked injection WhateverGreen.kext (WhateverGreen.kext) - Success
+39:740 00:043 OC: Prelinked injection WhateverGreen.kext v1.6.6
+39:813 00:073 OCAK: Local relocs 312 on FFFFFF8005B5E000
+39:858 00:044 OC: Prelinked injection VoodooRMI.kext\Contents\PlugIns\RMISMBus.kext (RMISMBus.kext) - Success
+39:909 00:050 OC: Prelinked injection VoodooRMI.kext\Contents\PlugIns\RMISMBus.kext v1.0
+39:955 00:046 OCAK: Patching invalid size 5E000 with 17A2000 for com.apple.iokit.IOHIDFamily
+40:000 00:045 OCAK: Patching invalid size 3000 with 13F7000 for com.apple.iokit.IOReportFamily
+40:144 00:143 OCAK: Local relocs 1338 on FFFFFF8005B6D000
+40:194 00:049 OC: Prelinked injection VoodooRMI.kext\Contents\PlugIns\VoodooInput.kext (VoodooInput.kext) - Success
+40:245 00:051 OC: Prelinked injection VoodooRMI.kext\Contents\PlugIns\VoodooInput.kext v1.1.4
+40:311 00:066 OCAK: Local relocs 346 on FFFFFF8005B8A000
+40:355 00:044 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Keyboard.kext (VoodooPS2Keyboard.kext) - Success
+40:398 00:042 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Keyboard.kext v2.3.5
+40:460 00:062 OCAK: Local relocs 333 on FFFFFF8005B97000
+40:505 00:044 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Mouse.kext (VoodooPS2Mouse.kext) - Success
+40:555 00:050 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Mouse.kext v2.3.5
+40:614 00:059 OCAK: Local relocs 1236 on FFFFFF8005BA0000
+40:663 00:048 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Trackpad.kext (VoodooPS2Trackpad.kext) - Success
+40:705 00:042 OC: Prelinked injection VoodooPS2Controller.kext\Contents\PlugIns\VoodooPS2Trackpad.kext v2.3.5
+40:770 00:064 OCAK: Local relocs 5837 on FFFFFF8005BC4000
+40:839 00:069 OC: Prelinked injection AppleALC.kext (AppleALC.kext) - Success
+40:890 00:050 OC: Prelinked injection AppleALC.kext v1.8.8
+40:944 00:053 OCAK: Local relocs 314 on FFFFFF8005D90000
+40:988 00:043 OC: Prelinked injection BlueToolFixup.kext (BlueToolFixup.kext) - Success
+41:029 00:041 OC: Prelinked injection BlueToolFixup.kext v2.6.8
+41:083 00:053 OCAK: Local relocs 314 on FFFFFF8005D9A000
+41:135 00:051 OC: Prelinked injection ECEnabler.kext (ECEnabler.kext) - Success
+41:177 00:042 OC: Prelinked injection ECEnabler.kext v1.0.4
+41:233 00:055 OCAK: Local relocs 324 on FFFFFF8005DA9000
+41:277 00:044 OC: Prelinked injection IntelBTPatcher.kext (IntelBTPatcher.kext) - Success
+41:320 00:042 OC: Prelinked injection IntelBTPatcher.kext v2.3.0
+41:370 00:050 OCAK: Patching invalid size 1000 with 136A000 for com.apple.iokit.IOSMBusFamily
+41:440 00:070 OCAK: Local relocs 824 on FFFFFF8005DB8000
+41:486 00:046 OC: Prelinked injection SMCBatteryManager.kext (SMCBatteryManager.kext) - Success
+41:536 00:050 OC: Prelinked injection SMCBatteryManager.kext v1.3.2
+41:592 00:055 OCAK: Local relocs 337 on FFFFFF8005DD2000
+41:635 00:043 OC: Prelinked injection SMCProcessor.kext (SMCProcessor.kext) - Success
+41:685 00:050 OC: Prelinked injection SMCProcessor.kext v1.3.2
+41:743 00:057 OCAK: Local relocs 3779 on FFFFFF8005DE1000
+41:815 00:071 OC: Prelinked injection SMCSuperIO.kext (SMCSuperIO.kext) - Success
+41:858 00:043 OC: Prelinked injection SMCSuperIO.kext v1.3.2
+41:901 00:042 OC: Prelink size 97284096 kext offset 68206592 reserved 29077504
+41:944 00:042 OCAK: KC TEXT is 65536 bytes with 64096 Mach-O headers need 1752
+42:028 00:083 OCAK: 64-bit AppleIoMapper replace count - 1
+42:071 00:043 OCAK: [OK] Patch success com.apple.iokit.IOPCIFamily AppleIoMapper
+42:114 00:043 OCAK: Patching invalid size 6000 with 283B000 for com.apple.driver.AppleRTC
+42:157 00:042 OCAK: 64-bit DisableRtcChecksum64 replace count - 4
+42:200 00:042 OCAK: [OK] Patch success com.apple.driver.AppleRTC DisableRtcChecksum
+42:252 00:052 OC: Prelinked status - Success
+42:641 00:389 AAPL: #[EB|SB:P] 0x1
+42:684 00:042 AAPL: #[EB|SB:SBGMFNS] x86legacyap.im4m
+42:727 00:042 AAPL: #[EB|SB:MF] boot\\System\\Library\\KernelCollections\\BootKernelExtensions.kc.x86legacyap.im4m
+42:769 00:042 AAPL: #[EB.LD.LF|IN] 0 1 <"boot\\System\\Library\\KernelCollections\\BootKernelExtensions.kc.x86legacyap.im4m"> <"0">
+42:814 00:045 OCI4: Verifying digest 48 (5C5FE380) override 1 48 (5C5FE380)
+43:188 00:373 OCI4: Matching override DE6E5320 with DE6E5320 - success
+43:238 00:050 AAPL: #[EB|SB:MKRN]
+43:298 00:059 AAPL: #[EB.LD.LKFS|-?] Ok(0)
+43:341 00:042 AAPL: #[EB.LD.LKC|-?] Ok(0)
+43:385 00:044 AAPL: #[EB|BST:REV1]
+43:428 00:042 AAPL: #[EB|CSR:IN] 0x0000007F
+43:478 00:050 AAPL: #[EB|CSR:OUT] 0x0000006F
+43:521 00:042 AAPL: #[EB.BST.FBS|+]
+43:564 00:043 AAPL: #[EB.BST.FBS|ADSZ] 0
+43:607 00:043 AAPL: #[EB.BST.FBS|KSSZ] 0
+43:650 00:043 AAPL: #[EB|SB:SBGMFNS] x86legacyap.im4m
+43:693 00:043 AAPL: #[EB|RH:PF] usr\standalone\OS.dmg.root_hash
+43:744 00:051 AAPL: #[EB|RH:MF] <"usr\\standalone\\OS.dmg.root_hash.x86legacyap.im4m">
+43:787 00:042 AAPL: #[EB.LD.LF|IN] 0 1 <"usr\\standalone\\OS.dmg.root_hash"> <"0">
+43:832 00:044 AAPL: #[EB.LD.LF|IN] 0 1 <"usr\\standalone\\OS.dmg.root_hash.x86legacyap.im4m"> <"0">
+43:875 00:043 AAPL: #[EB.BST.FBS|RHPSZ] 229
+43:918 00:043 AAPL: #[EB.BST.FBS|RHMSZ] 3627
+43:962 00:043 OCSMC: SmcReadValue Key 4D535463 Size 1
+44:012 00:050 OCSMC: SmcReadValue Key 4D534163 Size 2
+44:054 00:042 AAPL: #[EB|LOG:DT] 2024-01-03T23:48:36
+44:097 00:042 AAPL: #[EB|LOG:EXITBS:START] 2024-01-03T23:48:36
